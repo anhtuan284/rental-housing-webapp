@@ -4,21 +4,21 @@
  */
 package com.th.config;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
  *
- * @author Peter
+ * @author voquochuy
  */
-@Configuration
-public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherServletInitializer{
+public class DispatcherServeletInit extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[] {
             HibernateConfig.class,
-            TilesConfig.class
+            TilesConfig.class,
+            SpringSecurityConfig.class,
+//            JwtSecurityConfig.class
         };
     }
 
@@ -33,5 +33,5 @@ public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherSer
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
-    
+
 }

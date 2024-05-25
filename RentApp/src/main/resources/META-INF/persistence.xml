@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence           http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+  <persistence-unit name="com.th_RentApp_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.th.pojo.Admin</class>
+    <class>com.th.pojo.User</class>
+    <class>com.th.pojo.Notifications</class>
+    <class>com.th.pojo.Comment</class>
+    <class>com.th.pojo.PostImage</class>
+    <class>com.th.pojo.Followers</class>
+    <class>com.th.pojo.Post</class>
+    <class>com.th.pojo.Landlord</class>
+    <class>com.th.pojo.PropertyDetail</class>
+    <class>com.th.pojo.Renter</class>
+    <class>com.th.pojo.Follow</class>
+    <class>com.th.pojo.Image</class>
+    <class>com.th.pojo.Notification</class>
+    <class>com.th.pojo.Role</class>
+    <class>com.th.pojo.TypeOfPost</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql-aiven-aiven-3006.g.aivencloud.com:12602/rentaldb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="avnadmin"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="AVNS_UorWnEOoU7uKkugARcz"/>
+    </properties>
+  </persistence-unit>
+</persistence>
