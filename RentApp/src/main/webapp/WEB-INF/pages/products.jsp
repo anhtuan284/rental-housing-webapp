@@ -35,7 +35,7 @@
                     </c:otherwise>
                 </c:choose>
                 
-            </c:forEach>
+            </c:forEach>t
         </form:select>
         <label for="category" class="form-label">Select list (select one):</label>
     </div>

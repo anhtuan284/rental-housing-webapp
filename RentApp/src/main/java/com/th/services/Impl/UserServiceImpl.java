@@ -35,10 +35,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User u = this.userRepo.getUserByUsername(username);
-        if (u == null) {
+       
+         if (u == null) {
             throw new UsernameNotFoundException("Không tồn tại!");
         }
-        
         Set<GrantedAuthority> authorities = new HashSet<>();
         String userRole = this.roleService.getUserRoleName(u.getRoleId().getId());
         authorities.add(new SimpleGrantedAuthority(userRole));

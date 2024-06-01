@@ -13,8 +13,10 @@ import java.util.Map;
  * @author voquochuy
  */
 public interface PostService {
-   List<Post> getPosts(Map<String, String> params);
+    List<Post> getPosts(int typeId,boolean status, Map<String, String> params);
     void addOrUpdate(Post post);
     Post getPostById(int id);
     void deletePost(int id);
+    void approvePost(int postId);
+
 }

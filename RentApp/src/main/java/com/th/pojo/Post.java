@@ -69,7 +69,7 @@ public class Post implements Serializable {
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-    @OneToMany(mappedBy = "postId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postid")
     private Set<PropertyDetail> propertyDetailSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
     private Set<Comment> commentSet;

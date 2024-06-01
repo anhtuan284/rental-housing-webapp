@@ -4,7 +4,10 @@
  */
 package com.th.repositories.impl;
 
+import com.th.pojo.Image;
 import com.th.pojo.Post;
+import com.th.pojo.PropertyDetail;
+import com.th.pojo.User;
 import com.th.repositories.PostRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,36 +31,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class PostRepositoryImpl implements PostRepository {
+
     @Autowired
     private LocalSessionFactoryBean factoryBean;
     @Autowired
     private Environment env;
 
     @Override
-    public List<Post> getPosts(Map<String, String> params) {
+    public List<Post> getPosts(int typeId, boolean status, Map<String, String> params) {
         Session s = this.factoryBean.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Post> q = b.createQuery(Post.class);
-        Root<Post> r = q.from(Post.class);
-        q.select(r);
+        Root<Post> post = q.from(Post.class);
 
         List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(post.get("status"), status));
+        predicates.add(b.equal(post.get("typeId").get("typeId"), typeId));
 
         String kw = params.get("kw");
         if (kw != null && !kw.isEmpty()) {
-            predicates.add(b.like(r.get("title"), String.format("%%%s%%", kw)));
-        }
-
-        String userId = params.get("userId");
-        if (userId != null && !userId.isEmpty()) {
-            predicates.add(b.equal(r.get("userId"), Integer.parseInt(userId)));
+            predicates.add(b.like(post.get("title"), String.format("%%%s%%", kw)));
         }
 
         q.where(predicates.toArray(new Predicate[0]));
-        q.orderBy(b.desc(r.get("postId")));
+        q.orderBy(b.desc(post.get("postId")));
 
         Query query = s.createQuery(q);
-
         String p = params.get("page");
         if (p != null && !p.isEmpty()) {
             int pageSize = Integer.parseInt(env.getProperty("posts.pageSize"));
@@ -66,7 +65,41 @@ public class PostRepositoryImpl implements PostRepository {
             query.setMaxResults(pageSize);
         }
 
-        return query.getResultList();
+        List<Post> leasePosts = query.getResultList();
+        for (Post leasePost : leasePosts) {
+            User user = leasePost.getUserId();
+            System.out.println("User : " + user.getAvatar());
+            System.out.println("Username: " + user.getUsername());
+            System.out.println("Email: " + user.getEmail());
+            System.out.println("Name: " + user.getName());
+            System.out.println("Phone Number: " + user.getNumberPhone());
+            System.out.println("--------------------------------------");
+            System.out.println("--------------------------------------");
+
+            System.out.println("Post ID: " + leasePost.getPostId());
+            System.out.println("Title: " + leasePost.getTitle());
+            System.out.println("Description: " + leasePost.getDescription());
+            System.out.println("--------------------------------------");
+
+            // In thông tin về hình ảnh (images)
+            for (Image image : leasePost.getImageSet()) {
+                System.out.println("Image ID: " + image.getImageId());
+                System.out.println("Image URL: " + image.getUrl());
+            }
+            System.out.println("--------------------------------------");
+
+            // In thông tin chi tiết bất động sản (property detail)
+            for (PropertyDetail propertyDetail : leasePost.getPropertyDetailSet()) {
+                System.out.println("Property Detail ID: " + propertyDetail.getPropertyDetailId());
+                System.out.println("Address: " + propertyDetail.getAddress());
+                System.out.println("Acreage: " + propertyDetail.getAcreage());
+                // In các thông tin khác của bất động sản tùy ý
+            }
+
+            System.out.println("--------------------------------------");
+        }
+
+        return leasePosts;
     }
 
     @Override
@@ -94,4 +127,13 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
+    @Override
+    public void approvePost(int postId) {
+        Session s = this.factoryBean.getObject().getCurrentSession();
+        Post post = this.getPostById(postId);
+        if (post != null) {
+            post.setStatus(true);
+            s.update(post);
+        }
+    }
 }

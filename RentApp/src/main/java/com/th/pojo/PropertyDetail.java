@@ -75,8 +75,8 @@ public class PropertyDetail implements Serializable {
     @Column(name = "capacity")
     private Integer capacity;
     @JoinColumn(name = "post_id", referencedColumnName = "post_id")
-    @ManyToOne
-    private Post postId;
+    @ManyToOne(optional = false)
+    private Post postid;
 
     public PropertyDetail() {
     }
@@ -156,12 +156,12 @@ public class PropertyDetail implements Serializable {
         this.capacity = capacity;
     }
 
-    public Post getPostId() {
-        return postId;
+    public Post getPostid() {
+        return postid;
     }
 
-    public void setPostId(Post postId) {
-        this.postId = postId;
+    public void setPostid(Post postid) {
+        this.postid = postid;
     }
 
     @Override

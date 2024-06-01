@@ -31,7 +31,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan(basePackages = {
     "com.th.controllers",
     "com.th.repositories",
-    "com.th.services"
+    "com.th.services",
+    "com.th.dto"
+
 })
 public class WebAppContextConfig implements WebMvcConfigurer {
 

@@ -31,7 +31,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {
     "com.th.controllers",
     "com.th.repositories",
-    "com.th.services"
+    "com.th.services",
+    "com.th.dto"
+
 })
 @Order(2)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
