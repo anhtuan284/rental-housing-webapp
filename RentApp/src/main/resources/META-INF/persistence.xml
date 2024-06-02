@@ -17,6 +17,8 @@
     <class>com.th.pojo.Notification</class>
     <class>com.th.pojo.Role</class>
     <class>com.th.pojo.TypeOfPost</class>
+    <class>com.th.pojo.Location</class>
+    <class>com.th.pojo.Typeofpost</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql-aiven-aiven-3006.g.aivencloud.com:12602/rentaldb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

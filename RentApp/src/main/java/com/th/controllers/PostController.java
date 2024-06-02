@@ -29,8 +29,7 @@ public class PostController {
         return postSe.getPosts(typeId, status, params);
     }
 
-     @GetMapping("/admin/post/approve/{postId}")
-     @CrossOrigin
+    @GetMapping("/admin/post/approve/{postId}")
     public ResponseEntity<String> approvePost(@PathVariable(value = "postId") Integer postId) {
         try {
             postSe.approvePost(postId);

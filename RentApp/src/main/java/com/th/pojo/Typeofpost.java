@@ -24,16 +24,16 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author voquochuy
+ * @author Hi
  */
 @Entity
-@Table(name = "TypeOfPost")
+@Table(name = "typeofpost")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TypeOfPost.findAll", query = "SELECT t FROM TypeOfPost t"),
-    @NamedQuery(name = "TypeOfPost.findByTypeId", query = "SELECT t FROM TypeOfPost t WHERE t.typeId = :typeId"),
-    @NamedQuery(name = "TypeOfPost.findByName", query = "SELECT t FROM TypeOfPost t WHERE t.name = :name")})
-public class TypeOfPost implements Serializable {
+    @NamedQuery(name = "Typeofpost.findAll", query = "SELECT t FROM Typeofpost t"),
+    @NamedQuery(name = "Typeofpost.findByTypeId", query = "SELECT t FROM Typeofpost t WHERE t.typeId = :typeId"),
+    @NamedQuery(name = "Typeofpost.findByName", query = "SELECT t FROM Typeofpost t WHERE t.name = :name")})
+public class Typeofpost implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,14 +49,14 @@ public class TypeOfPost implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "typeId")
     private Set<Post> postSet;
 
-    public TypeOfPost() {
+    public Typeofpost() {
     }
 
-    public TypeOfPost(Integer typeId) {
+    public Typeofpost(Integer typeId) {
         this.typeId = typeId;
     }
 
-    public TypeOfPost(Integer typeId, String name) {
+    public Typeofpost(Integer typeId, String name) {
         this.typeId = typeId;
         this.name = name;
     }
@@ -96,10 +96,10 @@ public class TypeOfPost implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TypeOfPost)) {
+        if (!(object instanceof Typeofpost)) {
             return false;
         }
-        TypeOfPost other = (TypeOfPost) object;
+        Typeofpost other = (Typeofpost) object;
         if ((this.typeId == null && other.typeId != null) || (this.typeId != null && !this.typeId.equals(other.typeId))) {
             return false;
         }
@@ -108,7 +108,7 @@ public class TypeOfPost implements Serializable {
 
     @Override
     public String toString() {
-        return "com.th.pojo.TypeOfPost[ typeId=" + typeId + " ]";
+        return "com.th.pojo.Typeofpost[ typeId=" + typeId + " ]";
     }
     
 }

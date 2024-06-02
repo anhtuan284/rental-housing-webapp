@@ -5,9 +5,9 @@
 package com.th.pojo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,27 +17,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author voquochuy
+ * @author Hi
  */
 @Entity
-@Table(name = "Property_Detail")
+@Table(name = "property_detail")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PropertyDetail.findAll", query = "SELECT p FROM PropertyDetail p"),
     @NamedQuery(name = "PropertyDetail.findByPropertyDetailId", query = "SELECT p FROM PropertyDetail p WHERE p.propertyDetailId = :propertyDetailId"),
-    @NamedQuery(name = "PropertyDetail.findByAddress", query = "SELECT p FROM PropertyDetail p WHERE p.address = :address"),
-    @NamedQuery(name = "PropertyDetail.findByLatitude", query = "SELECT p FROM PropertyDetail p WHERE p.latitude = :latitude"),
     @NamedQuery(name = "PropertyDetail.findByCreatedDate", query = "SELECT p FROM PropertyDetail p WHERE p.createdDate = :createdDate"),
-    @NamedQuery(name = "PropertyDetail.findByLongitude", query = "SELECT p FROM PropertyDetail p WHERE p.longitude = :longitude"),
     @NamedQuery(name = "PropertyDetail.findByPrice", query = "SELECT p FROM PropertyDetail p WHERE p.price = :price"),
     @NamedQuery(name = "PropertyDetail.findByAcreage", query = "SELECT p FROM PropertyDetail p WHERE p.acreage = :acreage"),
     @NamedQuery(name = "PropertyDetail.findByCapacity", query = "SELECT p FROM PropertyDetail p WHERE p.capacity = :capacity")})
@@ -49,23 +46,9 @@ public class PropertyDetail implements Serializable {
     @Basic(optional = false)
     @Column(name = "property_detail_id")
     private Integer propertyDetailId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "address")
-    private String address;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "latitude")
-    private BigDecimal latitude;
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "longitude")
-    private BigDecimal longitude;
     @Size(max = 45)
     @Column(name = "price")
     private String price;
@@ -74,22 +57,17 @@ public class PropertyDetail implements Serializable {
     private String acreage;
     @Column(name = "capacity")
     private Integer capacity;
-    @JoinColumn(name = "post_id", referencedColumnName = "post_id")
+    @JoinColumn(name = "Post_id", referencedColumnName = "post_id")
     @ManyToOne(optional = false)
     private Post postid;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "propertyDetail")
+    private Location location;
 
     public PropertyDetail() {
     }
 
     public PropertyDetail(Integer propertyDetailId) {
         this.propertyDetailId = propertyDetailId;
-    }
-
-    public PropertyDetail(Integer propertyDetailId, String address, BigDecimal latitude, BigDecimal longitude) {
-        this.propertyDetailId = propertyDetailId;
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 
     public Integer getPropertyDetailId() {
@@ -100,36 +78,12 @@ public class PropertyDetail implements Serializable {
         this.propertyDetailId = propertyDetailId;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public BigDecimal getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(BigDecimal latitude) {
-        this.latitude = latitude;
-    }
-
     public Date getCreatedDate() {
         return createdDate;
     }
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public BigDecimal getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(BigDecimal longitude) {
-        this.longitude = longitude;
     }
 
     public String getPrice() {
@@ -162,6 +116,14 @@ public class PropertyDetail implements Serializable {
 
     public void setPostid(Post postid) {
         this.postid = postid;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override

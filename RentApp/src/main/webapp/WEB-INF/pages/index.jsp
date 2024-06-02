@@ -116,13 +116,13 @@
                             <c:forEach var="propertyDetail" items="${post.propertyDetailSet}" varStatus="loop">
                                 <h6 class="card-subtitle mb-2 text-muted">Thông tin về property:</h6>
                                 <ul class="list-group">
-                                    <li class="list-group-item">Địa chỉ: ${propertyDetail.address}</li>
+                                    <li class="list-group-item">Địa chỉ: ${propertyDetail.location.address}</li>
                                     <li class="list-group-item">Diện tích: ${propertyDetail.acreage}</li>
                                     <li class="list-group-item">Giá: ${propertyDetail.price}</li>
                                     <li class="list-group-item">Sức chứa: ${propertyDetail.capacity}</li>
                                     <!-- Thêm các thông tin khác của property tại đây -->
                                 </ul>
-                                <button type="button" class="btn btn-primary view-map-btn" data-lat="${propertyDetail.latitude}" data-lng="${propertyDetail.longitude}" data-toggle="modal" data-target="#mapModal">Xem vị trí trên bản đồ</button>
+                                <button type="button" class="btn btn-primary view-map-btn" data-lat="${propertyDetail.location.latitude}" data-lng="${propertyDetail.location.longitude}" data-toggle="modal" data-target="#mapModal">Xem vị trí trên bản đồ</button>
                             </c:forEach>
                             <div id="carouselExampleIndicators${post.postId}" class="carousel slide" data-interval="false" data-ride="carousel">
                                 <ol class="carousel-indicators">
@@ -268,7 +268,7 @@
 
 
                             function approvePost(url, postId) {
-                                fetch(url, {  method: 'get'})
+                                fetch(url, {method: 'get'})
                                         .then(response => {
                                             if (!response.ok) {
                                                 throw new Error('Failed to approve post');

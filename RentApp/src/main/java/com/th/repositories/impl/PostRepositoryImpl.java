@@ -91,7 +91,7 @@ public class PostRepositoryImpl implements PostRepository {
             // In thông tin chi tiết bất động sản (property detail)
             for (PropertyDetail propertyDetail : leasePost.getPropertyDetailSet()) {
                 System.out.println("Property Detail ID: " + propertyDetail.getPropertyDetailId());
-                System.out.println("Address: " + propertyDetail.getAddress());
+                System.out.println("Address: " + propertyDetail.getLocation().getAddress());
                 System.out.println("Acreage: " + propertyDetail.getAcreage());
                 // In các thông tin khác của bất động sản tùy ý
             }

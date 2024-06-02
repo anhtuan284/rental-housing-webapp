@@ -30,10 +30,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author voquochuy
+ * @author Hi
  */
 @Entity
-@Table(name = "Post")
+@Table(name = "post")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Post.findAll", query = "SELECT p FROM Post p"),
@@ -69,20 +69,20 @@ public class Post implements Serializable {
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postid")
-    private Set<PropertyDetail> propertyDetailSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
-    private Set<Comment> commentSet;
-    @JoinColumn(name = "type_id", referencedColumnName = "type_id")
-    @ManyToOne(optional = false)
-    private TypeOfPost typeId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private User userId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
     private Set<Image> imageSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
     private Set<Notification> notificationSet;
+    @JoinColumn(name = "type_id", referencedColumnName = "type_id")
+    @ManyToOne(optional = false)
+    private Typeofpost typeId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private User userId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postid")
+    private Set<PropertyDetail> propertyDetailSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
+    private Set<Comment> commentSet;
 
     public Post() {
     }
@@ -146,40 +146,6 @@ public class Post implements Serializable {
     }
 
     @XmlTransient
-    public Set<PropertyDetail> getPropertyDetailSet() {
-        return propertyDetailSet;
-    }
-
-    public void setPropertyDetailSet(Set<PropertyDetail> propertyDetailSet) {
-        this.propertyDetailSet = propertyDetailSet;
-    }
-
-    @XmlTransient
-    public Set<Comment> getCommentSet() {
-        return commentSet;
-    }
-
-    public void setCommentSet(Set<Comment> commentSet) {
-        this.commentSet = commentSet;
-    }
-
-    public TypeOfPost getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(TypeOfPost typeId) {
-        this.typeId = typeId;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
-    @XmlTransient
     public Set<Image> getImageSet() {
         return imageSet;
     }
@@ -195,6 +161,40 @@ public class Post implements Serializable {
 
     public void setNotificationSet(Set<Notification> notificationSet) {
         this.notificationSet = notificationSet;
+    }
+
+    public Typeofpost getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Typeofpost typeId) {
+        this.typeId = typeId;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
+
+    @XmlTransient
+    public Set<PropertyDetail> getPropertyDetailSet() {
+        return propertyDetailSet;
+    }
+
+    public void setPropertyDetailSet(Set<PropertyDetail> propertyDetailSet) {
+        this.propertyDetailSet = propertyDetailSet;
+    }
+
+    @XmlTransient
+    public Set<Comment> getCommentSet() {
+        return commentSet;
+    }
+
+    public void setCommentSet(Set<Comment> commentSet) {
+        this.commentSet = commentSet;
     }
 
     @Override
