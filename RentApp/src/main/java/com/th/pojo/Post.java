@@ -78,7 +78,7 @@ public class Post implements Serializable {
     private Typeofpost typeId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private User userId;
+    private User userId;     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postid")
     private Set<PropertyDetail> propertyDetailSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")

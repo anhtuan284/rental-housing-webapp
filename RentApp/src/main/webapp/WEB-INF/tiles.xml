@@ -18,5 +18,24 @@
         <put-attribute name="content"
                        value="/WEB-INF/pages/index.jsp" />
     </definition>
+    
+    <definition name="detail" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết bài đăng" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/post/detail.jsp" />
+    </definition>
+    
+    <definition name="postlist" extends="baseLayout">
+        <put-attribute name="title" value="Bài đăng" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/post/list.jsp" />
+    </definition>
+
+    
+    <definition name="stats" extends="baseLayout">
+        <put-attribute name="title" value="Thống kê" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/stats.jsp" />
+    </definition>
    
 </tiles-definitions>

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     @Autowired
-    private PostService postSe;
+    private PostService postSe;     
 
     @GetMapping
     public List<Post> getListLesaePost(@RequestParam(required = false) Map<String, String> params) {
