@@ -6,7 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">My Sale App</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
@@ -43,8 +43,6 @@
                 </c:choose>
             </ul>
             <form action="<c:url value="/" />" class="d-flex">
-            <input class="form-control me-2" name="kw" type="text" placeholder="Nhập tên...">
-            <button class="btn btn-primary" type="submit">Tìm</button>
             </form>
         </div>
     </div>
