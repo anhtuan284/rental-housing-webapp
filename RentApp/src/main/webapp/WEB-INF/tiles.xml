@@ -24,18 +24,35 @@
         <put-attribute name="content"
                        value="/WEB-INF/pages/post/detail.jsp" />
     </definition>
-    
+
     <definition name="postlist" extends="baseLayout">
         <put-attribute name="title" value="Bài đăng" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/post/list.jsp" />
     </definition>
 
-    
+
     <definition name="stats" extends="baseLayout">
         <put-attribute name="title" value="Thống kê" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/stats.jsp" />
     </definition>
-   
+
+    <definition name="userList" extends="baseLayout">
+        <put-attribute name="title" value="Người dùng" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/user/userList.jsp" />
+    </definition>
+
+    <definition name="userDetails" extends="baseLayout">
+        <put-attribute name="title" value="Người dùng" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/user/userDetails.jsp" />
+    </definition>
+
+    <definition name="notFound" extends="baseLayout">
+        <put-attribute name="title" value="Not Found" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/errors/notFound.jsp" />
+    </definition>
 </tiles-definitions>

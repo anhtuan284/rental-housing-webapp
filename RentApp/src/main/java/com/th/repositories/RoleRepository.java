@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface RoleRepository {
     String  getUserRoleName(int userRoleId);
+
+    Role getRoleById(int roleId);
 }

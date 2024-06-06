@@ -7,6 +7,9 @@ package com.th.repositories;
 import com.th.pojo.Role;
 import com.th.pojo.User;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author voquochuy
@@ -14,5 +17,10 @@ import com.th.pojo.User;
 public interface UserRepository {
     
     User getUserByUsername(String username);
+
+    User getUserById(int userId);
+
     void addUser(User user);
+
+    List<User> getAllUser(Map<String, String> params);
 }

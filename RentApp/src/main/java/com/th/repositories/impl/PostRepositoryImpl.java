@@ -66,39 +66,6 @@ public class PostRepositoryImpl implements PostRepository {
         }
 
         List<Post> leasePosts = query.getResultList();
-        for (Post leasePost : leasePosts) {
-            User user = leasePost.getUserId();
-            System.out.println("User : " + user.getAvatar());
-            System.out.println("Username: " + user.getUsername());
-            System.out.println("Email: " + user.getEmail());
-            System.out.println("Name: " + user.getName());
-            System.out.println("Phone Number: " + user.getNumberPhone());
-            System.out.println("--------------------------------------");
-            System.out.println("--------------------------------------");
-
-            System.out.println("Post ID: " + leasePost.getPostId());
-            System.out.println("Title: " + leasePost.getTitle());
-            System.out.println("Description: " + leasePost.getDescription());
-            System.out.println("--------------------------------------");
-
-            // In thông tin về hình ảnh (images)
-            for (Image image : leasePost.getImageSet()) {
-                System.out.println("Image ID: " + image.getImageId());
-                System.out.println("Image URL: " + image.getUrl());
-            }
-            System.out.println("--------------------------------------");
-
-            // In thông tin chi tiết bất động sản (property detail)
-            for (PropertyDetail propertyDetail : leasePost.getPropertyDetailSet()) {
-                System.out.println("Property Detail ID: " + propertyDetail.getPropertyDetailId());
-                System.out.println("Address: " + propertyDetail.getLocation().getAddress());
-                System.out.println("Acreage: " + propertyDetail.getAcreage());
-                // In các thông tin khác của bất động sản tùy ý
-            }
-
-            System.out.println("--------------------------------------");
-        }
-
         return leasePosts;
     }
 
@@ -115,7 +82,10 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Post getPostById(int id) {
         Session s = this.factoryBean.getObject().getCurrentSession();
-        return s.get(Post.class, id);
+        String hql = "SELECT p FROM Post p LEFT JOIN FETCH p.imageSet LEFT JOIN FETCH p.propertyDetailSet WHERE p.id = :id";
+        Query query = s.createQuery(hql);
+        query.setParameter("id", id);
+        return (Post) query.getSingleResult();
     }
 
     @Override
