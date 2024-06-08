@@ -7,22 +7,23 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <body>
 <div class="container mt-5">
-    <h1 class="mb-4">User List</h1>
+    <h1 class="mb-4"><User List></h1>
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
         <tr>
-            <th>ID</th>
-            <th>Avatar</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Date of Birth</th>
-            <th>Role ID</th>
-            <th>Name</th>
-            <th>CCCD</th>
-            <th>Phone Number</th>
+            <th><spring:message code="user.id.label"/></th>
+            <th><spring:message code="user.avatar.label"/></th>
+            <th><spring:message code="user.username.label"/></th>
+            <th><spring:message code="user.email.label"/></th>
+            <th><spring:message code="user.dateOfBirth.label"/></th>
+            <th><spring:message code="user.roleId.label"/></th>
+            <th><spring:message code="user.name.label"/></th>
+            <th><spring:message code="user.cccd.label"/></th>
+            <th><spring:message code="user.numberPhone.label"/></th>
         </tr>
         </thead>
         <tbody>

@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <body>
 <div class="container mt-5">
     <h1 class="mb-4">User Detail</h1>
@@ -15,17 +16,17 @@
             <h3>${user.name}</h3>
         </div>
         <div class="card-body">
-            <p><strong>ID:</strong> ${user.id}</p>
-            <p><strong>Avatar:</strong> <img src="${user.avatar}" alt="Avatar" style="width:100px;height:100px;"></p>
-            <p><strong>Username:</strong> ${user.username}</p>
-            <p><strong>Email:</strong> ${user.email}</p>
-            <p><strong>Name:</strong> ${user.name}</p>
-            <p><strong>Date of Birth:</strong> ${user.dateOfBirth}</p>
-            <p><strong>CCCD:</strong> ${user.cccd}</p>
-            <p><strong>Number Phone:</strong> ${user.numberPhone}</p>
-            <p><strong>Address:</strong> ${user.address}</p>
-            <p><strong>Created Date:</strong> ${user.createdDate}</p>
-            <p><strong>Updated Date:</strong> ${user.updatedDate}</p>
+            <p><strong><spring:message code="user.id.label"/>:</strong> ${user.id}</p>
+            <p><strong><spring:message code="user.avatar.label"/>:</strong> <img src="${user.avatar}" alt="Avatar" style="width:100px;height:100px;"></p>
+            <p><strong><spring:message code="user.username.label"/>:</strong> ${user.username}</p>
+            <p><strong><spring:message code="user.email.label"/>:</strong> ${user.email}</p>
+            <p><strong><spring:message code="user.name.label"/>:</strong> ${user.name}</p>
+            <p><strong><spring:message code="user.dateOfBirth.label"/>:</strong> ${user.dateOfBirth}</p>
+            <p><strong><spring:message code="user.cccd.label"/>:</strong> ${user.cccd}</p>
+            <p><strong><spring:message code="user.numberPhone.label"/>:</strong> ${user.numberPhone}</p>
+            <p><strong><spring:message code="user.address.label"/>:</strong> ${user.address}</p>
+            <p><strong><spring:message code="user.createdDate.label"/>:</strong> ${user.createdDate}</p>
+            <p><strong><spring:message code="user.updatedDate.label"/>:</strong> ${user.updatedDate}</p>
         </div>
         <div class="card-footer">
             <a href="/user/all" class="btn btn-secondary">Back to List</a>

@@ -15,10 +15,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+
+import java.util.Locale;
 
 
 /**
@@ -53,8 +55,27 @@ public class WebAppContextConfig implements WebMvcConfigurer {
     public MessageSource messageSource() {
         ResourceBundleMessageSource m = new ResourceBundleMessageSource();
         m.setBasename("messages");
+        m.setDefaultEncoding("UTF-8");
         return m;
     }
+
+    @Bean(name = "localeResolver")
+    public LocaleResolver getLocaleResolver() {
+        CookieLocaleResolver resolver = new CookieLocaleResolver();
+        resolver.setDefaultLocale(new Locale("us"));  // Đặt locale mặc định
+        resolver.setCookieName("myAppLocaleCookie");  // Đặt tên cookie
+        resolver.setCookieMaxAge(60 * 60);  // Thời gian sống của cookie là 60 phút
+        resolver.setCookiePath("/");  // Đặt đường dẫn cookie để cookie có sẵn trên toàn bộ ứng dụng
+        return resolver;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
+        localeInterceptor.setParamName("lang");
+        registry.addInterceptor(localeInterceptor).addPathPatterns("/**");
+    }
+
 
     @Bean(name = "validator")
     public LocalValidatorFactoryBean validator() {

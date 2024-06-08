@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -61,24 +62,24 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" href="#submenu1" data-bs-toggle="collapse">
-                        <i class="bi bi-speedometer2"></i> Dashboard
+                        <i class="bi bi-speedometer2"></i> <spring:message code="admin.dashboard.label"/>
                     </a>
                     <ul class="collapse" id="submenu1">
                         <li class="nav-item">
-                            <a class="nav-link" href="/RentApp/stats">Thống kê</a>
+                            <a class="nav-link" href="/RentApp/stats"><spring:message code="admin.stat.label"/></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Duyệt bài viết</a>
+                            <a class="nav-link" href="">##</a>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#submenu2" data-bs-toggle="collapse">
-                        <i class="bi bi-bootstrap"></i> Bài đăng
+                        <i class="bi bi-bootstrap"></i> <spring:message code="admin.system.label"/>
                     </a>
                     <ul class="collapse" id="submenu2">
                         <li class="nav-item">
-                            <a class="nav-link" href="/RentApp/post/all">Danh sách bài đăng </a>
+                            <a class="nav-link" href="/RentApp/post/all"><spring:message code="admin.post.label"/> </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Item 2</a>
@@ -87,7 +88,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/RentApp/user/all"/>
-                        <i class="bi bi-people"></i> Users
+                        <i class="bi bi-people"></i> <spring:message code="admin.user.label"/>
                     </a>
                 </li>
             </ul>
