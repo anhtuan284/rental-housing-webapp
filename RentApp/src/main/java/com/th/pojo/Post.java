@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -69,9 +70,9 @@ public class Post implements Serializable {
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
     private Set<Image> imageSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId",fetch = FetchType.LAZY)
     private Set<Notification> notificationSet;
     @JoinColumn(name = "type_id", referencedColumnName = "type_id")
     @ManyToOne(optional = false)
@@ -79,9 +80,9 @@ public class Post implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postid")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postid",fetch = FetchType.EAGER)
     private Set<PropertyDetail> propertyDetailSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.LAZY)
     private Set<Comment> commentSet;
 
     public Post() {
@@ -153,6 +154,7 @@ public class Post implements Serializable {
     public void setImageSet(Set<Image> imageSet) {
         this.imageSet = imageSet;
     }
+    
 
     @XmlTransient
     public Set<Notification> getNotificationSet() {

@@ -70,6 +70,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    @Transactional
     public void addOrUpdate(Post post) {
         Session s = this.factoryBean.getObject().getCurrentSession();
         if (post.getPostId() != null && post.getPostId() > 0) {

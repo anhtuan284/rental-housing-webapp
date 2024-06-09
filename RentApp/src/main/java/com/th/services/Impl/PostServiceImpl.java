@@ -29,7 +29,10 @@ public class PostServiceImpl implements PostService {
         return this.postRepo.getPostById(id);
     }
 
+
+        
     @Override
+    @Transactional
     public void addOrUpdate(Post post) {
         postRepo.addOrUpdate(post);
     }
