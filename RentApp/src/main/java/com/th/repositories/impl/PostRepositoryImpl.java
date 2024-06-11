@@ -66,6 +66,7 @@ public class PostRepositoryImpl implements PostRepository {
         }
 
         List<Post> leasePosts = query.getResultList();
+        System.out.println(leasePosts);
         return leasePosts;
     }
 
@@ -82,9 +83,10 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post getPostById(int id) {
+        System.out.println("11111");
         Session s = this.factoryBean.getObject().getCurrentSession();
-        String hql = "SELECT p FROM Post p LEFT JOIN FETCH p.imageSet LEFT JOIN FETCH p.propertyDetailSet WHERE p.id = :id";
-        Query query = s.createQuery(hql);
+        String hql = "FROM Post p WHERE p.postId = :id";
+        Query query = s.createQuery(hql, Post.class);
         query.setParameter("id", id);
         return (Post) query.getSingleResult();
     }
@@ -101,8 +103,12 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void approvePost(int postId) {
         Session s = this.factoryBean.getObject().getCurrentSession();
+        System.out.println("213123123");
+        System.out.println(postId);
         Post post = this.getPostById(postId);
+        System.out.println(post.getDescription());
         if (post != null) {
+            System.out.println(post.getDescription());
             post.setStatus(true);
             s.update(post);
         }

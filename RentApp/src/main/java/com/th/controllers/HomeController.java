@@ -83,11 +83,9 @@ public class HomeController {
                 User u = userSe.getUserByUsername("admin");
                 p.setUserId(u);
                 p.setStatus(false);
-                p.setTypeId(typeSe.getTypeById(1));
-                p.setStatus(false);
-                Date currentDate = new Date(); // Ngày hiện tại
-                p.setCreatedDate(currentDate); // Thiết lập ngày tạo
-                p.setUpdatedDate(currentDate); // Thiết lập ngày cập nhật
+                p.setTypeId(typeSe.getTypeById(2));
+                p.setStatus(true);
+
                 this.postSe.addOrUpdate(p);
                 imgService.saveListImageOfPost(p, files);
                 return "redirect:/";

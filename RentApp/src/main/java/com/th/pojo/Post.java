@@ -4,6 +4,7 @@
  */
 package com.th.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -21,6 +22,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Hi
+ * @author voquochuy
  */
 @Entity
 @Table(name = "post")
@@ -70,20 +74,24 @@ public class Post implements Serializable {
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch =FetchType.EAGER)
     private Set<Image> imageSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId",fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId",fetch =FetchType.EAGER)
+    @JsonIgnore
     private Set<Notification> notificationSet;
     @JoinColumn(name = "type_id", referencedColumnName = "type_id")
     @ManyToOne(optional = false)
     private Typeofpost typeId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private User userId;     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postid",fetch = FetchType.EAGER)
-    private Set<PropertyDetail> propertyDetailSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.LAZY)
+    private User userId;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post",fetch =FetchType.EAGER)
+    private PropertyDetail propertyDetail;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId",fetch =FetchType.LAZY)
+    @JsonIgnore
     private Set<Comment> commentSet;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
+    private Location location;
 
     public Post() {
     }
@@ -154,7 +162,6 @@ public class Post implements Serializable {
     public void setImageSet(Set<Image> imageSet) {
         this.imageSet = imageSet;
     }
-    
 
     @XmlTransient
     public Set<Notification> getNotificationSet() {
@@ -181,13 +188,12 @@ public class Post implements Serializable {
         this.userId = userId;
     }
 
-    @XmlTransient
-    public Set<PropertyDetail> getPropertyDetailSet() {
-        return propertyDetailSet;
+    public PropertyDetail getPropertyDetail() {
+        return propertyDetail;
     }
 
-    public void setPropertyDetailSet(Set<PropertyDetail> propertyDetailSet) {
-        this.propertyDetailSet = propertyDetailSet;
+    public void setPropertyDetail(PropertyDetail propertyDetail) {
+        this.propertyDetail = propertyDetail;
     }
 
     @XmlTransient
@@ -197,6 +203,14 @@ public class Post implements Serializable {
 
     public void setCommentSet(Set<Comment> commentSet) {
         this.commentSet = commentSet;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override
@@ -223,5 +237,20 @@ public class Post implements Serializable {
     public String toString() {
         return "com.th.pojo.Post[ postId=" + postId + " ]";
     }
+    
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdDate == null) { // Kiểm tra nếu createdDate đã được thiết lập hay chưa
+            this.createdDate = new Date(); // Nếu chưa, thì cập nhật nó
+        }
+        this.updatedDate = new Date(); // Luôn cập nhật updatedDate
+    }
+
+    
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedDate = new Date(); // Cập nhật updatedDate mỗi khi có sự cập nhật
+    }
+    
     
 }

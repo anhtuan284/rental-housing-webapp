@@ -139,14 +139,12 @@
                                 <div class="post-details">
                                     <h2 class="card-title">${post.title}</h2>
                                     <p class="card-text">${post.description}</p>
-                                    <c:forEach var="propertyDetail" items="${post.propertyDetailSet}">
                                         <h6 class="card-subtitle mb-2">Chi tiết:</h6>
-                                            <span class="pe-2"><strong>Địa chỉ: </strong> ${propertyDetail.location.address}  </span>
-                                            <span class="pe-2"><strong>Diện tích:</strong> ${propertyDetail.acreage} </span>
-                                            <span class="pe-2"><strong>Giá:</strong> ${propertyDetail.price}  </span>
-                                            <span class="pe-2"><strong>Sức chứa:</strong> ${propertyDetail.capacity}  </span>
-                                        <!--<button type="button" class="btn btn-primary view-map-btn" data-lat="${propertyDetail.location.latitude}" data-lng="${propertyDetail.location.longitude}" data-toggle="modal" data-target="#mapModal">Xem vị trí trên bản đồ</button>-->
-                                    </c:forEach>
+                                            <span class="pe-2"><strong>Địa chỉ: </strong> ${post.location.address}  </span>
+                                            <span class="pe-2"><strong>Diện tích:</strong> ${post.propertyDetail.acreage} </span>
+                                            <span class="pe-2"><strong>Giá:</strong> ${post.propertyDetail.price}  </span>
+                                            <span class="pe-2"><strong>Sức chứa:</strong> ${post.propertyDetail.capacity}  </span>
+                                        <!--<button type="button" class="btn btn-primary view-map-btn" data-lat="${post.location.latitude}" data-lng="${post.location.longitude}" data-toggle="modal" data-target="#mapModal">Xem vị trí trên bản đồ</button>-->
                                     <div id="carouselExampleIndicators${post.postId}" class="carousel slide" data-interval="false" data-ride="carousel">
                                         <ol class="carousel-indicators">
                                             <c:forEach var="image" items="${post.imageSet}" varStatus="loop">

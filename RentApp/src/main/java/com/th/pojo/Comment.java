@@ -4,6 +4,7 @@
  */
 package com.th.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -17,6 +18,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Hi
+ * @author voquochuy
  */
 @Entity
 @Table(name = "comment")
@@ -35,7 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Comment.findAll", query = "SELECT c FROM Comment c"),
     @NamedQuery(name = "Comment.findByCommentId", query = "SELECT c FROM Comment c WHERE c.commentId = :commentId"),
     @NamedQuery(name = "Comment.findByCreatedDate", query = "SELECT c FROM Comment c WHERE c.createdDate = :createdDate"),
-    @NamedQuery(name = "Comment.findByUpdatedDate", query = "SELECT c FROM Comment c WHERE c.updatedDate = :updatedDate")})
+    @NamedQuery(name = "Comment.findByUpdatedDate", query = "SELECT c FROM Comment c WHERE c.updatedDate = :updatedDate"),
+    @NamedQuery(name = "Comment.findByPositive", query = "SELECT c FROM Comment c WHERE c.positive = :positive")})
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,11 +60,15 @@ public class Comment implements Serializable {
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
+    @Column(name = "positive")
+    private Short positive;
     @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Post postId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private User userId;
 
     public Comment() {
@@ -107,6 +115,14 @@ public class Comment implements Serializable {
         this.updatedDate = updatedDate;
     }
 
+    public Short getPositive() {
+        return positive;
+    }
+
+    public void setPositive(Short positive) {
+        this.positive = positive;
+    }
+
     public Post getPostId() {
         return postId;
     }
@@ -147,5 +163,17 @@ public class Comment implements Serializable {
     public String toString() {
         return "com.th.pojo.Comment[ commentId=" + commentId + " ]";
     }
-    
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdDate == null) { // Kiểm tra nếu createdDate đã được thiết lập hay chưa
+            this.createdDate = new Date(); // Nếu chưa, thì cập nhật nó
+        }
+        this.updatedDate = new Date(); // Luôn cập nhật updatedDate
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedDate = new Date(); // Cập nhật updatedDate mỗi khi có sự cập nhật
+    }
 }

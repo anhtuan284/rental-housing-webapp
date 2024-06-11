@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     @Autowired
-    private PostService postSe;     
+    private PostService postSe;
 
     @GetMapping
     public List<Post> getListLesaePost(@RequestParam(required = false) Map<String, String> params) {
@@ -32,6 +32,8 @@ public class PostController {
     @GetMapping("/admin/post/approve/{postId}")
     public ResponseEntity<String> approvePost(@PathVariable(value = "postId") Integer postId) {
         try {
+            System.out.println(postId);
+            System.out.println(postId);
             postSe.approvePost(postId);
             return ResponseEntity.ok("Post approved successfully.");
         } catch (Exception e) {

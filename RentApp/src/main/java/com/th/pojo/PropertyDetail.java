@@ -4,78 +4,80 @@
  */
 package com.th.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Hi
+ * @author voquochuy
  */
 @Entity
 @Table(name = "property_detail")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PropertyDetail.findAll", query = "SELECT p FROM PropertyDetail p"),
-    @NamedQuery(name = "PropertyDetail.findByPropertyDetailId", query = "SELECT p FROM PropertyDetail p WHERE p.propertyDetailId = :propertyDetailId"),
     @NamedQuery(name = "PropertyDetail.findByCreatedDate", query = "SELECT p FROM PropertyDetail p WHERE p.createdDate = :createdDate"),
     @NamedQuery(name = "PropertyDetail.findByPrice", query = "SELECT p FROM PropertyDetail p WHERE p.price = :price"),
     @NamedQuery(name = "PropertyDetail.findByAcreage", query = "SELECT p FROM PropertyDetail p WHERE p.acreage = :acreage"),
-    @NamedQuery(name = "PropertyDetail.findByCapacity", query = "SELECT p FROM PropertyDetail p WHERE p.capacity = :capacity")})
+    @NamedQuery(name = "PropertyDetail.findByCapacity", query = "SELECT p FROM PropertyDetail p WHERE p.capacity = :capacity"),
+    @NamedQuery(name = "PropertyDetail.findByPostId", query = "SELECT p FROM PropertyDetail p WHERE p.postId = :postId")})
 public class PropertyDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "property_detail_id")
-    private Integer propertyDetailId;
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-    @Size(max = 45)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "price")
     private String price;
-    @Size(max = 20)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
     @Column(name = "acreage")
     private String acreage;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "capacity")
-    private Integer capacity;
-    @JoinColumn(name = "Post_id", referencedColumnName = "post_id")
-    @ManyToOne(optional = false)
-    private Post postid;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "propertyDetail")
-    private Location location;
+    private int capacity;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "post_id")
+    private Integer postId;
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    @JsonIgnore
+    private Post post;
 
     public PropertyDetail() {
     }
 
-    public PropertyDetail(Integer propertyDetailId) {
-        this.propertyDetailId = propertyDetailId;
+    public PropertyDetail(Integer postId) {
+        this.postId = postId;
     }
 
-    public Integer getPropertyDetailId() {
-        return propertyDetailId;
-    }
-
-    public void setPropertyDetailId(Integer propertyDetailId) {
-        this.propertyDetailId = propertyDetailId;
+    public PropertyDetail(Integer postId, String price, String acreage, int capacity) {
+        this.postId = postId;
+        this.price = price;
+        this.acreage = acreage;
+        this.capacity = capacity;
     }
 
     public Date getCreatedDate() {
@@ -102,34 +104,34 @@ public class PropertyDetail implements Serializable {
         this.acreage = acreage;
     }
 
-    public Integer getCapacity() {
+    public int getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(Integer capacity) {
+    public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
-    public Post getPostid() {
-        return postid;
+    public Integer getPostId() {
+        return postId;
     }
 
-    public void setPostid(Post postid) {
-        this.postid = postid;
+    public void setPostId(Integer postId) {
+        this.postId = postId;
     }
 
-    public Location getLocation() {
-        return location;
+    public Post getPost() {
+        return post;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (propertyDetailId != null ? propertyDetailId.hashCode() : 0);
+        hash += (postId != null ? postId.hashCode() : 0);
         return hash;
     }
 
@@ -140,7 +142,7 @@ public class PropertyDetail implements Serializable {
             return false;
         }
         PropertyDetail other = (PropertyDetail) object;
-        if ((this.propertyDetailId == null && other.propertyDetailId != null) || (this.propertyDetailId != null && !this.propertyDetailId.equals(other.propertyDetailId))) {
+        if ((this.postId == null && other.postId != null) || (this.postId != null && !this.postId.equals(other.postId))) {
             return false;
         }
         return true;
@@ -148,7 +150,7 @@ public class PropertyDetail implements Serializable {
 
     @Override
     public String toString() {
-        return "com.th.pojo.PropertyDetail[ propertyDetailId=" + propertyDetailId + " ]";
+        return "com.th.pojo.PropertyDetail[ postId=" + postId + " ]";
     }
     
 }

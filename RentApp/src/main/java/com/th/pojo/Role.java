@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Hi
+ * @author voquochuy
  */
 @Entity
 @Table(name = "role")

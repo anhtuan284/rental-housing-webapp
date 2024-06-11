@@ -4,6 +4,7 @@
  */
 package com.th.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -24,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Hi
+ * @author voquochuy
  */
 @Entity
 @Table(name = "typeofpost")
@@ -47,6 +48,7 @@ public class Typeofpost implements Serializable {
     @Column(name = "name")
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "typeId")
+    @JsonIgnore
     private Set<Post> postSet;
 
     public Typeofpost() {

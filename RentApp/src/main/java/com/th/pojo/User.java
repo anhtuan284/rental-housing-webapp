@@ -4,12 +4,27 @@
  */
 package com.th.pojo;
 
-import org.springframework.web.multipart.MultipartFile;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Hi
+ * @author voquochuy
  */
 @Entity
 @Table(name = "user")
@@ -35,7 +50,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByNumberPhone", query = "SELECT u FROM User u WHERE u.numberPhone = :numberPhone"),
     @NamedQuery(name = "User.findByAddress", query = "SELECT u FROM User u WHERE u.address = :address"),
     @NamedQuery(name = "User.findByCreatedDate", query = "SELECT u FROM User u WHERE u.createdDate = :createdDate"),
-    @NamedQuery(name = "User.findByUpdatedDate", query = "SELECT u FROM User u WHERE u.updatedDate = :updatedDate")})
+    @NamedQuery(name = "User.findByUpdatedDate", query = "SELECT u FROM User u WHERE u.updatedDate = :updatedDate"),
+    @NamedQuery(name = "User.findByActivated", query = "SELECT u FROM User u WHERE u.activated = :activated")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -88,22 +104,27 @@ public class User implements Serializable {
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
+    @Column(name = "activated")
+    private Short activated;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
     private Set<Notification> notificationSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
     private Set<Post> postSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
     private Set<Comment> commentSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "followerId")
+    @JsonIgnore
     private Set<Follow> followSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "followeeId")
+    @JsonIgnore
     private Set<Follow> followSet1;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Role roleId;
-
-    @Transient
-    private MultipartFile file;
 
     public User() {
     }
@@ -217,6 +238,14 @@ public class User implements Serializable {
         this.updatedDate = updatedDate;
     }
 
+    public Short getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Short activated) {
+        this.activated = activated;
+    }
+
     @XmlTransient
     public Set<Notification> getNotificationSet() {
         return notificationSet;
@@ -292,14 +321,19 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.th.pojo.User[id=" + id + "]";
+        return "com.th.pojo.User[ id=" + id + " ]";
     }
 
-    public MultipartFile getFile() {
-        return file;
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdDate == null) { // Kiểm tra nếu createdDate đã được thiết lập hay chưa
+            this.createdDate = new Date(); // Nếu chưa, thì cập nhật nó
+        }
+        this.updatedDate = new Date(); // Luôn cập nhật updatedDate
     }
 
-    public void setFile(MultipartFile file) {
-        this.file = file;
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedDate = new Date(); // Cập nhật updatedDate mỗi khi có sự cập nhật
     }
 }

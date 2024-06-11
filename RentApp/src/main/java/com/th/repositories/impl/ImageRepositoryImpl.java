@@ -45,7 +45,7 @@ public class ImageRepositoryImpl implements ImageRepository {
                 Image image = new Image();
                 image.setUrl((String) uploadedFile.get("url"));
                 image.setPostId(post);
-                image.setCreatedDate(new Date());
+//                image.setCreatedDate(new Date());
                 session.save(image);
             }
         } catch (IOException ex) {

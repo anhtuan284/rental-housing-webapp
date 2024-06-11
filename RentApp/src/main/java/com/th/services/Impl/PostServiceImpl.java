@@ -7,6 +7,7 @@ package com.th.services.Impl;
 import com.th.pojo.Post;
 import com.th.repositories.PostRepository;
 import com.th.services.PostService;
+import com.th.services.PostService;
 
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void approvePost(int postId) {
         postRepo.approvePost(postId);
+    }
+
+    @Override
+    public List<Post> getPostOfRenter(Map<String, String> param) {
+        return postRepo.getPosts(2, true, param);
     }
 
 

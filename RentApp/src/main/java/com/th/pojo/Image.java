@@ -4,6 +4,7 @@
  */
 package com.th.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -16,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Hi
+ * @author voquochuy
  */
 @Entity
 @Table(name = "image")
@@ -53,6 +55,7 @@ public class Image implements Serializable {
     private Date createdDate;
     @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Post postId;
 
     public Image() {
@@ -123,5 +126,13 @@ public class Image implements Serializable {
     public String toString() {
         return "com.th.pojo.Image[ imageId=" + imageId + " ]";
     }
+    
+     @PrePersist
+    protected void onCreate() {
+        if (this.createdDate == null) { // Kiểm tra nếu createdDate đã được thiết lập hay chưa
+            this.createdDate = new Date(); // Nếu chưa, thì cập nhật nó
+        }
+    }
+
     
 }

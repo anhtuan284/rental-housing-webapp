@@ -18,5 +18,6 @@ public interface PostService {
     Post getPostById(int id);
     void deletePost(int id);
     void approvePost(int postId);
+    List<Post> getPostOfRenter(Map<String, String> param);
 
 }

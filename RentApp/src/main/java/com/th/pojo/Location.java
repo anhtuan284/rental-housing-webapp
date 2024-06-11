@@ -4,6 +4,7 @@
  */
 package com.th.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
@@ -21,27 +22,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Hi
+ * @author voquochuy
  */
 @Entity
 @Table(name = "location")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Location.findAll", query = "SELECT l FROM Location l"),
-    @NamedQuery(name = "Location.findByPropertyDetailId", query = "SELECT l FROM Location l WHERE l.propertyDetailId = :propertyDetailId"),
     @NamedQuery(name = "Location.findByAddress", query = "SELECT l FROM Location l WHERE l.address = :address"),
     @NamedQuery(name = "Location.findByDistrict", query = "SELECT l FROM Location l WHERE l.district = :district"),
     @NamedQuery(name = "Location.findByCity", query = "SELECT l FROM Location l WHERE l.city = :city"),
     @NamedQuery(name = "Location.findByLatitude", query = "SELECT l FROM Location l WHERE l.latitude = :latitude"),
-    @NamedQuery(name = "Location.findByLongitude", query = "SELECT l FROM Location l WHERE l.longitude = :longitude")})
+    @NamedQuery(name = "Location.findByLongitude", query = "SELECT l FROM Location l WHERE l.longitude = :longitude"),
+    @NamedQuery(name = "Location.findByPostId", query = "SELECT l FROM Location l WHERE l.postId = :postId")})
 public class Location implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "property_detail_id")
-    private Integer propertyDetailId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -58,34 +54,38 @@ public class Location implements Serializable {
     @Column(name = "city")
     private String city;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "latitude")
     private BigDecimal latitude;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "longitude")
     private BigDecimal longitude;
-    @JoinColumn(name = "property_detail_id", referencedColumnName = "property_detail_id", insertable = false, updatable = false)
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "post_id")
+    private Integer postId;
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id", insertable = false, updatable = false)
     @OneToOne(optional = false)
-    private PropertyDetail propertyDetail;
+    @JsonIgnore
+    private Post post;
 
     public Location() {
     }
 
-    public Location(Integer propertyDetailId) {
-        this.propertyDetailId = propertyDetailId;
+    public Location(Integer postId) {
+        this.postId = postId;
     }
 
-    public Location(Integer propertyDetailId, String address, String district, String city) {
-        this.propertyDetailId = propertyDetailId;
+    public Location(Integer postId, String address, String district, String city, BigDecimal latitude, BigDecimal longitude) {
+        this.postId = postId;
         this.address = address;
         this.district = district;
         this.city = city;
-    }
-
-    public Integer getPropertyDetailId() {
-        return propertyDetailId;
-    }
-
-    public void setPropertyDetailId(Integer propertyDetailId) {
-        this.propertyDetailId = propertyDetailId;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getAddress() {
@@ -128,18 +128,26 @@ public class Location implements Serializable {
         this.longitude = longitude;
     }
 
-    public PropertyDetail getPropertyDetail() {
-        return propertyDetail;
+    public Integer getPostId() {
+        return postId;
     }
 
-    public void setPropertyDetail(PropertyDetail propertyDetail) {
-        this.propertyDetail = propertyDetail;
+    public void setPostId(Integer postId) {
+        this.postId = postId;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (propertyDetailId != null ? propertyDetailId.hashCode() : 0);
+        hash += (postId != null ? postId.hashCode() : 0);
         return hash;
     }
 
@@ -150,7 +158,7 @@ public class Location implements Serializable {
             return false;
         }
         Location other = (Location) object;
-        if ((this.propertyDetailId == null && other.propertyDetailId != null) || (this.propertyDetailId != null && !this.propertyDetailId.equals(other.propertyDetailId))) {
+        if ((this.postId == null && other.postId != null) || (this.postId != null && !this.postId.equals(other.postId))) {
             return false;
         }
         return true;
@@ -158,7 +166,8 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return "com.th.pojo.Location[ propertyDetailId=" + propertyDetailId + " ]";
+        return "com.th.pojo.Location[ postId=" + postId + " ]";
     }
+    
     
 }
