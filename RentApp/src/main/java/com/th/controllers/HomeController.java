@@ -103,9 +103,6 @@ public class HomeController {
         return "detail";
     }
 
-    @GetMapping("/stats")
-    public String stats() {
-        return "stats";
-    }
+
 
 }

@@ -20,6 +20,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,8 @@ public class UserRepositoryImpl implements UserRepository {
     private LocalSessionFactoryBean factory;
     @Autowired
     private Environment env;
-
+    @Autowired
+    private BCryptPasswordEncoder passEncoder;
     @Autowired
     private RoleRepository roleRepository;
 
@@ -94,5 +96,12 @@ public class UserRepositoryImpl implements UserRepository {
 
         List<User> user_list = query.getResultList();
         return user_list;
+    }
+
+    @Override
+    public boolean authUser(String username, String password) {
+        User  u = this.getUserByUsername(username);
+
+        return this.passEncoder.matches(password, u.getPassword());
     }
 }

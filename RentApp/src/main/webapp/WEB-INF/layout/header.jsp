@@ -40,6 +40,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-info" href="<c:url value="/" />">Chào ${pageContext.request.userPrincipal.name}!</a>
                         </li>
+                        <li class="nav-item">
+                            <a class=" btn btn-info " href="<c:url value="/logout" />">Đăng xuất</a>
+                        </li>
                     </c:when>
                 </c:choose>
             </ul>
