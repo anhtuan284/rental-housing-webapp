@@ -59,15 +59,13 @@ public class PostRepositoryImpl implements PostRepository {
         Query query = s.createQuery(q);
         String p = params.get("page");
         if (p != null && !p.isEmpty()) {
-            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize"));
+            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize", "5"));
             int start = (Integer.parseInt(p) - 1) * pageSize;
             query.setFirstResult(start);
             query.setMaxResults(pageSize);
         }
 
-        List<Post> leasePosts = query.getResultList();
-        System.out.println(leasePosts);
-        return leasePosts;
+        return (List<Post>) query.getResultList();
     }
 
     @Override
@@ -103,7 +101,6 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void approvePost(int postId) {
         Session s = this.factoryBean.getObject().getCurrentSession();
-        System.out.println("213123123");
         System.out.println(postId);
         Post post = this.getPostById(postId);
         System.out.println(post.getDescription());

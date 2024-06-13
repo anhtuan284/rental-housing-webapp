@@ -62,11 +62,15 @@ public class Notification implements Serializable {
     @ManyToOne(optional = false)
     @JsonIgnore
     private Post postId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @NotNull
+    @Column(name = "user_id")
+    private Integer userId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     @JsonIgnore
-    private User userId;
-
+    private User user;
+ 
+    
     public Notification() {
     }
 
@@ -120,14 +124,21 @@ public class Notification implements Serializable {
         this.postId = postId;
     }
 
-    public User getUserId() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+       public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(User userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;

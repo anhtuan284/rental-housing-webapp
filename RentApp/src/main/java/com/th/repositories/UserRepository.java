@@ -5,7 +5,6 @@
 
 package com.th.repositories;
 
-import com.th.pojo.Role;
 import com.th.pojo.User;
 
 import java.util.List;
@@ -26,4 +25,7 @@ public interface UserRepository {
     List<User> getAllUser(Map<String, String> params);
 
     boolean authUser(String username, String password);
+    
+    List<Integer> getListIdFollower (User user);
+    
 }

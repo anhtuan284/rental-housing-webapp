@@ -4,7 +4,6 @@
  */
 package com.th.config;
 
-
 import com.th.filters.CustomAccessDeniedHandler;
 import com.th.filters.JwtAuthenticationTokenFilter;
 import com.th.filters.RestAuthenticationEntryPoint;
@@ -37,7 +36,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Order(1)
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
-   @Bean
+    @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() throws Exception {
         JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter = new JwtAuthenticationTokenFilter();
         jwtAuthenticationTokenFilter.setAuthenticationManager(authenticationManager());
@@ -64,8 +63,8 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/api/**");
         http.authorizeRequests().antMatchers("/api/login/").permitAll();
-        http.authorizeRequests().antMatchers("/api/products/").permitAll();
-        http.authorizeRequests().antMatchers("/api/products/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/posts/").permitAll();
+        http.authorizeRequests().antMatchers("/api/posts/**").permitAll();
         http.authorizeRequests().antMatchers("/api/categories/").permitAll();
         http.authorizeRequests().antMatchers("/api/users/").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**/comments/").permitAll();

@@ -32,15 +32,15 @@ public class JwtService {
         String token = null;
         try {
             JWSSigner signer = new MACSigner(SHARED_SECRET_KEY);
-            
+
             JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
             builder.claim("username", username);
-            
+
             builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_TIME));
-            
+
             JWTClaimsSet claimsSet = builder.build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
-            
+
             signedJWT.sign(signer);
             token = signedJWT.serialize();
         } catch (JOSEException e) {
@@ -62,7 +62,7 @@ public class JwtService {
         }
         return claims;
     }
-    
+
     private Date getExpirationDateFromToken(String token) {
         JWTClaimsSet claims = getClaimsFromToken(token);
         Date expiration = claims.getExpirationTime();
@@ -74,6 +74,7 @@ public class JwtService {
         try {
             JWTClaimsSet claims = getClaimsFromToken(token);
             username = claims.getStringClaim("username");
+      
         } catch (ParseException e) {
             System.err.println(e.getMessage());
         }
@@ -90,7 +91,8 @@ public class JwtService {
             return false;
         }
         String username = getUsernameFromToken(token);
-        
+
+
         return !(username == null || username.isEmpty() || isTokenExpired(token));
     }
 }

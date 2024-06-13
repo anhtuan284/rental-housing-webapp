@@ -38,6 +38,7 @@ public class ImageRepositoryImpl implements ImageRepository {
     @Override
     public void saveListImageOfPost(Post post, MultipartFile[] files) {
         try {
+            System.out.println("kkkkkk");
             Session session = factory.getObject().getCurrentSession();
             List<Map<String, Object>> uploadedFiles = cloudinaryService.uploadFiles(files);
 
@@ -48,6 +49,7 @@ public class ImageRepositoryImpl implements ImageRepository {
 //                image.setCreatedDate(new Date());
                 session.save(image);
             }
+            session.flush();
         } catch (IOException ex) {
             Logger.getLogger(ImageRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

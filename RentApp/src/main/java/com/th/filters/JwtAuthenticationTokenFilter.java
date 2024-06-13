@@ -42,18 +42,34 @@ public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthentication
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String authToken = httpRequest.getHeader(TOKEN_HEADER);
+        System.out.println(jwtService.validateTokenLogin(authToken));
+        System.out.println(jwtService.validateTokenLogin(authToken));
+        System.out.println(jwtService.validateTokenLogin(authToken));
+        System.out.println(jwtService.validateTokenLogin(authToken));
+        System.out.println(jwtService.validateTokenLogin(authToken));
+        System.out.println(jwtService.validateTokenLogin(authToken));
+        System.out.println(jwtService.validateTokenLogin(authToken));
+        System.out.println(jwtService.validateTokenLogin(authToken));
         if (jwtService.validateTokenLogin(authToken)) {
             String username = jwtService.getUsernameFromToken(authToken);
             User user = userService.getUserByUsername(username);
+            System.out.println(username);
+            System.out.println(username);
+            System.out.println(username);
+            System.out.println(username);
+            System.out.println(username);
+            System.out.println(username);
+            System.out.println(username);
+
             if (user != null) {
                 boolean enabled = true;
                 boolean accountNonExpired = true;
                 boolean credentialsNonExpired = true;
                 boolean accountNonLocked = true;
-                
+
                 Set<GrantedAuthority> authorities = new HashSet<>();
                 authorities.add(new SimpleGrantedAuthority(user.getRoleId().getName()));
-                
+
                 UserDetails userDetail = new org.springframework.security.core.userdetails.User(username, user.getPassword(), enabled, accountNonExpired,
                         credentialsNonExpired, accountNonLocked, authorities);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail,

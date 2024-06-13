@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("userDetailsService")
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepo;
     @Autowired
@@ -92,5 +93,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean authUser(String username, String password) {
         return this.userRepo.authUser(username, password);
+    }
+
+    @Override
+    public List<Integer> getListIdFollower(User user) {
+        return userRepo.getListIdFollower(user);
+
     }
 }

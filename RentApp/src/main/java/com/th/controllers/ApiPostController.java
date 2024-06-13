@@ -10,6 +10,7 @@ import com.th.pojo.PropertyDetail;
 import com.th.pojo.User;
 import com.th.services.ImageService;
 import com.th.services.LocationService;
+import com.th.services.NotificationService;
 import com.th.services.PostService;
 import com.th.services.PropertyDetailService;
 //import com.th.services.PropertyDetailService;
@@ -18,6 +19,8 @@ import com.th.services.UserService;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +61,8 @@ public class ApiPostController {
     @Autowired
     private LocationService locationSe;
 
+    
+
     @GetMapping("/PostOfRenter/")
     public ResponseEntity<List<Post>> list(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.postSe.getPostOfRenter(params), HttpStatus.OK);
@@ -72,11 +77,6 @@ public class ApiPostController {
     @Transactional
     public ResponseEntity<String> createLeasePost(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] files) {
         try {
-//            for (Map.Entry<String, String> entry : params.entrySet()) {
-//                String key = entry.getKey();
-//                String value = entry.getValue();
-//                System.out.println(key + ": " + value);
-//            }
             User user = userService.getUserByUsername("admin");
             Post post = new Post();
             PropertyDetail prop = new PropertyDetail();
@@ -98,7 +98,17 @@ public class ApiPostController {
             propSe.savePropOfPost(post, prop);
             locationSe.saveLocationOfProp(post, location);
             imgSe.saveListImageOfPost(post, files);
+//            ExecutorService executor = Executors.newFixedThreadPool(2);
+//            executor.submit(() -> notiSe.addNotification(user, post));
+//            executor.submit(() -> imgSe.saveListImageOfPost(post, files));
+//            System.out.println("mfmmfmf");
+//            executor.shutdown();
 
+//            for (Map.Entry<String, String> entry : params.entrySet()) {
+//                String key = entry.getKey();
+//                String value = entry.getValue();
+//                System.out.println(key + ": " + value);
+//            }
 //            for (MultipartFile file : files) {
 //                System.out.println("File name: " + file.getOriginalFilename());
 //                System.out.println("Content type: " + file.getContentType());

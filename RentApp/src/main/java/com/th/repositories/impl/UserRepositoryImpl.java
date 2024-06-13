@@ -34,6 +34,7 @@ import java.util.Map;
 @Repository
 @Transactional
 public class UserRepositoryImpl implements UserRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
     @Autowired
@@ -98,10 +99,18 @@ public class UserRepositoryImpl implements UserRepository {
         return user_list;
     }
 
-    @Override
     public boolean authUser(String username, String password) {
-        User  u = this.getUserByUsername(username);
+        User u = this.getUserByUsername(username);
 
         return this.passEncoder.matches(password, u.getPassword());
+    }
+    @Override
+    public List<Integer> getListIdFollower(User user) {
+        Session s = this.factory.getObject().getCurrentSession();
+        System.out.println(user.getId());
+        String hql = "SELECT f.followerId.id FROM Follow f WHERE f.followeeId.id = :userId";
+        Query query = s.createQuery(hql);
+        query.setParameter("userId", user.getId());
+        return (List<Integer>) query.getResultList();
     }
 }

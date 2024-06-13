@@ -15,7 +15,8 @@ import java.util.Map;
  * @author voquochuy
  */
 public interface UserService extends UserDetailsService {
-    User getUserByUsername (String username);
+
+    User getUserByUsername(String username);
 
     List<User> getAllUsers(Map<String, String> params);
 
@@ -24,5 +25,7 @@ public interface UserService extends UserDetailsService {
     void addUser(User user);
 
     boolean authUser(String username, String password);
-}
     
+    List<Integer> getListIdFollower(User user);
+
+}

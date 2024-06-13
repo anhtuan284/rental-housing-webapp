@@ -25,15 +25,26 @@ public class CloudinaryService {
     private Cloudinary cloudinary;
 
     public List<Map<String, Object>> uploadFiles(MultipartFile[] files) throws IOException {
+        System.out.println("vvvvvvv");
         List<Map<String, Object>> uploadedFiles = new ArrayList<>();
+        System.out.println("fasda");
+
         for (MultipartFile file : files) {
+            System.out.println("vv;;;;;");
+
             Map<String, Object> uploadedFile = uploadFile(file);
+            System.out.println("wqe21;;;;;");
+
             uploadedFiles.add(uploadedFile);
         }
+        System.out.println("ccvvvvvvv");
+
         return uploadedFiles;
     }
 
     private Map<String, Object> uploadFile(MultipartFile file) throws IOException {
+        System.out.println("qqweqweqw;");
+
         return cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
     }
 }
