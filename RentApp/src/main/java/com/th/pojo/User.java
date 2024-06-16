@@ -5,6 +5,8 @@
 package com.th.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
@@ -12,7 +14,9 @@ import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.ws.rs.DefaultValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -46,67 +50,87 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+
     @Size(max = 255)
     @Column(name = "avatar")
     private String avatar;
+
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotNull(message = "{user.username.nullErr}")
+    @Size(min = 1, max = 30, message = "{user.name.err}")
     @Column(name = "username")
     private String username;
+
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{user.password.nullErr}")
     @Size(min = 1, max = 255)
     @Column(name = "password")
     private String password;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+
+    @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="{user.email.err}")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotNull(message = "{user.email.nullErr}")
+    @Size(min = 1, max = 255, message = "{user.email.err}")
     @Column(name = "email")
     private String email;
+
+
     @Column(name = "date_of_birth")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
+
     @Size(max = 255)
     @Column(name = "name")
     private String name;
+
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotNull(message = "{user.cccd.nullErr}")
+    @Size(min = 1, max = 255, message = "{user.cccd.err")
     @Column(name = "cccd")
     private String cccd;
+
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+    @NotNull(message = "{user.numberPhone.nullErr}")
+    @Size(min = 1, max = 12, message = "{user.numberPhone.err}")
     @Column(name = "numberPhone")
     private String numberPhone;
+
     @Size(max = 255)
     @Column(name = "address")
     private String address;
+
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
+
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
+
     @Column(name = "activated")
     private Short activated;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     @JsonIgnore
     private Set<Notification> notificationSet;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     @JsonIgnore
     private Set<Post> postSet;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     @JsonIgnore
     private Set<Comment> commentSet;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "followerId")
     @JsonIgnore
     private Set<Follow> followSet;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "followeeId")
     @JsonIgnore
     private Set<Follow> followSet1;
+
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     @JsonIgnore
@@ -324,5 +348,13 @@ public class User implements Serializable {
     @PreUpdate
     protected void onUpdate() {
         this.updatedDate = new Date(); // Cập nhật updatedDate mỗi khi có sự cập nhật
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }

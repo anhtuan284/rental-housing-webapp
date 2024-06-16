@@ -7,6 +7,7 @@ package com.th.repositories.impl;
 import com.th.pojo.Role;
 import com.th.repositories.RoleRepository;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.hibernate.Session;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author voquochuy
@@ -38,5 +41,13 @@ public class RoleRepositoryImpl implements RoleRepository {
     public Role getRoleById(int roleId) {
         Session session = this.factory.getObject().getCurrentSession();
         return session.get(Role.class, roleId);
+    }
+
+    @Override
+    public List<Role> getRoles() {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createNamedQuery("Role.findAll");
+
+        return q.getResultList();
     }
 }

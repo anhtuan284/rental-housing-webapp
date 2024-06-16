@@ -24,8 +24,11 @@ public interface UserService extends UserDetailsService {
 
     void addUser(User user);
 
+    void addOrUpdate(User user);
+
     boolean authUser(String username, String password);
-    
+
     List<Integer> getListIdFollower(User user);
 
+    int countUserByParams(Map<String, String> params);
 }

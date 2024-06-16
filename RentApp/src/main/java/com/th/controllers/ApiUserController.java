@@ -43,7 +43,7 @@ public class ApiUserController {
         user.setCccd(params.get("address"));
 
         if (files.length > 0)
-//            user.set(files[0]);
+            user.setFile(files[0]);
 
         this.userService.addUser(user);
     }

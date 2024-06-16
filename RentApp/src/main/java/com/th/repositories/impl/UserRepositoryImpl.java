@@ -9,7 +9,6 @@ import com.th.pojo.User;
 import com.th.repositories.RoleRepository;
 import com.th.repositories.UserRepository;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,6 +17,7 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +33,7 @@ import java.util.Map;
  */
 @Repository
 @Transactional
+@PropertySource("classpath:configs.properties")
 public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
@@ -61,10 +62,21 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void addUser(User user) {
         Session s = this.factory.getObject().getCurrentSession();
-        Role role = roleRepository.getRoleById(5);
+        Role role = roleRepository.getRoleById(3);
         System.out.println(role);
         user.setRoleId(role);
         s.save(user);
+    }
+
+    @Override
+    public void addOrUpdate(User user) {
+        Session s = this.factory.getObject().getCurrentSession();
+        if (user.getId() != null && user.getId() > 0) {
+            s.update(user);
+        } else {
+            user.setPassword(passEncoder.encode(user.getPassword()).toString());
+            s.save(user);
+        }
     }
 
     @Override
@@ -88,9 +100,13 @@ public class UserRepositoryImpl implements UserRepository {
         Query query = s.createQuery(q);
 
         String p = params.get("page");
+        int pageSize = Integer.parseInt(env.getProperty("user.pageSize"));
         if (p != null && !p.isEmpty()) {
-            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize"));
             int start = (Integer.parseInt(p) - 1) * pageSize;
+            query.setFirstResult(start);
+            query.setMaxResults(pageSize);
+        } else {
+            int start = 0;
             query.setFirstResult(start);
             query.setMaxResults(pageSize);
         }
@@ -113,4 +129,28 @@ public class UserRepositoryImpl implements UserRepository {
         query.setParameter("userId", user.getId());
         return (List<Integer>) query.getResultList();
     }
+
+    @Override
+    public int countUserByParam(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Long> q = b.createQuery(Long.class);
+        Root<User> rUser = q.from(User.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        String kw = params.get("kw");
+        if (kw != null && !kw.isEmpty()) {
+            predicates.add(b.like(rUser.get("username"), String.format("%%%s%%", kw)));
+        }
+
+        q.where(predicates.toArray(new Predicate[0]));
+
+        q.select(b.count(rUser));
+
+        Query query = s.createQuery(q);
+        Long count = (Long) query.getSingleResult();
+        return count.intValue();
+    }
+
 }

@@ -7,15 +7,12 @@ package com.th.controllers;
 import com.th.pojo.Image;
 import com.th.pojo.Post;
 import com.th.pojo.PropertyDetail;
-import com.th.services.PostService;
+import com.th.services.*;
 
 
 import com.th.pojo.User;
-import com.th.services.CloudinaryService;
-import com.th.services.ImageService;
 import com.th.services.PostService;
-import com.th.services.TypeOfPostService;
-import com.th.services.UserService;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,18 +22,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Peter
  */
 @Controller
+@ControllerAdvice
 @Transactional
 public class HomeController {
 
@@ -54,6 +47,9 @@ public class HomeController {
     
     @Autowired
     private ImageService imgService;
+
+    @Autowired
+    private RoleService roleSe;
 
     @RequestMapping("/")
     public String home(@RequestParam(required = false) Map<String, String> params, Model model) {
@@ -103,6 +99,10 @@ public class HomeController {
         return "detail";
     }
 
+    @ModelAttribute
+    public void commonAttr(Model model) {
+        model.addAttribute("roles", this.roleSe.getRoles());
+    }
 
 
 }

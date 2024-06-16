@@ -5,6 +5,7 @@
 package com.th.config;
 
 //import com.th.fomatters.CategoryFormatter;
+import com.th.formatters.RoleFormatter;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 //import org.springframework.format.FormatterRegistry;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -106,7 +108,12 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         return resolver;
     }
 
-//    @Bean
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new RoleFormatter());
+    }
+
+    //    @Bean
 //    public InternalResourceViewResolver internalResourceViewResolver() {
 //        InternalResourceViewResolver r = new InternalResourceViewResolver();
 //        r.setViewClass(JstlView.class);

@@ -12,5 +12,7 @@ import java.util.List;
  * @author voquochuy
  */
 public interface RoleService {
-    String  getUserRoleName(int userRoleId);    
+    String  getUserRoleName(int userRoleId);
+
+    List<Role> getRoles();
 }

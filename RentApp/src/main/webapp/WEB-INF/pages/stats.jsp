@@ -99,6 +99,9 @@
         <div class="col-md-5 p-2 mx-3 my-3 shadow rounded">
             <canvas id="usersByRoleChart"></canvas>
         </div>
+        <div class="col-md-6 p-2 mx-3 my-3 shadow rounded">
+            <canvas id="usersByRoleChart2"></canvas>
+        </div>
     </div>
 </main>
 <script src="<c:url value="/js/stats.js"/>"></script>
@@ -128,6 +131,9 @@
 
     const usersByRoleCtx = document.getElementById('usersByRoleChart').getContext('2d');
     renderDoughNutChart(usersByRoleCtx, labels, data, 'Count', 'Users sorted by ROLE');
+
+    const usersByRoleCtx2 = document.getElementById('usersByRoleChart2').getContext('2d');
+    renderPolarChart(usersByRoleCtx2, labels, data, 'Count', 'Users sorted by ROLE');
 
     const usersByPeriodCtx = document.getElementById('usersByPeriodChart').getContext('2d');
     renderBarChart(usersByPeriodCtx, label2, data2, `${period}`, `Created users by ${period} / ${year}`);

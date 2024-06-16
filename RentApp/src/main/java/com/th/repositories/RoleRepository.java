@@ -15,4 +15,6 @@ public interface RoleRepository {
     String  getUserRoleName(int userRoleId);
 
     Role getRoleById(int roleId);
+
+    List<Role> getRoles();
 }

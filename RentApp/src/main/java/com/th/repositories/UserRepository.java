@@ -22,10 +22,13 @@ public interface UserRepository {
 
     void addUser(User user);
 
+    void addOrUpdate(User p);
+
     List<User> getAllUser(Map<String, String> params);
 
     boolean authUser(String username, String password);
     
     List<Integer> getListIdFollower (User user);
-    
+
+    int countUserByParam(Map<String, String> params);
 }

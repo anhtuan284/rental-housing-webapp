@@ -65,16 +65,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(User user) {
-//        user.setPassword(passEncoder.encode(user.getPassword()).toString());
-//        if (!user.getFile().isEmpty()) {
-//            try {
-//                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-//                user.setAvatar(res.get("secure_url").toString());
-//            } catch (IOException ex) {
-//                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//        this.userRepo.addUser(user);
+        user.setPassword(passEncoder.encode(user.getPassword()).toString());
+        if (!user.getFile().isEmpty()) {
+            try {
+                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                user.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        this.userRepo.addUser(user);
     }
 
     @Override
@@ -91,6 +91,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void addOrUpdate(User user) {
+        if (user.getFile() != null || !user.getFile().isEmpty()) {
+            try {
+                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto"));
+                user.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        this.userRepo.addOrUpdate(user);
+    }
+    @Override
     public boolean authUser(String username, String password) {
         return this.userRepo.authUser(username, password);
     }
@@ -99,5 +112,10 @@ public class UserServiceImpl implements UserService {
     public List<Integer> getListIdFollower(User user) {
         return userRepo.getListIdFollower(user);
 
+    }
+
+    @Override
+    public int countUserByParams(Map<String, String> params) {
+        return userRepo.countUserByParam(params);
     }
 }
