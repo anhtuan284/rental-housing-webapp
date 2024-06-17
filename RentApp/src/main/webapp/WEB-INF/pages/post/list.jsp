@@ -4,6 +4,12 @@
     Author     : atuan
 --%>
 
+<%-- 
+    Document   : list
+    Created on : Jun 3, 2024, 3:10:03 PM
+    Author     : atuan
+--%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -124,7 +130,7 @@
             }
         </style>
     </head>
-    <body>
+   <body>
         <div class="container mt-4">
             <h1 class="text-center text-info">Bài viết</h1>
             <div class="row posts-wrapper">
@@ -139,12 +145,12 @@
                                 <div class="post-details">
                                     <h2 class="card-title">${post.title}</h2>
                                     <p class="card-text">${post.description}</p>
-                                        <h6 class="card-subtitle mb-2">Chi tiết:</h6>
-                                            <span class="pe-2"><strong>Địa chỉ: </strong> ${post.location.address}  </span>
-                                            <span class="pe-2"><strong>Diện tích:</strong> ${post.propertyDetail.acreage} </span>
-                                            <span class="pe-2"><strong>Giá:</strong> ${post.propertyDetail.price}  </span>
-                                            <span class="pe-2"><strong>Sức chứa:</strong> ${post.propertyDetail.capacity}  </span>
-                                        <!--<button type="button" class="btn btn-primary view-map-btn" data-lat="${post.location.latitude}" data-lng="${post.location.longitude}" data-toggle="modal" data-target="#mapModal">Xem vị trí trên bản đồ</button>-->
+                                    <h6 class="card-subtitle mb-2">Chi tiết:</h6>
+                                    <span class="pe-2"><strong>Địa chỉ: </strong> ${post.location.address}  </span>
+                                    <span class="pe-2"><strong>Diện tích:</strong> ${post.propertyDetail.acreage} </span>
+                                    <span class="pe-2"><strong>Giá:</strong> ${post.propertyDetail.price}  </span>
+                                    <span class="pe-2"><strong>Sức chứa:</strong> ${post.propertyDetail.capacity}  </span>
+                                    <button type="button" class="btn btn-primary view-map-btn" data-lat="${post.location.latitude}" data-lng="${post.location.longitude}" data-toggle="modal" data-target="#mapModal">Xem vị trí trên bản đồ</button>
                                     <div id="carouselExampleIndicators${post.postId}" class="carousel slide" data-interval="false" data-ride="carousel">
                                         <ol class="carousel-indicators">
                                             <c:forEach var="image" items="${post.imageSet}" varStatus="loop">
@@ -170,7 +176,7 @@
                                 </div>
                             </div>
                             <div class="my-2 text-center">
-                                <c:url value="/api/admin/post/approve/${post.postId}" var="url" />
+                                <c:url value="/admin/post/approve/${post.postId}" var="url" />
                                 <button type="button" class="btn btn-info" onclick="approvePost('${url}', ${post.postId})">Cập nhật</button>
                             </div>
                         </div>
@@ -196,90 +202,19 @@
             </div>
         </div>
 
+
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=loadMap' async defer></script>
         <script>
-            function initMap() {
-                // This function is required for Google Maps API to work
-            }
+            var map, pushpin;
 
-            document.addEventListener('DOMContentLoaded', function () {
-                var carousels = document.querySelectorAll('.carousel');
-                carousels.forEach(function (carousel) {
-                    var startX;
-                    var endX;
-
-                    carousel.addEventListener('touchstart', function (event) {
-                        startX = event.touches[0].clientX;
-                    });
-
-                    carousel.addEventListener('touchmove', function (event) {
-                        endX = event.touches[0].clientX;
-                    });
-
-                    carousel.addEventListener('touchend', function (event) {
-                        var threshold = 50; // Minimum distance for a swipe
-                        if (startX - endX > threshold) {
-                            $(carousel).carousel('next');
-                        } else if (endX - startX > threshold) {
-                            $(carousel).carousel('prev');
-                        }
-                    });
-
-                    var mouseDown = false;
-
-                    carousel.addEventListener('mousedown', function (event) {
-                        mouseDown = true;
-                        startX = event.clientX;
-                    });
-
-                    carousel.addEventListener('mousemove', function (event) {
-                        if (mouseDown) {
-                            endX = event.clientX;
-                        }
-                    });
-
-                    carousel.addEventListener('mouseup', function (event) {
-                        mouseDown = false;
-                        var threshold = 50; // Minimum distance for a swipe
-                        if (startX - endX > threshold) {
-                            $(carousel).carousel('next');
-                        } else if (endX - startX > threshold) {
-                            $(carousel).carousel('prev');
-                        }
-                    });
-
-                    carousel.addEventListener('mouseleave', function (event) {
-                        mouseDown = false;
-                    });
+            function loadMap() {
+                map = new Microsoft.Maps.Map(document.getElementById('map'), {
+                    credentials: 'AnmtdlciSHCT7-QaOKIk_DNILKWHw4ehMIsCGTXHi-HTGuGaoQ4KfQppjtyYsh5P'
                 });
-
-                // Event listener for map buttons
-                $('.view-map-btn').on('click', function () {
-                    var latitude = parseFloat($(this).data('lat'));
-                    var longitude = parseFloat($(this).data('lng'));
-
-                    $('#mapModal').on('shown.bs.modal', function () {
-                        var map = new google.maps.Map(document.getElementById('map'), {
-                            center: { lat: latitude, lng: longitude },
-                            zoom: 15
-                        });
-                        var marker = new google.maps.Marker({
-                            position: { lat: latitude, lng: longitude },
-                            map: map
-                        });
-                    });
-                });
-            });
-
-            function loadScript() {
-                var script = document.createElement('script');
-                script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ5yuhRClCTJ7mz69NjPs8Pz6AF4ksdIc&callback=initMap`;
-                script.async = true;
-                script.defer = true;
-                document.head.appendChild(script);
             }
 
             function approvePost(url, postId) {
@@ -295,6 +230,34 @@
                         alert('Failed to approve post'); // Hiển thị thông báo lỗi nếu có
                     });
             }
+
+            function initMapModal(lat, lng) {
+                if (!map) {
+                    loadMap();
+                }
+                var location = new Microsoft.Maps.Location(lat, lng);
+                map.setView({ center: location, zoom: 15 });
+
+                if (pushpin) {
+                    map.entities.remove(pushpin);
+                }
+                pushpin = new Microsoft.Maps.Pushpin(location);
+                map.entities.push(pushpin);
+            }
+
+            $(document).ready(function () {
+                $('.view-map-btn').on('click', function () {
+                    var lat = $(this).data('lat');
+                    var lng = $(this).data('lng');
+                    initMapModal(lat, lng);
+                });
+
+                $('#mapModal').on('shown.bs.modal', function () {
+                    if (map) {
+                        map.setView(map.getOptions());
+                    }
+                });
+            });
         </script>
     </body>
 </html>

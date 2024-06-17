@@ -30,13 +30,17 @@ public class ApiFollow {
     @Autowired
     private FollowService followSe;
     @Autowired
-    private UserService userRepo;
+    private UserService userSe;
 
     @PostMapping("/Follow")
     @Transactional
     public ResponseEntity<String> Follow(@RequestBody Map<String, Integer> params) {
         try {
-            int followerId = params.get("follower");
+             User currentUser = userSe.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            }
+            int followerId = currentUser.getId();
             int followeeId = params.get("followee");
             if (followerId == followeeId) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail: invalid input");
@@ -57,10 +61,13 @@ public class ApiFollow {
     @Transactional
     public ResponseEntity<String> UnFollow(@RequestBody Map<String, Integer> params) {
         try {
-            int followerId = params.get("follower");
+                User uFollower = userSe.getCurrentUser();
+            if (uFollower == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            }
+            int followerId = uFollower.getId();
             int followeeId = params.get("followee");
-            User uFollower = userRepo.getUserById(followerId);
-            User uFollowee = userRepo.getUserById(followeeId);
+            User uFollowee = userSe.getUserById(followeeId);
             if (followerId == followeeId) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail: invalid input");
             }
@@ -75,4 +82,6 @@ public class ApiFollow {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request");
         }
     }
+    
+    
 }

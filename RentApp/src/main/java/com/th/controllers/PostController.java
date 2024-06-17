@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class PostController {
 
     @Autowired
@@ -28,12 +28,12 @@ public class PostController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public List<Post> getListLesaePost(@RequestParam(required = false) Map<String, String> params) {
-        int typeId = 2;
-        boolean status = true;
-        return postSe.getPosts(typeId, status, params);
-    }
+//    @GetMapping
+//    public List<Post> getListLesaePost(@RequestParam(required = false) Map<String, String> params) {
+//        int typeId = 2;
+//        boolean status = true;
+//        return postSe.getPosts(typeId, status, params);
+//    }
 
     @GetMapping("/admin/post/approve/{postId}")
     public ResponseEntity<String> approvePost(@PathVariable(value = "postId") Integer postId) {

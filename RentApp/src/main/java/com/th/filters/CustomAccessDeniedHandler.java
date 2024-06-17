@@ -13,16 +13,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest hsr, HttpServletResponse response, org.springframework.security.access.AccessDeniedException ade) throws IOException, ServletException {
-        System.out.println(response);
-        System.out.println(response);
-        System.out.println(response);
-        System.out.println(response);
-        System.out.println(response);
-        System.out.println(response);
-        System.out.println(response);
-        System.out.println(response);
-        System.out.println(response);
-        System.out.println(response);
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.getWriter().write("Access Denied!");
     }

@@ -44,23 +44,9 @@ public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthentication
         String authToken = httpRequest.getHeader(TOKEN_HEADER);
         System.out.println(jwtService.validateTokenLogin(authToken));
         System.out.println(jwtService.validateTokenLogin(authToken));
-        System.out.println(jwtService.validateTokenLogin(authToken));
-        System.out.println(jwtService.validateTokenLogin(authToken));
-        System.out.println(jwtService.validateTokenLogin(authToken));
-        System.out.println(jwtService.validateTokenLogin(authToken));
-        System.out.println(jwtService.validateTokenLogin(authToken));
-        System.out.println(jwtService.validateTokenLogin(authToken));
         if (jwtService.validateTokenLogin(authToken)) {
             String username = jwtService.getUsernameFromToken(authToken);
             User user = userService.getUserByUsername(username);
-            System.out.println(username);
-            System.out.println(username);
-            System.out.println(username);
-            System.out.println(username);
-            System.out.println(username);
-            System.out.println(username);
-            System.out.println(username);
-
             if (user != null) {
                 boolean enabled = true;
                 boolean accountNonExpired = true;

@@ -19,5 +19,6 @@ public interface PostService {
     void deletePost(int id);
     void approvePost(int postId);
     List<Post> getPostOfRenter(Map<String, String> param);
+    List<Post> getPostOfLandlord(Map<String, String> param);
 
 }
