@@ -36,7 +36,7 @@ public class ApiFollow {
     @Transactional
     public ResponseEntity<String> Follow(@RequestBody Map<String, Integer> params) {
         try {
-             User currentUser = userSe.getCurrentUser();
+            User currentUser = userSe.getCurrentUser();
             if (currentUser == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
             }
@@ -61,7 +61,7 @@ public class ApiFollow {
     @Transactional
     public ResponseEntity<String> UnFollow(@RequestBody Map<String, Integer> params) {
         try {
-                User uFollower = userSe.getCurrentUser();
+            User uFollower = userSe.getCurrentUser();
             if (uFollower == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
             }
@@ -82,6 +82,22 @@ public class ApiFollow {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request");
         }
     }
-    
-    
+
+    @PostMapping("/CheckFollow")
+    public ResponseEntity<Boolean> CheckFollow(@RequestBody Map<String, Integer> params) {
+        try {
+            User uFollower = userSe.getCurrentUser();
+            if (uFollower == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+            }
+            Integer userIdToCheck = params.get("userId");
+            boolean isFollowing = followSe.checkFollowing(uFollower.getId(), userIdToCheck);
+            //true = đã fl / false = chưa fl
+            return ResponseEntity.ok(isFollowing);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+        }
+    }
+
 }

@@ -41,4 +41,15 @@ public class FollowServiceImpl implements FollowService {
             return "error";
         }
     }
+
+    @Override
+    public boolean checkFollowing(Integer currentUser, Integer userIdToCheck) {
+        if (followRepo.getFollowByTwoId(currentUser, userIdToCheck) != null) {
+                        System.out.println("44444");
+            return true;
+        } else {
+            System.out.println("1212112");
+            return false;
+        }
+    }
 }

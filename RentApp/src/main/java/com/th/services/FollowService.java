@@ -14,5 +14,7 @@ public interface FollowService {
 
     String unFollow(int followerID, int followeeID);
 
+   boolean checkFollowing(Integer currentUser, Integer userIdToCheck);
+
 
 }
