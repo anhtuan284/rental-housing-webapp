@@ -9,6 +9,7 @@ import com.th.pojo.Post;
 import com.th.pojo.PropertyDetail;
 import com.th.pojo.User;
 import com.th.repositories.PostRepository;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import javax.persistence.Query;
 import org.springframework.core.env.Environment;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
@@ -45,6 +48,8 @@ public class PostRepositoryImpl implements PostRepository {
         CriteriaQuery<Post> q = b.createQuery(Post.class);
         Root<Post> post = q.from(Post.class);
 
+        Join<Post, PropertyDetail> propJoin = post.join("propertyDetail", JoinType.INNER);
+
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(post.get("status"), status));
         predicates.add(b.equal(post.get("typeId").get("typeId"), typeId));
@@ -52,6 +57,31 @@ public class PostRepositoryImpl implements PostRepository {
         String kw = params.get("kw");
         if (kw != null && !kw.isEmpty()) {
             predicates.add(b.like(post.get("title"), String.format("%%%s%%", kw)));
+        }
+
+        String minPrice = params.get("minPrice");
+        if (minPrice != null && !minPrice.isEmpty()) {
+            predicates.add(b.greaterThanOrEqualTo(propJoin.get("price"), new BigDecimal(minPrice)));
+        }
+
+        String maxPrice = params.get("maxPrice");
+        if (maxPrice != null && !maxPrice.isEmpty()) {
+            predicates.add(b.lessThanOrEqualTo(propJoin.get("price"), new BigDecimal(maxPrice)));
+        }
+
+        String minAcreage = params.get("minAcreage");
+        if (minAcreage != null && !minAcreage.isEmpty()) {
+            predicates.add(b.greaterThanOrEqualTo(propJoin.get("acreage"), Integer.parseInt(minAcreage)));
+        }
+
+        String maxAcreage = params.get("maxAcreage");
+        if (maxAcreage != null && !maxAcreage.isEmpty()) {
+            predicates.add(b.lessThanOrEqualTo(propJoin.get("acreage"), Integer.parseInt(maxAcreage)));
+        }
+
+        String capacity = params.get("capacity");
+        if (capacity != null && !capacity.isEmpty()) {
+            predicates.add(b.equal(propJoin.get("capacity"), Integer.parseInt(capacity)));
         }
 
         q.where(predicates.toArray(new Predicate[0]));
@@ -68,7 +98,6 @@ public class PostRepositoryImpl implements PostRepository {
 
         return (List<Post>) query.getResultList();
     }
-
     @Override
     @Transactional
     public void addOrUpdate(Post post) {
