@@ -65,7 +65,8 @@ public class ApiPostController {
     public ResponseEntity<List<Post>> PostOfRenter(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.postSe.getPostOfRenter(params), HttpStatus.OK);
     }
-     @GetMapping("/PostOfLandlord/")
+
+    @GetMapping("/PostOfLandlord/")
     public ResponseEntity<List<Post>> PostOfLandlord(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.postSe.getPostOfLandlord(params), HttpStatus.OK);
     }
@@ -84,23 +85,33 @@ public class ApiPostController {
     @Transactional
     public ResponseEntity<String> createLeasePost(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] files) {
         try {
-            User user = userService.getUserByUsername("admin");
+            User user = userService.getCurrentUser();
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            }
+            if (files.length < 3) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Min is 3 image");
+            }
             Post post = new Post();
             PropertyDetail prop = new PropertyDetail();
             Location location = new Location();
+
             post.setUserId(user);
             post.setStatus(false);
             post.setTitle(params.get("title"));
             post.setDescription(params.get("description"));
             post.setTypeId(typeService.getTypeById(1));
-            prop.setAcreage(params.get("acreage"));
+
+            prop.setAcreage(Integer.parseInt(params.get("acreage")));
             prop.setCapacity(Integer.valueOf(params.get("capacity")));
-            prop.setPrice(params.get("price"));
+            prop.setPrice(new BigDecimal(params.get("price"))); // Correctly convert String to BigDecimal
+
             location.setAddress(params.get("address"));
             location.setCity(params.get("city"));
             location.setDistrict(params.get("district"));
             location.setLatitude(new BigDecimal(params.get("latitude")));
             location.setLongitude(new BigDecimal(params.get("longitude")));;
+
             postSe.addOrUpdate(post);
             propSe.savePropOfPost(post, prop);
             locationSe.saveLocationOfProp(post, location);

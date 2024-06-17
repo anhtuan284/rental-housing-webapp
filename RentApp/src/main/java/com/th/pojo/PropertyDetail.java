@@ -6,6 +6,7 @@ package com.th.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -19,13 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author voquochuy
- */
 @Entity
 @Table(name = "property_detail")
 @XmlRootElement
@@ -35,32 +31,37 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PropertyDetail.findByPrice", query = "SELECT p FROM PropertyDetail p WHERE p.price = :price"),
     @NamedQuery(name = "PropertyDetail.findByAcreage", query = "SELECT p FROM PropertyDetail p WHERE p.acreage = :acreage"),
     @NamedQuery(name = "PropertyDetail.findByCapacity", query = "SELECT p FROM PropertyDetail p WHERE p.capacity = :capacity"),
-    @NamedQuery(name = "PropertyDetail.findByPostId", query = "SELECT p FROM PropertyDetail p WHERE p.postId = :postId")})
+    @NamedQuery(name = "PropertyDetail.findByPostId", query = "SELECT p FROM PropertyDetail p WHERE p.postId = :postId")
+})
 public class PropertyDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
+
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
     @Column(name = "price")
-    private String price;
+    private BigDecimal price;
+
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
     @Column(name = "acreage")
-    private String acreage;
+    private int acreage;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "capacity")
     private int capacity;
+
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "post_id")
     private Integer postId;
+
     @JoinColumn(name = "post_id", referencedColumnName = "post_id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     @JsonIgnore
@@ -73,7 +74,7 @@ public class PropertyDetail implements Serializable {
         this.postId = postId;
     }
 
-    public PropertyDetail(Integer postId, String price, String acreage, int capacity) {
+    public PropertyDetail(Integer postId, BigDecimal price, int acreage, int capacity) {
         this.postId = postId;
         this.price = price;
         this.acreage = acreage;
@@ -88,19 +89,19 @@ public class PropertyDetail implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public String getAcreage() {
+    public int getAcreage() {
         return acreage;
     }
 
-    public void setAcreage(String acreage) {
+    public void setAcreage(int acreage) {
         this.acreage = acreage;
     }
 
@@ -137,7 +138,6 @@ public class PropertyDetail implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof PropertyDetail)) {
             return false;
         }
@@ -152,5 +152,4 @@ public class PropertyDetail implements Serializable {
     public String toString() {
         return "com.th.pojo.PropertyDetail[ postId=" + postId + " ]";
     }
-    
 }
