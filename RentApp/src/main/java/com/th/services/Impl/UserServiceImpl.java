@@ -88,7 +88,14 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value = "users", key = "#id")
     public User getUserById(Integer id) {
         System.out.println("Call getUserById");
-        return this.userRepo.getUserById(id);
+        User u = this.userRepo.getUserById(id);
+        return u;
+    }
+
+    @Override
+    public User getUserProfile(Integer id) {
+        User u = this.userRepo.getUserProfile(id);
+        return u;
     }
 
     @Override

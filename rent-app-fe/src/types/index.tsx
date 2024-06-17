@@ -13,6 +13,17 @@ export type IUpdateUser = {
   file: File[];
 };
 
+export type IPost = {
+  postId: string;
+  creator: IUser;
+  title: string;
+  describe: string;
+  files: string[];
+  location?: string;
+  tags?: string;
+  created_date: string;
+};
+
 export type INewPost = {
   userId: string;
   caption: string;
@@ -32,11 +43,13 @@ export type IUpdatePost = {
 };
 
 export type IUser = {
-  id: string;
+  id: number;
   name: string;
   username: string;
   email: string;
   avatar: string;
+  followers: any[];
+  following: any[];
 };
 
 export type INewUser = {

@@ -24,6 +24,8 @@ public interface UserService extends UserDetailsService {
 
     void addUser(User user);
 
+    User getUserProfile(Integer id);
+
     void addOrUpdate(User user);
 
     boolean authUser(String username, String password);

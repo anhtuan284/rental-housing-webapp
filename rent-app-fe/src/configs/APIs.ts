@@ -6,10 +6,14 @@ export const endpoints = {
     'login': '/api/login/',
     'register': '/api/users/',
     'current-user': '/api/current-user/',
+    'profile': (id?: string) => `/api/profile/${id}`,
+    'follow': '/api/Follow',
+    'unfollow': '/api/UnFollow',
+    'check-follow': '/api/CheckFollow/',
     
 }
 
-export const authApi = (accessToken: String) => axios.create({
+export const authApi = (accessToken: string) => axios.create({
     baseURL: "http://localhost:8080/RentApp",
     headers: {
         "Authorization": `${accessToken}`

@@ -123,12 +123,12 @@ public class User implements Serializable {
     @JsonIgnore
     private Set<Comment> commentSet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "followerId")
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "followerId")
+//    @JsonIgnore
     private Set<Follow> followSet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "followeeId")
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "followeeId")
+//    @JsonIgnore
     private Set<Follow> followSet1;
 
     @JoinColumn(name = "role_id", referencedColumnName = "id")
@@ -137,6 +137,7 @@ public class User implements Serializable {
     private Role roleId;
 
     @Transient
+    @JsonIgnore
     private MultipartFile file;
 
     public User() {

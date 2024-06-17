@@ -20,6 +20,8 @@ public interface UserRepository {
 
     User getUserById(int userId);
 
+    User getUserProfile(int userId);
+
     void addUser(User user);
 
     void addOrUpdate(User p);

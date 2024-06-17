@@ -4,6 +4,7 @@
  */
 package com.th.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -38,9 +39,11 @@ public class Follow implements Serializable {
     private Integer followId;
     @JoinColumn(name = "follower_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private User followerId;
     @JoinColumn(name = "followee_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private User followeeId;
 
     public Follow() {

@@ -69,6 +69,7 @@ public class FollowRepositoryImpl implements FollowRepository {
         if (follow != null) {
             User uFollower = userRepo.getUserById(followerID);
             User uFollowee = userRepo.getUserById(followeeID);
+            System.out.println(follow);
             if (uFollower == null || uFollowee == null) {
                 return "fail";
             }

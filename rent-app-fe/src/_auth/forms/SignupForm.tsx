@@ -68,7 +68,7 @@ const SignupForm = () => {
           title: "Sign up success",
           description: "Please login to your acccount.",
         });
-        navigate("/login");
+        navigate("/sign-in");
       }
     } catch (error) {
       console.log({ error });

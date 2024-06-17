@@ -51,6 +51,7 @@ public class ApiUserController {
     @PostMapping("/login/")
     @CrossOrigin
     public ResponseEntity<String> login(@RequestBody User user) {
+        System.out.println("Login");
         if (this.userService.authUser(user.getUsername(), user.getPassword())) {
             String token = this.jwtService.generateTokenLogin(user.getUsername());
             return new ResponseEntity<>(token, HttpStatus.OK);
@@ -65,4 +66,12 @@ public class ApiUserController {
         User u = this.userService.getUserByUsername(p.getName());
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/profile/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<User> getUserProfile(@PathVariable int id) {
+        User u = this.userService.getUserProfile(id);
+        return new ResponseEntity<>(u, HttpStatus.OK);
+    }
+
 }

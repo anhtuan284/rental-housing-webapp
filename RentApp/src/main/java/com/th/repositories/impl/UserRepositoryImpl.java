@@ -48,7 +48,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getUserByUsername(String username) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query q = s.createQuery("SELECT u FROM User u WHERE u.username = :username");
+        Query q = s.createQuery("SELECT u FROM User u " +
+                "LEFT JOIN FETCH u.followSet f1 " +
+                "LEFT JOIN FETCH f1.followeeId followee " +
+                "LEFT JOIN FETCH u.followSet1 f2 " +
+                "LEFT JOIN FETCH f2.followerId follower " +
+                "WHERE u.username = :username", User.class);
         q.setParameter("username", username);
         return (User) q.getSingleResult();
     }
@@ -57,6 +62,21 @@ public class UserRepositoryImpl implements UserRepository {
     public User getUserById(int userId) {
         Session s = this.factory.getObject().getCurrentSession();
         return s.get(User.class, userId);
+    }
+
+    @Override
+    public User getUserProfile(int userId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery(
+                "SELECT u FROM User u " +
+                        "LEFT JOIN FETCH u.followSet f1 " +
+                        "LEFT JOIN FETCH f1.followeeId followee " +
+                        "LEFT JOIN FETCH u.followSet1 f2 " +
+                        "LEFT JOIN FETCH f2.followerId follower " +
+                        "WHERE u.id = :id", User.class);
+        q.setParameter("id", userId);
+        return (User) q.getSingleResult();
+
     }
 
     @Override

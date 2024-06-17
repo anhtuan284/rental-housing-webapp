@@ -59,6 +59,7 @@ public class ApiFollow {
 
     @PostMapping("/UnFollow")
     @Transactional
+    @CrossOrigin
     public ResponseEntity<String> UnFollow(@RequestBody Map<String, Integer> params) {
         try {
             User uFollower = userSe.getCurrentUser();
@@ -91,6 +92,8 @@ public class ApiFollow {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
             }
             Integer userIdToCheck = params.get("userId");
+            if (userIdToCheck == null)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
             boolean isFollowing = followSe.checkFollowing(uFollower.getId(), userIdToCheck);
             //true = đã fl / false = chưa fl
             return ResponseEntity.ok(isFollowing);
