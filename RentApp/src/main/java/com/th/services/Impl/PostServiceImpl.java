@@ -58,6 +58,10 @@ public class PostServiceImpl implements PostService {
     public List<Post> getPostOfRenter(Map<String, String> param) {
         return postRepo.getPosts(2, true, param);
     }
+    @Override
+    public List<Post> getPostOfLandlord(Map<String, String> param) {
+        return postRepo.getPosts(1, true, param);
+    }
 
 
 }

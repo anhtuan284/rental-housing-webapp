@@ -12,6 +12,7 @@ import com.th.repositories.PostRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import org.springframework.core.env.Environment;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -81,12 +82,16 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post getPostById(int id) {
-        System.out.println("11111");
-        Session s = this.factoryBean.getObject().getCurrentSession();
-        String hql = "FROM Post p WHERE p.postId = :id";
-        Query query = s.createQuery(hql, Post.class);
-        query.setParameter("id", id);
-        return (Post) query.getSingleResult();
+        try {
+            Session session = this.factoryBean.getObject().getCurrentSession();
+            String hql = "FROM Post p WHERE p.postId = :id";
+            Query query = session.createQuery(hql, Post.class);
+            query.setParameter("id", id);
+            return (Post) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+
+        }
     }
 
     @Override

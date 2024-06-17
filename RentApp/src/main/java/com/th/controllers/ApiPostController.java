@@ -61,16 +61,23 @@ public class ApiPostController {
     @Autowired
     private LocationService locationSe;
 
-    
-
     @GetMapping("/PostOfRenter/")
-    public ResponseEntity<List<Post>> list(@RequestParam Map<String, String> params) {
+    public ResponseEntity<List<Post>> PostOfRenter(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.postSe.getPostOfRenter(params), HttpStatus.OK);
+    }
+     @GetMapping("/PostOfLandlord/")
+    public ResponseEntity<List<Post>> PostOfLandlord(@RequestParam Map<String, String> params) {
+        return new ResponseEntity<>(this.postSe.getPostOfLandlord(params), HttpStatus.OK);
     }
 
     @GetMapping("/test")
     public ResponseEntity<String> test() {
-        return new ResponseEntity<>("API is working", HttpStatus.OK);
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            return new ResponseEntity<>("Current user: " + currentUser.getUsername(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping("/posts")
