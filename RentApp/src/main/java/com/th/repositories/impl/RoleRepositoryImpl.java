@@ -47,7 +47,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     public List<Role> getRoles() {
         Session s = this.factory.getObject().getCurrentSession();
         Query q = s.createNamedQuery("Role.findAll");
-
+        
         return q.getResultList();
     }
 }

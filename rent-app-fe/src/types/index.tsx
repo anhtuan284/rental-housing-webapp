@@ -13,33 +13,81 @@ export type IUpdateUser = {
   file: File[];
 };
 
+export type IImage = {
+  imageId: string;
+  url: string;
+  createDate: string;
+};
+
+export type IPostType = {
+  typeId: string;
+  name: string;
+};
+
+export type IPropertyDetail = {
+  price: string;
+  acreage: string;
+  capacity: string;
+};
+
+export type IPostLocation = {
+  longitude: string;
+  latitude: string;
+  address: string;
+  district: string;
+  city: string;
+};
+
 export type IPost = {
   postId: string;
-  creator: IUser;
+  user: {
+    userId: string;
+    name: string;
+    avatar: string;
+  };
   title: string;
-  describe: string;
-  files: string[];
-  location?: string;
-  tags?: string;
+  description: string;
+  imageSet: IImage[];
+  location?: IPostLocation;
   created_date: string;
+  typeId: IPostType;
+  propertyDetail: IPropertyDetail;
 };
 
 export type INewPost = {
-  userId: string;
-  caption: string;
-  file: File[];
-  location?: string;
-  tags?: string;
+  postId: string;
+  title: string;
+  description: string;
+  files: File[];
+  price: string;
+  capacity: string;
+  acreage: string;
+  address: string;
+  district: string;
+  city: string;
+  latitude: string;
+  longitude: string;
+  imageUrl: string[];
 };
 
 export type IUpdatePost = {
   postId: string;
-  caption: string;
+  userId: string;
+  username: string;
+  title: string;
+  description: string;
+  files: File[];
+  price: string;
+  capacity: string;
+  acreage: string;
+  address: string;
+  district: string;
+  city: string;
+  latitude: string;
+  longitude: string;
   imageId: string;
-  imageUrl: URL;
-  file: File[];
+  imageUrl: string[];
   location?: string;
-  tags?: string;
 };
 
 export type IUser = {
