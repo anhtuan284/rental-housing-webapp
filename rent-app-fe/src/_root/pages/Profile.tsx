@@ -5,6 +5,7 @@ import {
   Outlet,
   useParams,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 
 import { Button, useToast } from "@/components/ui";
@@ -13,9 +14,12 @@ import UserContext from "@/context/UserContext";
 import { Loader } from "@/components/shared";
 import { AxiosResponse } from "axios";
 import APIs, { authApi, endpoints } from "@/configs/APIs";
-import { IUser } from "@/types";
+import { Conversation, IUser } from "@/types";
 import { transformToIUser } from "@/lib/utils";
 import Cookies from "js-cookie";
+import { addDoc, collection, query, where } from "firebase/firestore";
+import { db } from "@/configs/firebase";
+import { useCollection } from "react-firebase-hooks/firestore";
 
 interface StabBlockProps {
   value: string | number;
@@ -35,7 +39,34 @@ const Profile = () => {
   const { pathname } = useLocation();
   const [currentUser, setCurrentUser] = useState<IUser>();
   const [isFollowed, setIsFollowed] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
   const { toast } = useToast();
+
+  //get all conversations then check already ...
+  const queryGetConversationsForCurrentUser = user?.id
+    ? query(
+        collection(db, "conversations"),
+        where("users", "array-contains", user.email)
+      )
+    : null;
+  const [conversationsSnapshot] = useCollection(
+    queryGetConversationsForCurrentUser
+  );
+
+  const ConversationAlreadyExists = (recipientUser: string) => {
+    if (!conversationsSnapshot) return null;
+
+    const existingConversation = conversationsSnapshot.docs.find(
+      (conversation) =>
+        (conversation.data() as Conversation).users.includes(recipientUser)
+    );
+
+    return existingConversation
+      ? { id: existingConversation.id, ...existingConversation.data() }
+      : null;
+  };
 
   const fetchProfile = async (token: string) => {
     if (token) {
@@ -135,9 +166,29 @@ const Profile = () => {
       });
     }
   };
+  const createConversation = async () => {
+    setLoading(false); // Set loading to true when starting conversation creation
 
-  const goToConservation = () => {
-    // navigate(endpoints["conservation"]);
+    await addDoc(collection(db, "conversations"), {
+      users: [user?.email, currentUser?.email],
+    });
+  };
+  const goToConversation = async () => {
+    if (!currentUser?.email) {
+      return toast({
+        title: "Failed to start conversation",
+        description: "Please try again later.",
+      });
+    }
+    const conversation = ConversationAlreadyExists(currentUser?.email);
+    if (!conversation) {
+      await createConversation();
+      setTimeout(() => {
+        setLoading(true); // Set loading to false after simulated delay
+      }, 2000); // Adjust the timeout as needed
+    } else {
+      navigate(`/conversations/${conversation.id}`);
+    }
   };
 
   useEffect(() => {
@@ -160,7 +211,19 @@ const Profile = () => {
         <Loader />
       </div>
     );
-
+  if (!loading) {
+    if (!currentUser?.email) {
+      const newConversation = ConversationAlreadyExists(currentUser?.email);
+      if (newConversation) {
+        navigate(`/conversations/${newConversation.id}`);
+      }
+    }
+    return (
+      <div className="flex-center w-full h-full">
+        <Loader />
+      </div>
+    );
+  }
   return (
     <div className="profile-container">
       <div className="profile-inner_container">
@@ -239,7 +302,7 @@ const Profile = () => {
                 <Button
                   type="button"
                   className="shad-button_ghost hover:scale-110 transition-all ease-in-out"
-                  onClick={goToConservation}
+                  onClick={goToConversation}
                 >
                   <img
                     src={"/assets/icons/chat.svg"}

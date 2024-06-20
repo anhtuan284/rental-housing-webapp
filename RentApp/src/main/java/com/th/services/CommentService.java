@@ -5,6 +5,7 @@
 package com.th.services;
 
 import com.th.pojo.Comment;
+import java.util.List;
 
 /**
  *
@@ -16,5 +17,6 @@ public interface CommentService {
     Comment getCommentById(int id);
 
     String deleteComment(Comment commentDelete);
+    List<Comment> getCmtByPostId(int postId);
     
 }

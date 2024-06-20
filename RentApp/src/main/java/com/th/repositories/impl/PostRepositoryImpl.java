@@ -111,6 +111,7 @@ public class PostRepositoryImpl implements PostRepository {
 
         return (List<Post>) query.getResultList();
     }
+
     @Override
     @Transactional
     public void addOrUpdate(Post post) {
@@ -159,6 +160,19 @@ public class PostRepositoryImpl implements PostRepository {
             System.out.println(post.getDescription());
             post.setStatus(true);
             s.update(post);
+        }
+    }
+
+    @Override
+    public Post getPostDetail(int postId) {
+        try {
+            Session s = this.factoryBean.getObject().getCurrentSession();
+            String hql = "FROM Post p LEFT JOIN FETCH p.propertyDetail WHERE p.postId = :id";
+            Query query = s.createQuery(hql, Post.class);
+            query.setParameter("id", postId);
+            return (Post) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null; // Return null if no post found with the given postId
         }
     }
 }

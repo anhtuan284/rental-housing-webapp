@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -178,7 +179,7 @@ public class ApiComment {
         }
     }
 
-        @DeleteMapping("/comment/delete")
+    @DeleteMapping("/comment/delete")
     @Transactional
     public ResponseEntity<String> deleteComment(@RequestBody Map<String, String> params) {
         try {
@@ -211,4 +212,23 @@ public class ApiComment {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting comment: " + e.getMessage());
         }
     }
+
+    @GetMapping("/comment/GetCmtByPostId")
+    @Transactional
+    public ResponseEntity<?> GetCmtByPostId(@RequestBody Map<String, Integer> params) {
+        if (!params.containsKey("postId")) {
+            return new ResponseEntity<>("Missing required parameter 'postId'", HttpStatus.BAD_REQUEST);
+        }
+
+        Integer postId = params.get("postId");
+        if (postId == null) {
+            return new ResponseEntity<>("Invalid 'postId' parameter. It must be an integer.", HttpStatus.BAD_REQUEST);
+        }
+
+        System.out.println(postId);
+        System.out.println(postId);
+
+        return new ResponseEntity<>(this.commentService.getCmtByPostId(postId), HttpStatus.OK);
+    }
+
 }

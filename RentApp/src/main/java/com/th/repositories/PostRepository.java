@@ -13,10 +13,17 @@ import java.util.Map;
  * @author voquochuy
  */
 public interface PostRepository {
+
     List<Post> getPosts(int typeId, boolean status, Map<String, String> params);
+
     void addOrUpdate(Post post);
+
     Post getPostById(int id);
+
     void deletePost(int id);
+
     void approvePost(int postId);
-    
+
+    Post getPostDetail(int postId);
+
 }

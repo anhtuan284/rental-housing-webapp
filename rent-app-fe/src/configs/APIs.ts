@@ -12,7 +12,6 @@ export const endpoints = {
     'unfollow': '/api/UnFollow',
     'check-follow': '/api/CheckFollow/',
     'check-user-by-email': '/api/CheckUserByEmail/',
-
     'create-post': '/api/posts/',
     'get-renter-post': '/api/PostOfRenter/',
     'get-landlord-post': '/api/PostOfLandlord/',
