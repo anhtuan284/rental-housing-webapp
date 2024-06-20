@@ -144,7 +144,6 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<Integer> getListIdFollower(User user) {
         Session s = this.factory.getObject().getCurrentSession();
-        System.out.println(user.getId());
         String hql = "SELECT f.followerId.id FROM Follow f WHERE f.followeeId.id = :userId";
         Query query = s.createQuery(hql);
         query.setParameter("userId", user.getId());

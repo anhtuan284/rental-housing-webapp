@@ -32,10 +32,10 @@ const ConversationSelect = ({
 }) => {
   const { recipient, recipientEmail } = useRecipient(conversationUsers);
 
-  const navigate = useNavigate(); // Sử dụng useNavigate thay cho useHistory
+  const navigate = useNavigate();
 
   const onSelectConversation = () => {
-    navigate(`/conversations/${id}`); // Sử dụng navigate để điều hướng
+    navigate(`/conversations/${id}`);
   };
 
   return (

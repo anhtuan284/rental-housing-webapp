@@ -20,5 +20,6 @@ public interface PostService {
     void approvePost(int postId);
     List<Post> getPostOfRenter(Map<String, String> param);
     List<Post> getPostOfLandlord(Map<String, String> param);
+    Post getPostDetail(int postId);
 
 }

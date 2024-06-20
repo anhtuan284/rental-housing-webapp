@@ -9,6 +9,7 @@ import com.th.pojo.Post;
 import com.th.repositories.CommentRepository;
 import com.th.services.CommentService;
 import com.th.services.PostService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,5 +96,10 @@ public class CommentServiceImpl implements CommentService {
         } catch (Exception e) {
             return "Failed to delete comment: " + e.getMessage();
         }
+    }
+
+    @Override
+    public List<Comment> getCmtByPostId(int postId) {
+        return cmtRepo.getCmtByPostId(postId);
     }
 }

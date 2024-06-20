@@ -31,7 +31,7 @@ const StyledConversationContainer = styled.div`
   overflow-x: none;
   overflow-y: none;
   height: 100vh;
-  width: 67vw;
+  width: 67.5vw;
   ::-webkit-scrollbar {
     display: none;
   }

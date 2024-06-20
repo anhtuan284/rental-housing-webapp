@@ -5,6 +5,7 @@
 package com.th.repositories;
 
 import com.th.pojo.Comment;
+import java.util.List;
 
 /**
  *
@@ -17,5 +18,7 @@ public interface CommentRepository {
     Comment getCommentById(int id);
 
     void delete(Comment cmt);
+
+    List<Comment> getCmtByPostId(int postId);
 
 }

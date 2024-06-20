@@ -63,5 +63,10 @@ public class PostServiceImpl implements PostService {
         return postRepo.getPosts(1, true, param);
     }
 
+    @Override
+    public Post getPostDetail(int postId ) {
+        return postRepo.getPostDetail(postId);
+    }
+
 
 }

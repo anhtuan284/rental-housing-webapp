@@ -72,6 +72,7 @@ public class ApiPostController {
             return new ResponseEntity<>("Current user: " + currentUser.getUsername(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+
         }
     }
 
