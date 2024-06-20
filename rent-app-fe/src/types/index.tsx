@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type INavLink = {
   imgURL: string;
   route: string;
@@ -109,3 +111,20 @@ export type INewUser = {
   phone: number;
   address: string;
 };
+
+export interface Conversation {
+  users: string[];
+}
+export interface IMessage {
+  id: string;
+  conversation_id: string;
+  text: string;
+  sent_at: string;
+  user: string;
+}
+
+export interface ChatUser {
+  email: string;
+  lastSeen: Timestamp;
+  avatar: string;
+}

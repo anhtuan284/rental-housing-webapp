@@ -13,6 +13,8 @@ import Cookie from "js-cookie";
 import { transformToIUser } from "./lib/utils";
 import { authApi, endpoints } from "./configs/APIs";
 import { useToast } from "./components/ui/use-toast";
+import { loginFirebase } from "./configs/firebase";
+import Conversation from "./_root/pages/conversations/[id]";
 import { PostsProvider, usePosts } from "./context/PostsContext";
 
 function App() {
@@ -28,6 +30,7 @@ function App() {
         const currentUser = res.data;
 
         let transUser = transformToIUser(currentUser);
+        loginFirebase(transUser);
 
         dispatch({
           type: "login",
@@ -58,10 +61,12 @@ function App() {
               <Route path="/sign-up" element={<SignupForm />} />
             </Route>
 
-            <Route element={<RootLayout />}>
-              <Route index element={<Home />} />
-              <Route path="/profile/:id" element={<Profile />} />
-              <Route path="/posts/:postId" element={<PostDetails />} />
+          <Route element={<RootLayout />}>
+            <Route index element={<Home />} />
+            <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/chat/" element={<ChatBox />} />
+            <Route path="/conversations/:id" element={<Conversation />} />
+
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="*" element={<NoPage />} />
             </Route>

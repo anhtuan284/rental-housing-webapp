@@ -25,6 +25,7 @@ import UserContext from "@/context/UserContext";
 import { transformToIUser } from "@/lib/utils";
 import { ToastAction } from "@/components/ui/toast";
 import Cookies from "js-cookie";
+import { loginFirebase } from "@/configs/firebase";
 
 const SigninForm = () => {
   const { toast } = useToast();
@@ -56,6 +57,7 @@ const SigninForm = () => {
       const currentUser = res2.data;
 
       let transUser = transformToIUser(currentUser);
+      loginFirebase(transUser);
 
       dispatch({
         type: "login",

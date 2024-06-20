@@ -33,4 +33,6 @@ public interface UserRepository {
     List<Integer> getListIdFollower (User user);
 
     int countUserByParam(Map<String, String> params);
+    
+    User getUserByEmail(String userEmail);
 }
