@@ -34,8 +34,18 @@ export const ProfileValidation = z.object({
 // POST
 // ============================================================
 export const PostValidation = z.object({
-  caption: z.string().min(5, { message: "Minimum 5 characters." }).max(2200, { message: "Maximum 2,200 caracters" }),
-  file: z.custom<File[]>(),
-  location: z.string().min(1, { message: "This field is required" }).max(1000, { message: "Maximum 1000 characters." }),
-  tags: z.string(),
+  postId: z.any(),
+  title: z.string().min(5, { message: "Minimum 5 characters." }).max(2200, { message: "Maximum 2,200 caracters" }),
+  files: z.custom<File[]>(),
+  address: z.string().min(1, { message: "This field is required" }).max(1000, { message: "Maximum 1000 characters." }),
+  userId: z.any(),
+  description: z.string().min(1, { message: "This field is required"}),
+  price: z.string().min(1, { message: "Price invalid"}).max(1000, { message: "Price to large"}),
+  capacity: z.string().min(1, { message: "This field is required"}),
+  acreage: z.string().min(1, { message: "This field is required"}),
+  district: z.any(),
+  city: z.any(),
+  latitude: z.any(),
+  longitude: z.any(),
+  imageUrl: z.any(),
 });

@@ -11,13 +11,12 @@ import {
 } from 'firebase/firestore';import { Conversation, IMessage } from './../types/index';
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { IUser } from "@/types";
 import { db } from '@/configs/firebase';
+import { IImage, IPost, IUser } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-
 
 export const transformToIUser = (data: any): IUser => {
   return {
@@ -64,6 +63,43 @@ export const transformMessage = (
 // 	} as IMessage)
 
 
+export const convertToIPost = (data: any): IPost => {
+  return {
+    typeId: data.typeId ? {
+      typeId: data.typeId.typeId,
+      name: data.typeId.name,
+    } : { typeId: "", name: "" },
+    postId: data.postId || "",
+    title: data.title || "",
+    description: data.description || "",
+    imageSet: data.imageSet ? data.imageSet.map((image: any): IImage => ({
+      imageId: image.imageId || "",
+      url: image.url || "",
+      createDate: image.createDate || "",
+    })) : [],
+    created_date: data.createdDate || "",
+    user: data.userId ? {
+      userId: data.userId.id || "",
+      name: data.userId.name || "",
+      avatar: data.userId.avatar || "/assets/icons/profile-placeholder.svg",
+    } : { userId: "", name: "", avatar: "/assets/icons/profile-placeholder.svg" },
+    propertyDetail: data.propertyDetail ? {
+      price: data.propertyDetail.price || "",
+      acreage: data.propertyDetail.acreage || "",
+      capacity: data.propertyDetail.capacity || "",
+    } : { price: "", acreage: "", capacity: "" },
+    location: data.location ? {
+      longitude: data.location.longitude || "",
+      latitude: data.location.latitude || "",
+      address: data.location.address || "",
+      district: data.location.district || "",
+      city: data.location.city || "",
+    } : { longitude: "", latitude: "", address: "", district: "", city: "" },
+  };
+};
+
+export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
+
 export function formatDateString(dateString: string) {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
@@ -76,26 +112,41 @@ export function formatDateString(dateString: string) {
 
   const time = date.toLocaleTimeString([], {
     hour: "numeric",
+    month: "short",
     minute: "2-digit",
   });
 
   return `${formattedDate} at ${time}`;
 }
 
-export const multiFormatDateString = (timestamp: string = ""): string => {
-  const timestampNum = Math.round(new Date(timestamp).getTime() / 1000);
-  const date: Date = new Date(timestampNum * 1000);
-  const now: Date = new Date();
+export const multiFormatDateString = (timestamp: string | number = ""): string => {
+  let timestampNum: number;
+  
+  // Handle numeric timestamps directly (assuming they are in milliseconds)
+  if (typeof timestamp === "number") {
+    timestampNum = timestamp;
+  } else if (/^\d+$/.test(timestamp)) {
+    timestampNum = Number(timestamp);
+  } else {
+    const parsedDate = new Date(timestamp);
+    if (isNaN(parsedDate.getTime())) {
+      return "Invalid Date";
+    }
+    timestampNum = parsedDate.getTime();
+  }
 
-  const diff: number = now.getTime() - date.getTime();
-  const diffInSeconds: number = diff / 1000;
-  const diffInMinutes: number = diffInSeconds / 60;
-  const diffInHours: number = diffInMinutes / 60;
-  const diffInDays: number = diffInHours / 24;
+  const date = new Date(timestampNum);
+  const now = new Date();
+
+  const diff = now.getTime() - date.getTime();
+  const diffInSeconds = diff / 1000;
+  const diffInMinutes = diffInSeconds / 60;
+  const diffInHours = diffInMinutes / 60;
+  const diffInDays = diffInHours / 24;
 
   switch (true) {
     case Math.floor(diffInDays) >= 30:
-      return formatDateString(timestamp);
+      return formatDateString(date.toISOString());
     case Math.floor(diffInDays) === 1:
       return `${Math.floor(diffInDays)} day ago`;
     case Math.floor(diffInDays) > 1 && diffInDays < 30:

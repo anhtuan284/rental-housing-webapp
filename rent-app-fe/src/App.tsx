@@ -4,7 +4,7 @@ import AuthLayout from "./_auth/AuthLayout";
 import SigninForm from "./_auth/forms/SigninForm";
 import SignupForm from "./_auth/forms/SignupForm";
 import RootLayout from "./_root/RootLayout";
-import { Home, NoPage, Profile, ChatBox } from "./_root/pages";
+import { CreatePost, Home, NoPage, PostDetails, Profile } from "./_root/pages";
 import MyUserReducer from "./reducer/MyReducer";
 import { useEffect, useReducer } from "react";
 import UserContext from "./context/UserContext";
@@ -15,6 +15,7 @@ import { authApi, endpoints } from "./configs/APIs";
 import { useToast } from "./components/ui/use-toast";
 import { loginFirebase } from "./configs/firebase";
 import Conversation from "./_root/pages/conversations/[id]";
+import { PostsProvider, usePosts } from "./context/PostsContext";
 
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
@@ -52,12 +53,13 @@ function App() {
 
   return (
     <UserContext.Provider value={{ user, dispatch }}>
-      <main className="flex h-screen">
-        <Routes>
-          <Route element={<AuthLayout />}>
-            <Route path="/sign-in" element={<SigninForm />} />
-            <Route path="/sign-up" element={<SignupForm />} />
-          </Route>
+      <PostsProvider>
+        <main className="flex h-screen">
+          <Routes>
+            <Route element={<AuthLayout />}>
+              <Route path="/sign-in" element={<SigninForm />} />
+              <Route path="/sign-up" element={<SignupForm />} />
+            </Route>
 
           <Route element={<RootLayout />}>
             <Route index element={<Home />} />
@@ -65,12 +67,14 @@ function App() {
             <Route path="/chat/" element={<ChatBox />} />
             <Route path="/conversations/:id" element={<Conversation />} />
 
-            <Route path="*" element={<NoPage />} />
-          </Route>
-        </Routes>
+              <Route path="/create-post" element={<CreatePost />} />
+              <Route path="*" element={<NoPage />} />
+            </Route>
+          </Routes>
 
-        <Toaster />
-      </main>
+          <Toaster />
+        </main>
+      </PostsProvider>
     </UserContext.Provider>
   );
 }

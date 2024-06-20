@@ -90,7 +90,7 @@ public class PostRepositoryImpl implements PostRepository {
         Query query = s.createQuery(q);
         String p = params.get("page");
         if (p != null && !p.isEmpty()) {
-            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize", "5"));
+            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize", "2"));
             int start = (Integer.parseInt(p) - 1) * pageSize;
             query.setFirstResult(start);
             query.setMaxResults(pageSize);

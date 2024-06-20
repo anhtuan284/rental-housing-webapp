@@ -78,7 +78,7 @@ const Profile = () => {
         let unfollowRes: AxiosResponse = await authApi(token).post(
           endpoints["unfollow"],
           {
-            followee: currentUser?.id,
+            followee: id,
           }
         );
         if (unfollowRes.status === 200) {
@@ -136,11 +136,15 @@ const Profile = () => {
     }
   };
 
+  const goToConservation = () => {
+    // navigate(endpoints["conservation"]);
+  };
+
   useEffect(() => {
     let token = Cookies.get("access_token");
     if (token) {
-      fetchProfile(token);
       checkFollow(token);
+      fetchProfile(token);
     }
   }, []);
 
@@ -208,23 +212,37 @@ const Profile = () => {
               </Link>
             </div>
             <div className={`${user?.id === currentUser?.id && "hidden"}`}>
-              {isFollowed ? (
+              <div className="flex gap-1">
+                {isFollowed ? (
+                  <Button
+                    type="button"
+                    className="shad-button_dark_4"
+                    onClick={unfollow}
+                  >
+                    Unfollow
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    className="shad-button_primary"
+                    onClick={follow}
+                  >
+                    Follow
+                  </Button>
+                )}
                 <Button
                   type="button"
-                  className="shad-button_dark_4"
-                  onClick={unfollow}
+                  className="shad-button_ghost hover:scale-110 transition-all ease-in-out"
+                  onClick={goToConservation}
                 >
-                  Unfollow
+                  <img
+                    src={"/assets/icons/chat.svg"}
+                    alt="chat-icon"
+                    width={25}
+                    height={25}
+                  />
                 </Button>
-              ) : (
-                <Button
-                  type="button"
-                  className="shad-button_primary px-8"
-                  onClick={follow}
-                >
-                  Follow
-                </Button>
-              )}
+              </div>
             </div>
           </div>
         </div>
