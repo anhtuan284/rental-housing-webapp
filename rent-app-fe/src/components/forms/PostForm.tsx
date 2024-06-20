@@ -126,7 +126,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
           post?.latitude || 10.735307748069317,
           post?.longitude || 106.70096272563886
         ), // Default to Hanoi coordinates
-        zoom: 12,
+        zoom: 30,
       });
 
       var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), {

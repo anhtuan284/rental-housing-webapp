@@ -1,22 +1,71 @@
-import { CommentList } from "@/components/shared";
-import { usePosts } from "@/context/PostsContext";
-import UserContext from "@/context/UserContext";
-import { multiFormatDateString } from "@/lib/utils";
-import { useContext, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import Modal from "react-modal";
+import { multiFormatDateString } from "@/lib/utils";
+import { usePosts } from "@/context/PostsContext";
+import UserContext from "@/context/UserContext";
+import { CommentList } from "@/components/shared";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+// Declare the global variable on window
+declare global {
+  interface Window {
+    initializeMap: () => void;
+  }
+}
+
+// Declare Microsoft object
+declare var Microsoft: any;
 
 const PostDetails = () => {
   const { user } = useContext(UserContext);
   const { postId } = useParams<{ postId: string }>();
   const { posts } = usePosts();
-  const post = posts?.find((post) => post.postId == postId);
-
+  const [post, setPost] = useState<any>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // State cho ảnh được chọn
+
+  // Fetch post data based on postId
+  useEffect(() => {
+    const foundPost = posts?.find((p: any) => p.postId == postId);
+    if (foundPost) {
+      setPost(foundPost);
+    }
+  }, [postId, posts]);
+
+  // Initialize Bing Maps once post data is available
+  useEffect(() => {
+    if (post) {
+      const mapScript = document.createElement("script");
+      mapScript.src =
+        "https://www.bing.com/api/maps/mapcontrol?callback=initializeMap";
+      mapScript.async = true;
+      mapScript.defer = true;
+      document.body.appendChild(mapScript);
+
+      window.initializeMap = () => {
+        var map = new Microsoft.Maps.Map(document.getElementById("map"), {
+          credentials:
+            "AnmtdlciSHCT7-QaOKIk_DNILKWHw4ehMIsCGTXHi-HTGuGaoQ4KfQppjtyYsh5P",
+          center: new Microsoft.Maps.Location(
+            post.location?.latitude || 10.735307748069317,
+            post.location?.longitude || 106.70096272563886
+          ),
+          zoom: 15,
+        });
+
+        var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), {
+          draggable: false,
+        });
+        map.entities.push(pushpin);
+      };
+
+      return () => {
+        document.body.removeChild(mapScript);
+      };
+    }
+  }, [post]);
 
   const openModal = (imageUrl: string) => {
     setSelectedImage(imageUrl);
@@ -36,13 +85,36 @@ const PostDetails = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 640,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
     <div className="flex flex-1">
       <div className="home-container">
         <div className="flex flex-col items-center p-4">
-          <div className="w-full max-w-4xl  shadow-md rounded-lg p-6">
+          <div className="w-full max-w-2xl shadow-md rounded-lg p-6">
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-center gap-3">
                 <Link to={`/profile/${post.user.userId}`}>
@@ -57,7 +129,7 @@ const PostDetails = () => {
                 </Link>
                 <div className="flex flex-col">
                   <Link to={`/profile/${post.user.userId}`}>
-                    <p className="text-lg font-semibold text-gray-800">
+                    <p className="text-lg font-semibold text-white">
                       {post.user.name}
                     </p>
                   </Link>
@@ -84,17 +156,21 @@ const PostDetails = () => {
             </div>
 
             <div className="mb-6">
-              <h1 className="text-2xl font-bold text-gray-800 mb-4">
+              <h1 className="text-2xl font-bold text-white mb-4">
                 {post.title}
               </h1>
-              <p className="text-gray-700 mb-4">{post.description}</p>
+              <p className="text-gray-100 mb-4">{post.description}</p>
               <Slider {...sliderSettings}>
-                {post.imageSet.map((image) => (
-                  <div key={image.imageId} onClick={() => openModal(image.url)}>
+                {post.imageSet.map((image: any) => (
+                  <div
+                    key={image.imageId}
+                    onClick={() => openModal(image.url)}
+                    className="cursor-pointer"
+                  >
                     <img
                       src={image.url}
                       alt="post image"
-                      className="w-full h-auto rounded-lg cursor-pointer"
+                      className="w-full h-auto rounded-lg"
                     />
                   </div>
                 ))}
@@ -102,7 +178,7 @@ const PostDetails = () => {
             </div>
 
             <div className="mb-6">
-              <p className="text-lg font-semibold text-gray-800">
+              <p className="text-lg font-semibold text-white">
                 Price:{" "}
                 <span className="text-purple-400">
                   {post.propertyDetail.price
@@ -111,33 +187,34 @@ const PostDetails = () => {
                   / Tháng
                 </span>
               </p>
-              <p className="text-lg font-semibold text-gray-800">
+              <p className="text-lg font-semibold text-white font-bolder">
                 Acreage:{" "}
-                <span className="text-gray-600">
+                <span className="text-light-1">
                   {post.propertyDetail.acreage}
                 </span>
               </p>
-              <p className="text-lg font-semibold text-gray-800">
+              <p className="text-lg font-semibold text-white font-bolder">
                 Capacity:{" "}
-                <span className="text-gray-600">
+                <span className="text-light-1">
                   {post.propertyDetail.capacity}
                 </span>
               </p>
-              <p className="text-lg font-semibold text-gray-800">
+              <p className="text-lg font-semibold text-white font-bolder">
                 Address:{" "}
-                <span className="text-gray-600">
+                <span className="text-light-1">
                   {post.location?.address}, {post.location?.district},{" "}
                   {post.location?.city}
                 </span>
               </p>
-              <p className="text-lg font-semibold text-gray-800">
+              <p className="text-lg font-semibold text-white font-bolder">
                 Coordinates:{" "}
-                <span className="text-gray-600">
+                <span className="text-light-1">
                   {post.location?.latitude}, {post.location?.longitude}
                 </span>
               </p>
             </div>
-
+            <div id="map" style={{ width: "100%", height: "400px" }}></div>
+            <div className="text-2xl font-bold my-4">Comments</div>
             <CommentList postId={post.postId} />
 
             {selectedImage && (

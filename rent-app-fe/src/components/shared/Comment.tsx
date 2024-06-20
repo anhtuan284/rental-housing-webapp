@@ -12,7 +12,7 @@ type CommentProps = {
 
 const Comment = ({ comment }: CommentProps) => {
   return (
-    <div className="comment">
+    <div className="flex items-start gap-3 my-3">
       <Link to={`/profile/${comment.userId}`}>
         <img
           src={comment.avatar || "/assets/icons/profile-placeholder.svg"}
@@ -20,11 +20,15 @@ const Comment = ({ comment }: CommentProps) => {
           className="w-8 h-8 rounded-full"
         />
       </Link>
-      <div className="comment-content">
-        <Link to={`/profile/${comment.userId}`}>
-          <p className="comment-user-name">{comment.name}</p>
-        </Link>
-        <p className="comment-text">{comment.content}</p>
+      <div className="flex">
+        <div className="bg-slate-900 rounded-lg p-3">
+          <Link to={`/profile/${comment.userId}`}>
+            <p className="comment-user-name font-extrabold text-primary-500">
+              {comment.name}
+            </p>
+          </Link>
+          <p className="comment-text">{comment.content}</p>
+        </div>
       </div>
     </div>
   );
