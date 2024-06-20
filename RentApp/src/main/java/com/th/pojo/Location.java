@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -70,6 +71,7 @@ public class Location implements Serializable {
     @JoinColumn(name = "post_id", referencedColumnName = "post_id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     @JsonIgnore
+    @XmlTransient
     private Post post;
 
     public Location() {
@@ -136,6 +138,7 @@ public class Location implements Serializable {
         this.postId = postId;
     }
 
+    @XmlTransient
     public Post getPost() {
         return post;
     }

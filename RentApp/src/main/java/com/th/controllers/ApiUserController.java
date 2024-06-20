@@ -40,7 +40,7 @@ public class ApiUserController {
         user.setNumberPhone(params.get("phone"));
         user.setEmail(params.get("email"));
         user.setCccd(params.get("cccd"));
-        user.setCccd(params.get("address"));
+        user.setAddress(params.get("address"));
 
         if (files.length > 0) {
             user.setFile(files[0]);

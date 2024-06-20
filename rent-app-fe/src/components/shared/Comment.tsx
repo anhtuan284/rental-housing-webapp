@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 type CommentProps = {
@@ -7,10 +7,13 @@ type CommentProps = {
     name: string;
     avatar: string;
     content: string;
+    positive: boolean;
   };
 };
 
 const Comment = ({ comment }: CommentProps) => {
+  const [visile, setVisible] = useState<boolean>(comment.positive);
+
   return (
     <div className="flex items-start gap-3 my-3">
       <Link to={`/profile/${comment.userId}`}>
@@ -27,7 +30,21 @@ const Comment = ({ comment }: CommentProps) => {
               {comment.name}
             </p>
           </Link>
-          <p className="comment-text">{comment.content}</p>
+          {visile ? (
+            <p className="comment-text">{comment.content}</p>
+          ) : (
+            <div className="flex align-start">
+              <p className="text-italic text-gray-500 ">
+                <i>Bình luận này đã bị ẩn do phát hiện mang tính tiêu cực</i>
+              </p>
+              <button
+                className="btn btn-primary"
+                onClick={() => setVisible(!visile)}
+              >
+                Xem
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

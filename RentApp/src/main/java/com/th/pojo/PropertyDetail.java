@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "property_detail")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PropertyDetail.findAll", query = "SELECT p FROM PropertyDetail p"),
     @NamedQuery(name = "PropertyDetail.findByCreatedDate", query = "SELECT p FROM PropertyDetail p WHERE p.createdDate = :createdDate"),

@@ -10,7 +10,6 @@ import UserContext from "@/context/UserContext";
 const LeftSidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  // const { user, setUser, setIsAuthenticated, isLoading } = useUserContext();
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const { user, dispatch } = useContext(UserContext);
 

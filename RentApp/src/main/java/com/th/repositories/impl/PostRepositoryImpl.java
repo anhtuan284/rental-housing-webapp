@@ -4,10 +4,7 @@
  */
 package com.th.repositories.impl;
 
-import com.th.pojo.Image;
-import com.th.pojo.Post;
-import com.th.pojo.PropertyDetail;
-import com.th.pojo.User;
+import com.th.pojo.*;
 import com.th.repositories.PostRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -49,14 +46,30 @@ public class PostRepositoryImpl implements PostRepository {
         Root<Post> post = q.from(Post.class);
 
         Join<Post, PropertyDetail> propJoin = post.join("propertyDetail", JoinType.INNER);
+        Join<Post, Location> locationJoin = post.join("location", JoinType.INNER);
 
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(post.get("status"), status));
         predicates.add(b.equal(post.get("typeId").get("typeId"), typeId));
 
+        String userId = params.get("userId");
+        if (userId != null && !userId.isEmpty()) {
+            predicates.add(b.equal(post.get("userId"), Integer.parseInt(userId)));
+        }
+
         String kw = params.get("kw");
         if (kw != null && !kw.isEmpty()) {
-            predicates.add(b.like(post.get("title"), String.format("%%%s%%", kw)));
+            predicates.add(b.or(b.like(post.get("title"), String.format("%%%s%%", kw)), b.like(post.get("description"), String.format("%%%s%%", kw))));
+        }
+
+        String city = params.get("city");
+        if (city != null && !city.isEmpty()) {
+            predicates.add(b.like(locationJoin.get("city"), String.format("%%%s%%", city)));
+        }
+
+        String district = params.get("district");
+        if (district != null && !district.isEmpty()) {
+            predicates.add(b.like(locationJoin.get("district"), String.format("%%%s%%", district)));
         }
 
         String minPrice = params.get("minPrice");
@@ -112,10 +125,14 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Post getPostById(int id) {
         try {
-            Session session = this.factoryBean.getObject().getCurrentSession();
-            String hql = "FROM Post p WHERE p.postId = :id";
-            Query query = session.createQuery(hql, Post.class);
-            query.setParameter("id", id);
+//            Session session = this.factoryBean.getObject().getCurrentSession();
+//            String hql = "FROM Post p WHERE p.postId = :id";
+//            Query query = session.createQuery(hql, Post.class);
+//            query.setParameter("id", id);
+            Session s = this.factoryBean.getObject().getCurrentSession();
+            Query query = s.getNamedQuery("Post.findByPostId");
+            query.setParameter("postId", id);
+
             return (Post) query.getSingleResult();
         } catch (NoResultException e) {
             return null;

@@ -25,13 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -39,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author voquochuy
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 @CrossOrigin
 public class ApiPostController {
 
@@ -61,17 +55,17 @@ public class ApiPostController {
     @Autowired
     private LocationService locationSe;
 
-    @GetMapping("/PostOfRenter/")
+    @GetMapping("/api/PostOfRenter/")
     public ResponseEntity<List<Post>> PostOfRenter(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.postSe.getPostOfRenter(params), HttpStatus.OK);
     }
 
-    @GetMapping("/PostOfLandlord/")
+    @GetMapping("/api/PostOfLandlord/")
     public ResponseEntity<List<Post>> PostOfLandlord(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.postSe.getPostOfLandlord(params), HttpStatus.OK);
     }
 
-    @GetMapping("/test")
+    @GetMapping("/api/test")
     public ResponseEntity<String> test() {
         User currentUser = userService.getCurrentUser();
         if (currentUser != null) {
@@ -81,7 +75,7 @@ public class ApiPostController {
         }
     }
 
-    @PostMapping("/posts")
+    @PostMapping("/api/posts")
     @Transactional
     public ResponseEntity<String> createLeasePost(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] files) {
         try {
@@ -116,39 +110,16 @@ public class ApiPostController {
             propSe.savePropOfPost(post, prop);
             locationSe.saveLocationOfProp(post, location);
             imgSe.saveListImageOfPost(post, files);
-//            ExecutorService executor = Executors.newFixedThreadPool(2);
-//            executor.submit(() -> notiSe.addNotification(user, post));
-//            executor.submit(() -> imgSe.saveListImageOfPost(post, files));
-//            System.out.println("mfmmfmf");
-//            executor.shutdown();
 
-//            for (Map.Entry<String, String> entry : params.entrySet()) {
-//                String key = entry.getKey();
-//                String value = entry.getValue();
-//                System.out.println(key + ": " + value);
-//            }
-//            for (MultipartFile file : files) {
-//                System.out.println("File name: " + file.getOriginalFilename());
-//                System.out.println("Content type: " + file.getContentType());
-//                System.out.println("File size: " + file.getSize());
-//            }
-//            System.out.println("Post userId: " + post.getUserId().getUsername());
-//            System.out.println("Post status: " + post.getStatus());
-//            System.out.println("Post title: " + post.getTitle());
-//            System.out.println("Post description: " + post.getDescription());
-//
-//            System.out.println("Property acreage: " + prop.getAcreage());
-//            System.out.println("Property capacity: " + prop.getCapacity());
-//            System.out.println("Property price: " + prop.getPrice());
-//
-//            System.out.println("Location address: " + location.getAddress());
-//            System.out.println("Location city: " + location.getCity());
-//            System.out.println("Location district: " + location.getDistrict());
-//            System.out.println("Location latitude: " + location.getLatitude());
-//            System.out.println("Location longitude: " + location.getLongitude());
             return new ResponseEntity<>("Post created successfully", HttpStatus.CREATED);
         } catch (Exception ex) {
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/api/posts/{postId}")
+    public ResponseEntity<Post> getPost(@PathVariable(value = "postId") Integer postId) {
+        System.out.println(this.postSe.getPostById(postId));
+        return new ResponseEntity<>(this.postSe.getPostById(postId), HttpStatus.OK);
     }
 }

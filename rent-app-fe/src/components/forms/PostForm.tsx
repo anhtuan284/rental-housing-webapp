@@ -65,6 +65,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
   const { user } = useContext(UserContext);
   const [cities, setCities] = useState<City[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
+  const [showMap, setShowMap] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
     defaultValues: {
@@ -105,6 +107,45 @@ const PostForm = ({ post, action }: PostFormProps) => {
     fetchDistricts(selectedCity);
   };
 
+  const fetchCoordinates = async (fullAddress: string) => {
+    const encodedAddress = encodeURIComponent(fullAddress);
+    console.log(fullAddress);
+    const response = await fetch(
+      `http://dev.virtualearth.net/REST/v1/Locations?q=${encodedAddress}&key=AnmtdlciSHCT7-QaOKIk_DNILKWHw4ehMIsCGTXHi-HTGuGaoQ4KfQppjtyYsh5P`
+    );
+    const data = await response.json();
+    if (data.resourceSets[0].resources.length > 0) {
+      const coordinates = data.resourceSets[0].resources[0].point.coordinates;
+      form.setValue("latitude", coordinates[0].toString());
+      form.setValue("longitude", coordinates[1].toString());
+      updateMap(coordinates[0], coordinates[1]);
+    }
+  };
+
+  const updateMap = (latitude: string | number, longitude: string | number) => {
+    var map = new Microsoft.Maps.Map(document.getElementById("map"), {
+      credentials:
+        "AnmtdlciSHCT7-QaOKIk_DNILKWHw4ehMIsCGTXHi-HTGuGaoQ4KfQppjtyYsh5P",
+      center: new Microsoft.Maps.Location(latitude, longitude),
+      zoom: 30,
+    });
+
+    var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), {
+      draggable: true,
+    });
+    map.entities.push(pushpin);
+
+    Microsoft.Maps.Events.addHandler(pushpin, "dragend", function (e: any) {
+      var location = e.target.getLocation();
+      form.setValue("latitude", location.latitude.toString());
+      form.setValue("longitude", location.longitude.toString());
+    });
+
+    var initialLocation = new Microsoft.Maps.Location(latitude, longitude);
+    pushpin.setLocation(initialLocation);
+    map.setView({ center: initialLocation });
+  };
+
   useEffect(() => {
     fetchCities();
   }, []);
@@ -119,42 +160,26 @@ const PostForm = ({ post, action }: PostFormProps) => {
     document.body.appendChild(mapScript);
 
     window.initializeMap = () => {
-      var map = new Microsoft.Maps.Map(document.getElementById("map"), {
-        credentials:
-          "AnmtdlciSHCT7-QaOKIk_DNILKWHw4ehMIsCGTXHi-HTGuGaoQ4KfQppjtyYsh5P",
-        center: new Microsoft.Maps.Location(
-          post?.latitude || 10.735307748069317,
-          post?.longitude || 106.70096272563886
-        ), // Default to Hanoi coordinates
-        zoom: 30,
-      });
-
-      var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), {
-        draggable: true,
-      });
-      map.entities.push(pushpin);
-
-      Microsoft.Maps.Events.addHandler(pushpin, "dragend", function (e: any) {
-        var location = e.target.getLocation();
-        form.setValue("latitude", location.latitude.toString());
-        form.setValue("longitude", location.longitude.toString());
-      });
-
-      // Set initial pushpin position if editing an existing post
-      if (post?.latitude && post?.longitude) {
-        var initialLocation = new Microsoft.Maps.Location(
-          post.latitude,
-          post.longitude
-        );
-        pushpin.setLocation(initialLocation);
-        map.setView({ center: initialLocation });
-      }
+      updateMap(
+        post?.latitude || 10.735307748069317,
+        post?.longitude || 106.70096272563886
+      );
     };
 
     return () => {
       document.body.removeChild(mapScript);
     };
   }, []);
+
+  useEffect(() => {
+    const fullAddress = `${form.getValues("address")}, ${
+      districts.find(
+        (district) =>
+          district.district_id.toString() === form.getValues("district")
+      )?.district_name
+    }`;
+    fetchCoordinates(fullAddress);
+  }, [form.watch("address"), form.watch("district")]);
 
   // Handler
   const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
@@ -367,7 +392,20 @@ const PostForm = ({ post, action }: PostFormProps) => {
           )}
         />
 
-        <div id="map" style={{ height: "400px", width: "100%" }}></div>
+        <div
+          id="map"
+          style={{
+            height: "400px",
+            width: "100%",
+            display: `${
+              form.getValues("address") &&
+              form.getValues("city") &&
+              form.getValues("district")
+                ? "block"
+                : "none"
+            }`,
+          }}
+        ></div>
 
         <FormField
           control={form.control}

@@ -39,7 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "post")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Post.findAll", query = "SELECT p FROM Post p"),
     @NamedQuery(name = "Post.findByPostId", query = "SELECT p FROM Post p WHERE p.postId = :postId"),
@@ -47,7 +46,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Post.findByStatus", query = "SELECT p FROM Post p WHERE p.status = :status"),
     @NamedQuery(name = "Post.findByCreatedDate", query = "SELECT p FROM Post p WHERE p.createdDate = :createdDate"),
     @NamedQuery(name = "Post.findByUpdatedDate", query = "SELECT p FROM Post p WHERE p.updatedDate = :updatedDate")})
-public class Post implements Serializable {
+public class    Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -87,7 +86,7 @@ public class Post implements Serializable {
     private User userId;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "post",fetch =FetchType.EAGER)
     private PropertyDetail propertyDetail;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId",fetch =FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId",fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Comment> commentSet;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")

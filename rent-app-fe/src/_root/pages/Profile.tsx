@@ -141,12 +141,18 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    let token = Cookies.get("access_token");
-    if (token) {
+    setCurrentUser(undefined);
+    if (user?.id != id) {
+      let token = Cookies.get("access_token");
+      if (!token) return;
       checkFollow(token);
       fetchProfile(token);
+    } else {
+      if (user) {
+        setCurrentUser(user);
+      }
     }
-  }, []);
+  }, [id]);
 
   if (!currentUser)
     return (

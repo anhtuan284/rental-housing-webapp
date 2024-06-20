@@ -8,6 +8,7 @@ import UserContext from "@/context/UserContext";
 import { CommentList } from "@/components/shared";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { IPost } from "@/types";
 // Declare the global variable on window
 declare global {
   interface Window {
@@ -28,7 +29,9 @@ const PostDetails = () => {
 
   // Fetch post data based on postId
   useEffect(() => {
-    const foundPost = posts?.find((p: any) => p.postId == postId);
+    console.log(postId);
+    const foundPost = posts?.find((p: IPost) => p.postId == postId);
+    console.log(foundPost);
     if (foundPost) {
       setPost(foundPost);
     }

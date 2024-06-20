@@ -4,7 +4,14 @@ import AuthLayout from "./_auth/AuthLayout";
 import SigninForm from "./_auth/forms/SigninForm";
 import SignupForm from "./_auth/forms/SignupForm";
 import RootLayout from "./_root/RootLayout";
-import { CreatePost, Home, NoPage, PostDetails, Profile } from "./_root/pages";
+import {
+  ChatBox,
+  CreatePost,
+  Home,
+  NoPage,
+  PostDetails,
+  Profile,
+} from "./_root/pages";
 import MyUserReducer from "./reducer/MyReducer";
 import { useEffect, useReducer } from "react";
 import UserContext from "./context/UserContext";
@@ -61,12 +68,12 @@ function App() {
               <Route path="/sign-up" element={<SignupForm />} />
             </Route>
 
-          <Route element={<RootLayout />}>
-            <Route index element={<Home />} />
-            <Route path="/profile/:id" element={<Profile />} />
-            <Route path="/chat/" element={<ChatBox />} />
-            <Route path="/conversations/:id" element={<Conversation />} />
-
+            <Route element={<RootLayout />}>
+              <Route index element={<Home />} />
+              <Route path="/profile/:id" element={<Profile />} />
+              <Route path="/chat/" element={<ChatBox />} />
+              <Route path="/conversations/:id" element={<Conversation />} />
+              <Route path="/posts/:postId" element={<PostDetails />} />
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="*" element={<NoPage />} />
             </Route>

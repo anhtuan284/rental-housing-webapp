@@ -3,12 +3,19 @@ import Comment from "./Comment";
 
 const CommentList = ({ postId }: { postId: string }) => {
   const comments = [
-    { userId: "1", name: "User One", avatar: "", content: "Great post!" },
+    {
+      userId: "1",
+      name: "User One",
+      avatar: "",
+      content: "Great post!",
+      positive: true,
+    },
     {
       userId: "2",
       name: "User Two",
       avatar: "",
       content: "Thanks for sharing!",
+      positive: false,
     },
   ];
 
