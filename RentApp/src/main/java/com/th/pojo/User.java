@@ -124,11 +124,11 @@ public class User implements Serializable {
     private Set<Comment> commentSet;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "followerId")
-//    @JsonIgnore
+    @JsonIgnore
     private Set<Follow> followSet;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "followeeId")
-//    @JsonIgnore
+    @JsonIgnore
     private Set<Follow> followSet1;
 
     @JoinColumn(name = "role_id", referencedColumnName = "id")

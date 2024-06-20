@@ -10,6 +10,7 @@ export const endpoints = {
     'follow': '/api/Follow',
     'unfollow': '/api/UnFollow',
     'check-follow': '/api/CheckFollow/',
+    'check-user-by-email': '/api/CheckUserByEmail/'
     
 }
 

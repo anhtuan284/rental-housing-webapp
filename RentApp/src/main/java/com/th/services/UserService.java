@@ -31,7 +31,11 @@ public interface UserService extends UserDetailsService {
     boolean authUser(String username, String password);
 
     List<Integer> getListIdFollower(User user);
-     User getCurrentUser();
+
+    User getCurrentUser();
 
     int countUserByParams(Map<String, String> params);
+
+    User getUserByEmail(String userEmail);
+
 }

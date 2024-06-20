@@ -15,10 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @RestController
 @RequestMapping("/api")
 public class ApiUserController {
+
     @Autowired
     private BCryptPasswordEncoder passswordEncoder;
     @Autowired
@@ -27,8 +27,8 @@ public class ApiUserController {
     private JwtService jwtService;
 
     @PostMapping(path = "/users/", consumes = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE
+        MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE
     })
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,8 +42,9 @@ public class ApiUserController {
         user.setCccd(params.get("cccd"));
         user.setCccd(params.get("address"));
 
-        if (files.length > 0)
+        if (files.length > 0) {
             user.setFile(files[0]);
+        }
 
         this.userService.addUser(user);
     }
@@ -74,4 +75,18 @@ public class ApiUserController {
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
+    @PostMapping(path = "/CheckUserByEmail/")
+    @CrossOrigin
+    public ResponseEntity<String> getUserProfile(@RequestBody Map<String, String> params) {
+        try {
+            User user = userService.getUserByEmail(params.get("userEmail"));
+            if (user != null) {
+                return ResponseEntity.ok("User found: " + user.getEmail());
+            } else {
+                return ResponseEntity.noContent().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request");
+        }
+    }
 }

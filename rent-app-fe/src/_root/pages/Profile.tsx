@@ -75,12 +75,10 @@ const Profile = () => {
     try {
       let token = Cookies.get("access_token");
       if (token) {
-        let unfollowRes: AxiosResponse = await authApi(token).delete(
+        let unfollowRes: AxiosResponse = await authApi(token).post(
           endpoints["unfollow"],
           {
-            data: {
-              followee: id,
-            },
+            followee: currentUser?.id,
           }
         );
         if (unfollowRes.status === 200) {

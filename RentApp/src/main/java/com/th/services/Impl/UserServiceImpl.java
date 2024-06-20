@@ -111,6 +111,7 @@ public class UserServiceImpl implements UserService {
         }
         this.userRepo.addOrUpdate(user);
     }
+
     @Override
     public boolean authUser(String username, String password) {
         return this.userRepo.authUser(username, password);
@@ -134,5 +135,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public int countUserByParams(Map<String, String> params) {
         return userRepo.countUserByParam(params);
+    }
+
+    @Override
+    public User getUserByEmail(String userEmail) {
+        return userRepo.getUserByEmail(userEmail);
     }
 }

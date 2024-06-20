@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 
 /**
  * @author voquochuy
@@ -173,4 +174,16 @@ public class UserRepositoryImpl implements UserRepository {
         return count.intValue();
     }
 
+    @Override
+    public User getUserByEmail(String userEmail){
+        Session s = this.factory.getObject().getCurrentSession();
+        Query query = s.createNamedQuery("User.findByEmail");
+        query.setParameter("email", userEmail);
+
+        try {
+            return (User) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

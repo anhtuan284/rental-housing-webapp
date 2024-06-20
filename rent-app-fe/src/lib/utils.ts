@@ -1,6 +1,18 @@
+import {
+  CollectionReference,
+  DocumentData,
+  Query,
+  collection,
+  query,
+  where,
+  orderBy,
+  Timestamp,
+  QueryDocumentSnapshot,
+} from 'firebase/firestore';import { Conversation, IMessage } from './../types/index';
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { IUser } from "@/types";
+import { db } from '@/configs/firebase';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -18,6 +30,39 @@ export const transformToIUser = (data: any): IUser => {
     followers: data.followSet1,
   };
 };
+export const getRecipientEmail = (conversationUsers: Conversation['users'], loggedInUser?: IUser | null) => conversationUsers.find(userEmail => userEmail !== loggedInUser?.email)
+export const generateQueryGetMessages = (conversationId?: string) =>
+	query(
+		collection(db, 'messages'),
+		where('conversation_id', '==', conversationId),
+		orderBy('sent_at', 'asc')
+	)
+
+export const transformMessage = (
+	message: QueryDocumentSnapshot<DocumentData>
+) =>
+	({
+		id: message.id,
+		...message.data(), // spread out conversation_id, text, sent_at, user
+		sent_at: message.data().sent_at
+			? convertFirestoreTimestampToString(message.data().sent_at as Timestamp)
+			: null
+	} as IMessage)
+
+  export const convertFirestoreTimestampToString = (timestamp: Timestamp) =>
+	new Date(timestamp.toDate().getTime()).toLocaleString()
+
+// export const transformMessage = (
+// 	message: QueryDocumentSnapshot<DocumentData>
+// ) =>
+// 	({
+// 		id: message.id,
+// 		...message.data(), // spread out conversation_id, text, sent_at, user
+// 		sent_at: message.data().sent_at
+// 			? convertFirestoreTimestampToString(message.data().sent_at as Timestamp)
+// 			: null
+// 	} as IMessage)
+
 
 export function formatDateString(dateString: string) {
   const options: Intl.DateTimeFormatOptions = {
@@ -62,4 +107,6 @@ export const multiFormatDateString = (timestamp: string = ""): string => {
     default:
       return "Just now";
   }
+
+
 };

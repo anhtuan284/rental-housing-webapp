@@ -4,7 +4,7 @@ import AuthLayout from "./_auth/AuthLayout";
 import SigninForm from "./_auth/forms/SigninForm";
 import SignupForm from "./_auth/forms/SignupForm";
 import RootLayout from "./_root/RootLayout";
-import { Home, NoPage, Profile } from "./_root/pages";
+import { Home, NoPage, Profile, ChatBox } from "./_root/pages";
 import MyUserReducer from "./reducer/MyReducer";
 import { useEffect, useReducer } from "react";
 import UserContext from "./context/UserContext";
@@ -13,6 +13,8 @@ import Cookie from "js-cookie";
 import { transformToIUser } from "./lib/utils";
 import { authApi, endpoints } from "./configs/APIs";
 import { useToast } from "./components/ui/use-toast";
+import { loginFirebase } from "./configs/firebase";
+import Conversation from "./_root/pages/conversations/[id]";
 
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
@@ -27,6 +29,7 @@ function App() {
         const currentUser = res.data;
 
         let transUser = transformToIUser(currentUser);
+        loginFirebase(transUser);
 
         dispatch({
           type: "login",
@@ -59,6 +62,9 @@ function App() {
           <Route element={<RootLayout />}>
             <Route index element={<Home />} />
             <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/chat/" element={<ChatBox />} />
+            <Route path="/conversations/:id" element={<Conversation />} />
+
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>
