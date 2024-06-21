@@ -193,7 +193,7 @@ const ConversationScreen: React.FC<ConversationScreenProps> = ({
           recipientEmail={recipientEmail}
         />
         <StyledHeaderInfo>
-          <StyledH3>{recipientEmail}</StyledH3>
+          <StyledH3>{recipient?.name}</StyledH3>
           {recipient && (
             <span>
               Last active:{" "}
