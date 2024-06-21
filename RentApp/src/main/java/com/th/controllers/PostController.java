@@ -29,14 +29,7 @@ public class PostController {
     @Autowired
     private UserService userService;
 
-//    @GetMapping
-//    public List<Post> getListLesaePost(@RequestParam(required = false) Map<String, String> params) {
-//        int typeId = 2;
-//        boolean status = true;
-//        return postSe.getPosts(typeId, status, params);
-//    }
-
-    @GetMapping("/admin/post/approve/{postId}")
+    @PostMapping("/admin/post/approve/{postId}")
     public ResponseEntity<String> approvePost(@PathVariable(value = "postId") Integer postId) {
         try {
             postSe.approvePost(postId);
@@ -47,4 +40,17 @@ public class PostController {
             return ResponseEntity.status(500).body("Failed to approve post: " + e.getMessage());
         }
     }
+    
+        @PostMapping("/admin/post/reject/{postId}")
+    public ResponseEntity<String> reject(@PathVariable(value = "postId") Integer postId) {
+        try {
+            postSe.unActivedPost(postId);
+            notiSe.addNotification(postId);
+
+            return ResponseEntity.ok("Post approved successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to approve post: " + e.getMessage());
+        }
+    }
+    
 }

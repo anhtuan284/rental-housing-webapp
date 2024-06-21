@@ -30,7 +30,7 @@ public interface UserService extends UserDetailsService {
 
     boolean authUser(String username, String password);
 
-    List<Integer> getListIdFollower(User user);
+    List<User> getListUserFollower(User user);
 
     User getCurrentUser();
 

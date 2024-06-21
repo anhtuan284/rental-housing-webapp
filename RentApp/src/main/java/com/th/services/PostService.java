@@ -13,7 +13,7 @@ import java.util.Map;
  * @author voquochuy
  */
 public interface PostService {
-    List<Post> getPosts(int typeId,boolean status, Map<String, String> params);
+    List<Post> getPosts(int typeId,boolean status,boolean actived, Map<String, String> params);
     void addOrUpdate(Post post);
     Post getPostById(int id);
     void deletePost(int id);
@@ -21,5 +21,6 @@ public interface PostService {
     List<Post> getPostOfRenter(Map<String, String> param);
     List<Post> getPostOfLandlord(Map<String, String> param);
     Post getPostDetail(int postId);
+    void unActivedPost(int postId);
 
 }

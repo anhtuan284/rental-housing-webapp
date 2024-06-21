@@ -142,12 +142,13 @@ public class UserRepositoryImpl implements UserRepository {
         return this.passEncoder.matches(password, u.getPassword());
     }
     @Override
-    public List<Integer> getListIdFollower(User user) {
+    public List<User> getListUserFollower(User user) {
         Session s = this.factory.getObject().getCurrentSession();
-        String hql = "SELECT f.followerId.id FROM Follow f WHERE f.followeeId.id = :userId";
+        String hql = "SELECT f.followerId FROM Follow f WHERE f.followeeId.id = :userId";
         Query query = s.createQuery(hql);
         query.setParameter("userId", user.getId());
-        return (List<Integer>) query.getResultList();
+        System.out.println((List<User>) query.getResultList());
+        return (List<User>) query.getResultList();
     }
 
     @Override

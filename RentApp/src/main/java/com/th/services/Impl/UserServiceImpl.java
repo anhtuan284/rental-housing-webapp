@@ -118,8 +118,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Integer> getListIdFollower(User user) {
-        return userRepo.getListIdFollower(user);
+    public List<User> getListUserFollower(User user) {
+        return userRepo.getListUserFollower(user);
     }
 
     @Override

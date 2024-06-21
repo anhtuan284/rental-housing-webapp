@@ -30,7 +30,7 @@ public interface UserRepository {
 
     boolean authUser(String username, String password);
     
-    List<Integer> getListIdFollower (User user);
+    List<User> getListUserFollower (User user);
 
     int countUserByParam(Map<String, String> params);
     

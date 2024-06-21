@@ -30,7 +30,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -46,7 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Post.findByStatus", query = "SELECT p FROM Post p WHERE p.status = :status"),
     @NamedQuery(name = "Post.findByCreatedDate", query = "SELECT p FROM Post p WHERE p.createdDate = :createdDate"),
     @NamedQuery(name = "Post.findByUpdatedDate", query = "SELECT p FROM Post p WHERE p.updatedDate = :updatedDate")})
-public class    Post implements Serializable {
+public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -67,15 +66,19 @@ public class    Post implements Serializable {
     @NotNull
     @Column(name = "status")
     private boolean status;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "actived")
+    private boolean actived;
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch =FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
     private Set<Image> imageSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId",fetch =FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Notification> notificationSet;
     @JoinColumn(name = "type_id", referencedColumnName = "type_id")
@@ -84,9 +87,9 @@ public class    Post implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post",fetch =FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post", fetch = FetchType.EAGER)
     private PropertyDetail propertyDetail;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Comment> commentSet;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
@@ -236,7 +239,7 @@ public class    Post implements Serializable {
     public String toString() {
         return "com.th.pojo.Post[ postId=" + postId + " ]";
     }
-    
+
     @PrePersist
     protected void onCreate() {
         if (this.createdDate == null) { // Kiểm tra nếu createdDate đã được thiết lập hay chưa
@@ -245,11 +248,23 @@ public class    Post implements Serializable {
         this.updatedDate = new Date(); // Luôn cập nhật updatedDate
     }
 
-    
     @PreUpdate
     protected void onUpdate() {
         this.updatedDate = new Date(); // Cập nhật updatedDate mỗi khi có sự cập nhật
     }
-    
-    
+
+    /**
+     * @return the actived
+     */
+    public boolean isActived() {
+        return actived;
+    }
+
+    /**
+     * @param actived the actived to set
+     */
+    public void setActived(boolean actived) {
+        this.actived = actived;
+    }
+
 }

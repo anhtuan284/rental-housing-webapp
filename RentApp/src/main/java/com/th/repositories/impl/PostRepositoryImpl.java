@@ -39,7 +39,7 @@ public class PostRepositoryImpl implements PostRepository {
     private Environment env;
 
     @Override
-    public List<Post> getPosts(int typeId, boolean status, Map<String, String> params) {
+    public List<Post> getPosts(int typeId, boolean status,boolean actived, Map<String, String> params) {
         Session s = this.factoryBean.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Post> q = b.createQuery(Post.class);
@@ -50,6 +50,7 @@ public class PostRepositoryImpl implements PostRepository {
 
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(post.get("status"), status));
+        predicates.add(b.equal(post.get("actived"), actived));
         predicates.add(b.equal(post.get("typeId").get("typeId"), typeId));
 
         String userId = params.get("userId");
@@ -153,12 +154,20 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void approvePost(int postId) {
         Session s = this.factoryBean.getObject().getCurrentSession();
-        System.out.println(postId);
         Post post = this.getPostById(postId);
-        System.out.println(post.getDescription());
         if (post != null) {
-            System.out.println(post.getDescription());
             post.setStatus(true);
+            post.setActived(true);
+            s.update(post);
+        }
+    }
+    
+    @Override
+    public void unActivedPost(int postId) {
+        Session s = this.factoryBean.getObject().getCurrentSession();
+        Post post = this.getPostById(postId);
+        if (post != null) {
+            post.setActived(false);
             s.update(post);
         }
     }
