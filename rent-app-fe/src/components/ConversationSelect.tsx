@@ -41,7 +41,7 @@ const ConversationSelect = ({
   return (
     <StyledContainer onClick={onSelectConversation}>
       <RecipientAvatar recipient={recipient} recipientEmail={recipientEmail} />
-      <RecipientEmail>{recipientEmail}</RecipientEmail>
+      <RecipientEmail>{recipient?.name}</RecipientEmail>
     </StyledContainer>
   );
 };

@@ -127,4 +127,5 @@ export interface ChatUser {
   email: string;
   lastSeen: Timestamp;
   avatar: string;
+  name: string;
 }
