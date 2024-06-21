@@ -45,8 +45,8 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public List<Post> getPosts(int typeId, boolean status, Map<String, String> params) {
-        return postRepo.getPosts(typeId, status, params);
+    public List<Post> getPosts(int typeId, boolean status,boolean actived, Map<String, String> params) {
+        return postRepo.getPosts(typeId, status,actived, params);
     }
 
     @Override
@@ -56,16 +56,21 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getPostOfRenter(Map<String, String> param) {
-        return postRepo.getPosts(2, true, param);
+        return postRepo.getPosts(2, true,true, param);
     }
     @Override
     public List<Post> getPostOfLandlord(Map<String, String> param) {
-        return postRepo.getPosts(1, true, param);
+        return postRepo.getPosts(1, true,true, param);
     }
 
     @Override
     public Post getPostDetail(int postId ) {
         return postRepo.getPostDetail(postId);
+    }
+
+    @Override
+    public void unActivedPost(int postId) {
+        postRepo.unActivedPost(postId);
     }
 
 

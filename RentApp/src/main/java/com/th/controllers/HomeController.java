@@ -58,7 +58,7 @@ public class HomeController {
 
     @GetMapping("/post/all")
     public String getListPendingLesaePost(@RequestParam(required = false) Map<String, String> params, Model model) {
-        List<Post> posts = postSe.getPosts(1, false, params);
+        List<Post> posts = postSe.getPosts(1, false,true, params);
         model.addAttribute("posts", posts);
         return "postlist";
     }
@@ -81,7 +81,7 @@ public class HomeController {
                 p.setStatus(false);
                 p.setTypeId(typeSe.getTypeById(2));
                 p.setStatus(true);
-
+                p.setActived(true);
                 this.postSe.addOrUpdate(p);
                 imgService.saveListImageOfPost(p, files);
                 return "redirect:/";

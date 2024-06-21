@@ -176,6 +176,8 @@
                                 </div>
                             </div>
                             <div class="my-2 text-center">
+                                <c:url value="/admin/post/reject/${post.postId}" var="url" />
+                                <button type="button" class="btn btn-danger" onclick="reject('${url}', ${post.postId})">Từ chối</button>
                                 <c:url value="/admin/post/approve/${post.postId}" var="url" />
                                 <button type="button" class="btn btn-info" onclick="approvePost('${url}', ${post.postId})">Cập nhật</button>
                             </div>
@@ -218,7 +220,7 @@
             }
 
             function approvePost(url, postId) {
-                fetch(url, { method: 'get' })
+                fetch(url, { method: 'post' })
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Failed to approve post');
@@ -228,6 +230,19 @@
                     .catch(error => {
                         console.error('Error:', error);
                         alert('Failed to approve post'); // Hiển thị thông báo lỗi nếu có
+                    });
+            }
+               function reject(url, postId) {
+                fetch(url, { method: 'post' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to reject post');
+                        }
+                        location.reload(); // Tải lại trang sau khi duyệt bài đăng thành công
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to reject post'); // Hiển thị thông báo lỗi nếu có
                     });
             }
 

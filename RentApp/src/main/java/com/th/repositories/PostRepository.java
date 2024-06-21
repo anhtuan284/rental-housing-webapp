@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface PostRepository {
 
-    List<Post> getPosts(int typeId, boolean status, Map<String, String> params);
+    List<Post> getPosts(int typeId, boolean status,boolean actived, Map<String, String> params);
 
     void addOrUpdate(Post post);
 
@@ -25,5 +25,7 @@ public interface PostRepository {
     void approvePost(int postId);
 
     Post getPostDetail(int postId);
+    
+    void unActivedPost(int postId);
 
 }

@@ -76,7 +76,7 @@ public class ApiPostController {
         }
     }
 
-    @PostMapping("/api/posts")
+    @PostMapping("/api/posts/landlorUpPost")
     @Transactional
     public ResponseEntity<String> createLeasePost(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] files) {
         try {
@@ -93,6 +93,7 @@ public class ApiPostController {
 
             post.setUserId(user);
             post.setStatus(false);
+            post.setActived(true);
             post.setTitle(params.get("title"));
             post.setDescription(params.get("description"));
             post.setTypeId(typeService.getTypeById(1));
@@ -105,7 +106,7 @@ public class ApiPostController {
             location.setCity(params.get("city"));
             location.setDistrict(params.get("district"));
             location.setLatitude(new BigDecimal(params.get("latitude")));
-            location.setLongitude(new BigDecimal(params.get("longitude")));;
+            location.setLongitude(new BigDecimal(params.get("longitude")));
 
             postSe.addOrUpdate(post);
             propSe.savePropOfPost(post, prop);
@@ -117,7 +118,40 @@ public class ApiPostController {
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @PostMapping("/api/posts/renterUpPost")
+    @Transactional
+    public ResponseEntity<String> createFindRentalPost(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] files) {
+        try {
+            User user = userService.getCurrentUser();
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            }
+            Post post = new Post();
+            Location location = new Location();
 
+            post.setUserId(user);
+            post.setStatus(true);
+            post.setActived(true);
+            post.setTitle(params.get("title"));
+            post.setDescription(params.get("description"));
+            post.setTypeId(typeService.getTypeById(2));
+            location.setAddress(params.get("address"));
+            location.setCity(params.get("city"));
+            location.setDistrict(params.get("district"));
+            location.setLatitude(new BigDecimal(params.get("latitude")));
+            location.setLongitude(new BigDecimal(params.get("longitude")));
+
+            postSe.addOrUpdate(post);
+            locationSe.saveLocationOfProp(post, location);
+            imgSe.saveListImageOfPost(post, files);
+
+            return new ResponseEntity<>("Post created successfully", HttpStatus.CREATED);
+        } catch (Exception ex) {
+            return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @GetMapping("/api/posts/{postId}")
     public ResponseEntity<Post> getPost(@PathVariable(value = "postId") Integer postId) {
         System.out.println(this.postSe.getPostById(postId));
