@@ -4,8 +4,10 @@
  */
 package com.th.repositories;
 
+import com.th.pojo.Notification;
 import com.th.pojo.Post;
 import com.th.pojo.User;
+import java.util.List;
 
 /**
  *
@@ -13,5 +15,6 @@ import com.th.pojo.User;
  */
 public interface NotificationRepository {
     void addNotification(User user,Post post);
+    List<Notification> listNoti (int userId);
     
 }

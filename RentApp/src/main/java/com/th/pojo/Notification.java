@@ -58,19 +58,20 @@ public class Notification implements Serializable {
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-    @JoinColumn(name = "post_id", referencedColumnName = "post_id")
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id",insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    @JsonIgnore
     private Post postId;
     @NotNull
     @Column(name = "user_id")
     private Integer userId;
+    @NotNull
+    @Column(name = "post_id")
+    private Integer postIdInt;
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     @JsonIgnore
     private User user;
- 
-    
+
     public Notification() {
     }
 
@@ -132,13 +133,22 @@ public class Notification implements Serializable {
         this.user = user;
     }
 
-       public Integer getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
+    public Integer getPostIdInt() {
+        return postIdInt;
+    }
+
+    public void setPostIdInt(Integer postIdInt) {
+        this.postIdInt = postIdInt;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -163,7 +173,7 @@ public class Notification implements Serializable {
     public String toString() {
         return "com.th.pojo.Notification[ notificationId=" + notificationId + " ]";
     }
-    
+
     @PrePersist
     protected void onCreate() {
         if (this.createdDate == null) { // Kiểm tra nếu createdDate đã được thiết lập hay chưa
@@ -171,5 +181,4 @@ public class Notification implements Serializable {
         }
     }
 
-   
 }
