@@ -119,6 +119,7 @@ export interface IMessage {
   id: string;
   conversation_id: string;
   text: string;
+  img: string[];
   sent_at: string;
   user: string;
 }

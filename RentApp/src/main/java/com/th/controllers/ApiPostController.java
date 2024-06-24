@@ -5,6 +5,7 @@
 package com.th.controllers;
 
 import com.th.pojo.Location;
+import com.th.pojo.Notification;
 import com.th.pojo.Post;
 import com.th.pojo.PropertyDetail;
 import com.th.pojo.User;
@@ -32,8 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author voquochuy
  */
+@RequestMapping("/api")
 @RestController
-@RequestMapping("/")
 @CrossOrigin
 public class ApiPostController {
 
@@ -48,6 +49,8 @@ public class ApiPostController {
 
     @Autowired
     private ImageService imgSe;
+    @Autowired
+    private NotificationService NotiSe;
 
     @Autowired
     private PropertyDetailService propSe;
@@ -55,28 +58,22 @@ public class ApiPostController {
     @Autowired
     private LocationService locationSe;
 
-    @GetMapping("/api/PostOfRenter/")
+    @GetMapping("/post/PostOfRenter/")
     public ResponseEntity<List<Post>> PostOfRenter(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.postSe.getPostOfRenter(params), HttpStatus.OK);
     }
 
-    @GetMapping("/api/PostOfLandlord/")
+    @GetMapping("/post/PostOfLandlord/")
     public ResponseEntity<List<Post>> PostOfLandlord(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.postSe.getPostOfLandlord(params), HttpStatus.OK);
     }
 
-    @GetMapping("/api/test")
-    public ResponseEntity<String> test() {
-        User currentUser = userService.getCurrentUser();
-        if (currentUser != null) {
-            return new ResponseEntity<>("Current user: " + currentUser.getUsername(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
-
-        }
+    @GetMapping("/test")
+    public ResponseEntity<List<Notification>> test() {
+        return new ResponseEntity<>(this.NotiSe.listNoti(userService.getCurrentUser().getId()), HttpStatus.OK);
     }
 
-    @PostMapping("/api/posts/landlorUpPost")
+    @PostMapping("/post/landlordUpPost")
     @Transactional
     public ResponseEntity<String> createLeasePost(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] files) {
         try {
@@ -99,7 +96,7 @@ public class ApiPostController {
             post.setTypeId(typeService.getTypeById(1));
 
             prop.setAcreage(Integer.parseInt(params.get("acreage")));
-            prop.setCapacity(Integer.valueOf(params.get("capacity")));
+            prop.setCapacity( Integer.parseInt(params.get("capacity")));
             prop.setPrice(new BigDecimal(params.get("price"))); // Correctly convert String to BigDecimal
 
             location.setAddress(params.get("address"));
@@ -118,8 +115,8 @@ public class ApiPostController {
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    @PostMapping("/api/posts/renterUpPost")
+
+    @PostMapping("/post/renterUpPost")
     @Transactional
     public ResponseEntity<String> createFindRentalPost(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] files) {
         try {
@@ -151,8 +148,8 @@ public class ApiPostController {
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    @GetMapping("/api/posts/{postId}")
+
+    @GetMapping("/post/{postId}")
     public ResponseEntity<Post> getPost(@PathVariable(value = "postId") Integer postId) {
         System.out.println(this.postSe.getPostById(postId));
         return new ResponseEntity<>(this.postSe.getPostById(postId), HttpStatus.OK);

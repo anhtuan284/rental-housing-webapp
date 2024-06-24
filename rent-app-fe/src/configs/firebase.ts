@@ -1,12 +1,11 @@
+// Import necessary Firebase modules
 import { IUser } from '@/types';
-// Import the functions you need from the SDKs you need
 import { getApps, initializeApp } from "firebase/app";
 import { doc, getFirestore, serverTimestamp, setDoc } from "firebase/firestore";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth } from "firebase/auth";
+import { getStorage } from 'firebase/storage';
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCiteD1RB5cw-OahuVDXbcd6xBV_yWNtIQ",
   authDomain: "rental-website-2f47b.firebaseapp.com",
@@ -23,6 +22,13 @@ if (!getApps().length) {
 } else {
   app = getApps()[0];
 }
+
+// Initialize Firebase services
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+// Function to login and set user in Firestore
 export const loginFirebase = async (currentUser: IUser) => {
   try {
     if (!currentUser || !currentUser.id) {
@@ -46,7 +52,5 @@ export const loginFirebase = async (currentUser: IUser) => {
   }
 };
 
-const db = getFirestore(app);
-const auth = getAuth(app);
-export {db, auth,}
-
+// Export Firebase services
+export { db, auth, storage };

@@ -17,8 +17,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -105,6 +112,21 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         } catch (InterruptedException ex) {
             Logger.getLogger(NotificationRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<Notification> listNoti(int userId) {
+        Session s = this.session.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Notification> q = b.createQuery(Notification.class);
+        Root<Notification> noti = q.from(Notification.class);
+        Join< Notification, Post> propJoin = noti.join("postId", JoinType.INNER);
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(noti.get("userId"), userId));
+        q.where(predicates.toArray(new Predicate[0]));
+        q.orderBy(b.desc(noti.get("notificationId")));
+        Query query = s.createQuery(q);
+        return (List<Notification>) query.getResultList();
     }
 
 }

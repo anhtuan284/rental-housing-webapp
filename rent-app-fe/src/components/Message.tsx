@@ -2,10 +2,9 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import { IMessage } from "../types";
 import UserContext from "@/context/UserContext";
-import { Timestamp } from "firebase/firestore";
 
 // Styled component for a message
-const StyledMessage = styled.p`
+const StyledMessage = styled.div`
   width: fit-content;
   word-break: break-all;
   max-width: 90%;
@@ -14,6 +13,8 @@ const StyledMessage = styled.p`
   border-radius: 8px;
   margin: 10px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 
 // Styled component for a sender's message
@@ -38,6 +39,35 @@ const StyledTimestamp = styled.span`
   text-align: right;
 `;
 
+// Styled component for image container in flex format
+const ImageContainer = styled.div`
+  max-width: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+`;
+
+// Styled component for individual image
+const SingleImage = styled.img`
+  width: 500px;
+  height: auto;
+  border-radius: 8px;
+`;
+
+const MultipleImages = styled.img`
+  width: calc(250px - 5px);
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+`;
+
+// Function to format the timestamp to a readable string
+const formatTimestamp = (timestamp: string): string => {
+  const date = new Date(timestamp);
+  return date.toLocaleString();
+};
+
 // Message component to display individual messages
 const Message: React.FC<{ message: IMessage }> = ({ message }) => {
   const { user } = useContext(UserContext); // Get current user from context
@@ -46,12 +76,25 @@ const Message: React.FC<{ message: IMessage }> = ({ message }) => {
   const MessageType =
     user?.email === message.user ? StyledSenderMessage : StyledReceiverMessage;
 
-  // Format the timestamp to a readable string
-
   return (
     <MessageType>
       {message.text}
-      <StyledTimestamp>{message.sent_at}</StyledTimestamp>
+      {message.img && message.img.length > 0 && (
+        <ImageContainer>
+          {message.img.length === 1 ? (
+            <SingleImage src={message.img[0]} alt="Message Attachment" />
+          ) : (
+            message.img.map((url, index) => (
+              <MultipleImages
+                key={index}
+                src={url}
+                alt={`Message Attachment ${index + 1}`}
+              />
+            ))
+          )}
+        </ImageContainer>
+      )}
+      <StyledTimestamp>{formatTimestamp(message.sent_at)}</StyledTimestamp>
     </MessageType>
   );
 };
