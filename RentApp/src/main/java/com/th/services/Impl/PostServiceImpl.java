@@ -7,8 +7,8 @@ package com.th.services.Impl;
 import com.th.pojo.Post;
 import com.th.repositories.PostRepository;
 import com.th.services.PostService;
-import com.th.services.PostService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -73,5 +73,8 @@ public class PostServiceImpl implements PostService {
         postRepo.unActivedPost(postId);
     }
 
-
+    @Override
+    public List<Post> findNearHouse(BigDecimal userLat, BigDecimal userLon, int dist) {
+        return postRepo.findNearHouse(userLat, userLon, dist);
+    }
 }

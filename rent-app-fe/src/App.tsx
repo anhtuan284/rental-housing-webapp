@@ -23,6 +23,8 @@ import { useToast } from "./components/ui/use-toast";
 import { loginFirebase } from "./configs/firebase";
 import Conversation from "./_root/pages/conversations/[id]";
 import { PostsProvider, usePosts } from "./context/PostsContext";
+import UpdateProfile from "./_root/pages/UpdateProfile";
+import { BingMap, MapModal } from "./components/shared";
 
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
@@ -71,10 +73,15 @@ function App() {
             <Route element={<RootLayout />}>
               <Route index element={<Home />} />
               <Route path="/profile/:id" element={<Profile />} />
+              <Route
+                path="/profile/:userId/update"
+                element={<UpdateProfile />}
+              />
               <Route path="/chat/" element={<ChatBox />} />
               <Route path="/conversations/:id" element={<Conversation />} />
               <Route path="/posts/:postId" element={<PostDetails />} />
               <Route path="/create-post" element={<CreatePost />} />
+              <Route path="/explore" element={<MapModal />} />
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>

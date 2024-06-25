@@ -1,14 +1,12 @@
 import {
-  CollectionReference,
   DocumentData,
-  Query,
   collection,
   query,
   where,
   orderBy,
   Timestamp,
   QueryDocumentSnapshot,
-} from 'firebase/firestore';import { Conversation, IMessage } from './../types/index';
+} from 'firebase/firestore';import { Conversation, IComment, IMessage } from './../types/index';
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { db } from '@/configs/firebase';
@@ -27,8 +25,28 @@ export const transformToIUser = (data: any): IUser => {
     avatar: data.avatar,
     following: data.followSet,
     followers: data.followSet1,
+    phone: data.numberPhone,
+    cccd: data.cccd,
+    address: data.address,  
+    role: data.roleId.name,
   };
 };
+
+export const transformcomment = (data: any): IComment => {
+  return {
+    commentId: data.commentId,
+    content: data.content,
+    createdDate: data.createdDate,
+    updatedDate: data.updatedDate,
+    positive: data.positive,
+    user: data.userId ? {
+      userId: data.userId.id || "",
+      name: data.userId.name || "",
+      avatar: data.userId.avatar || "/assets/icons/profile-placeholder.svg",
+    } : { userId: "", name: "", avatar: "/assets/icons/profile-placeholder.svg" }
+  };
+};
+
 export const getRecipientEmail = (conversationUsers: Conversation['users'], loggedInUser?: IUser | null) => conversationUsers.find(userEmail => userEmail !== loggedInUser?.email)
 export const generateQueryGetMessages = (conversationId?: string) =>
 	query(
@@ -86,7 +104,7 @@ export const convertToIPost = (data: any): IPost => {
     propertyDetail: data.propertyDetail ? {
       price: data.propertyDetail.price || "",
       acreage: data.propertyDetail.acreage || "",
-      capacity: data.propertyDetail.capacity || "",
+      capacity: data.propertyDetail.capacity || "", 
     } : { price: "", acreage: "", capacity: "" },
     location: data.location ? {
       longitude: data.location.longitude || "",

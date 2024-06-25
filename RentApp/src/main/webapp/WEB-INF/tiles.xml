@@ -60,4 +60,10 @@
         <put-attribute name="content"
                        value="/WEB-INF/pages/post/createPost.jsp" />
     </definition>
+
+    <definition name="login" extends="baseLayout">
+        <put-attribute name="title" value="Login" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/login.jsp" />
+    </definition>
 </tiles-definitions>

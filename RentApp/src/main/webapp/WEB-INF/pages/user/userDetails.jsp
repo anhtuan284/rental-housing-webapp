@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Detail</title>
+    <title><spring:message code="admin.user.label"/></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -58,7 +58,7 @@
 
         <div class="form-floating mb-3 mt-3">
             <form:input type="file" class="form-control"  id="image" path="file" />
-            <label for="image">Ảnh sản phẩm</label>
+            <label for="image"><spring:message code="user.avatar.label"/></label>
 
             <c:if test="${user.id > 0}">
                 <img src="${user.avatar}" width="200" class="img-fluid" alt="avatar"/>
@@ -88,6 +88,7 @@
         </div>
 
         <form:hidden path="id"/>
+        <form:hidden path="avatar"/>
     </form:form>
 </div>
 

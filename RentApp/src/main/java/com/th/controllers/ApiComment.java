@@ -179,16 +179,15 @@ public class ApiComment {
         }
     }
 
-    @DeleteMapping("/comment/delete")
+    @DeleteMapping("/comment/{commentId}/delete")
     @Transactional
-    public ResponseEntity<String> deleteComment(@RequestBody Map<String, String> params) {
+    public ResponseEntity<String> deleteComment(@PathVariable int commentId) {
         try {
             User currentUser = userService.getCurrentUser();
             if (currentUser == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
             }
 
-            int commentId = Integer.parseInt(params.get("commentId"));
 
             Comment commentDelete = commentService.getCommentById(commentId);
             if (commentDelete == null) {
@@ -213,20 +212,20 @@ public class ApiComment {
         }
     }
 
-    @GetMapping("/comment/GetCmtByPostId")
+    @GetMapping("/comment/{postId}")
     @Transactional
-    public ResponseEntity<?> GetCmtByPostId(@RequestBody Map<String, Integer> params) {
-        if (!params.containsKey("postId")) {
-            return new ResponseEntity<>("Missing required parameter 'postId'", HttpStatus.BAD_REQUEST);
-        }
-
-        Integer postId = params.get("postId");
-        if (postId == null) {
-            return new ResponseEntity<>("Invalid 'postId' parameter. It must be an integer.", HttpStatus.BAD_REQUEST);
-        }
-
-        System.out.println(postId);
-        System.out.println(postId);
+    public ResponseEntity<?> GetCmtByPostId(@PathVariable int postId) {
+//        if (!params.containsKey("postId")) {
+//            return new ResponseEntity<>("Missing required parameter 'postId'", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        Integer postId = params.get("postId");
+//        if (postId == null) {
+//            return new ResponseEntity<>("Invalid 'postId' parameter. It must be an integer.", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        System.out.println(postId);
+//        System.out.println(postId);
 
         return new ResponseEntity<>(this.commentService.getCmtByPostId(postId), HttpStatus.OK);
     }

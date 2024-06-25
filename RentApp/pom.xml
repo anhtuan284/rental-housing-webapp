@@ -197,6 +197,7 @@
     </dependencies>
 
     <build>
+        <finalName>RentApp</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

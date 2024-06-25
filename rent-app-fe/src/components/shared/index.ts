@@ -6,3 +6,7 @@ export { default as PostCard} from "./PostCard";
 export { default as Topbar} from "./Topbar"
 export { default as CommentList} from "./CommentList"
 export { default as Comment} from "./Comment"
+export { default as ProfileUploader} from "./ProfileUploader"
+export { default as MapModal} from "./MapModal"
+export { default as BingMap} from "./BingMap"
+

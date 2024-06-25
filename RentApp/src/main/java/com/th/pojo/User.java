@@ -128,8 +128,7 @@ public class User implements Serializable {
     private Set<Follow> followSet1;
 
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    @JsonIgnore
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Role roleId;
 
     @Transient

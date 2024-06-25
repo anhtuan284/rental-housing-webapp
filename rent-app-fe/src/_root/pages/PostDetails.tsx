@@ -2,13 +2,15 @@ import React, { useState, useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import Modal from "react-modal";
-import { multiFormatDateString } from "@/lib/utils";
+import { convertToIPost, multiFormatDateString } from "@/lib/utils";
 import { usePosts } from "@/context/PostsContext";
 import UserContext from "@/context/UserContext";
-import { CommentList } from "@/components/shared";
+import { CommentList, Loader } from "@/components/shared";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { IPost } from "@/types";
+import { authApi, endpoints } from "@/configs/APIs";
+import { useToast } from "@/components/ui";
 // Declare the global variable on window
 declare global {
   interface Window {
@@ -23,17 +25,36 @@ const PostDetails = () => {
   const { user } = useContext(UserContext);
   const { postId } = useParams<{ postId: string }>();
   const { posts } = usePosts();
+
+  const [loading, setLoading] = useState<boolean>(false);
   const [post, setPost] = useState<any>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null); // State cho ảnh được chọn
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { toast } = useToast();
 
   // Fetch post data based on postId
+  const fetchPostDetails = async (postId: string) => {
+    try {
+      setLoading(true);
+      if (!postId) return;
+      let res = await authApi().get(endpoints["get-post-details"](postId));
+      const transPost = convertToIPost(res.data);
+      setPost(transPost);
+    } catch (ex: any) {
+      toast({
+        title: "Error fetching post details",
+        description: ex.message,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    console.log(postId);
     const foundPost = posts?.find((p: IPost) => p.postId == postId);
-    console.log(foundPost);
     if (foundPost) {
       setPost(foundPost);
+    } else {
+      if (postId) fetchPostDetails(postId);
     }
   }, [postId, posts]);
 
@@ -80,8 +101,6 @@ const PostDetails = () => {
     setModalIsOpen(false);
   };
 
-  if (!post) return <div>Post not found</div>;
-
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -115,136 +134,146 @@ const PostDetails = () => {
 
   return (
     <div className="flex flex-1">
-      <div className="home-container">
-        <div className="flex flex-col items-center p-4">
-          <div className="w-full max-w-2xl shadow-md rounded-lg p-6">
-            <div className="flex justify-between items-center mb-6">
-              <div className="flex items-center gap-3">
-                <Link to={`/profile/${post.user.userId}`}>
-                  <img
-                    src={
-                      post.user.avatar ||
-                      "/assets/icons/profile-placeholder.svg"
-                    }
-                    alt="creator"
-                    className="w-12 lg:h-12 rounded-full"
-                  />
-                </Link>
-                <div className="flex flex-col">
-                  <Link to={`/profile/${post.user.userId}`}>
-                    <p className="text-lg font-semibold text-white">
-                      {post.user.name}
-                    </p>
-                  </Link>
-                  <div className="flex items-center gap-2 text-gray-500">
-                    <p className="text-sm">
-                      <i>{multiFormatDateString(post.created_date)}</i>
-                    </p>
-                    <span>•</span>
-                    <p className="text-sm text-primary-500 font-semibold">
+      <div className="common-container">
+        {loading ? (
+          <Loader />
+        ) : post ? (
+          <>
+            <div className="flex flex-col items-center p-4">
+              <div className="w-full max-w-2xl shadow-md rounded-lg p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex items-center gap-3">
+                    <Link to={`/profile/${post.user.userId}`}>
+                      <img
+                        src={
+                          post.user.avatar ||
+                          "/assets/icons/profile-placeholder.svg"
+                        }
+                        alt="creator"
+                        className="w-12 lg:h-12 rounded-full"
+                      />
+                    </Link>
+                    <div className="flex flex-col">
+                      <Link to={`/profile/${post.user.userId}`}>
+                        <p className="text-lg font-semibold text-white">
+                          {post.user.name}
+                        </p>
+                      </Link>
+                      <div className="flex items-center gap-2 text-gray-500">
+                        <p className="text-sm">
+                          <i>{multiFormatDateString(post.created_date)}</i>
+                        </p>
+                        <span>•</span>
+                        <p className="text-sm text-primary-500 font-semibold">
+                          {post.location?.city}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  {user?.id.toString() === post.user.userId && (
+                    <Link to={`/update-post/${post.postId}`}>
+                      <img
+                        src="/assets/icons/edit.svg"
+                        alt="edit"
+                        className="w-5 h-5"
+                      />
+                    </Link>
+                  )}
+                </div>
+
+                <div className="mb-6">
+                  <h1 className="text-2xl font-bold text-white mb-4">
+                    {post.title}
+                  </h1>
+                  <p className="text-gray-100 mb-4">{post.description}</p>
+                  <Slider {...sliderSettings}>
+                    {post.imageSet.map((image: any) => (
+                      <div
+                        key={image.imageId}
+                        onClick={() => openModal(image.url)}
+                        className="cursor-pointer"
+                      >
+                        <img
+                          src={image.url}
+                          alt="post image"
+                          className="w-full h-auto rounded-lg"
+                        />
+                      </div>
+                    ))}
+                  </Slider>
+                </div>
+
+                <div className="mb-6">
+                  <p className="text-lg font-semibold text-white">
+                    Price:{" "}
+                    <span className="text-purple-400">
+                      {post.propertyDetail.price
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                      / Tháng
+                    </span>
+                  </p>
+                  <p className="text-lg font-semibold text-white font-bolder">
+                    Acreage:{" "}
+                    <span className="text-light-1">
+                      {post.propertyDetail.acreage}
+                    </span>
+                  </p>
+                  <p className="text-lg font-semibold text-white font-bolder">
+                    Capacity:{" "}
+                    <span className="text-light-1">
+                      {post.propertyDetail.capacity}
+                    </span>
+                  </p>
+                  <p className="text-lg font-semibold text-white font-bolder">
+                    Address:{" "}
+                    <span className="text-light-1">
+                      {post.location?.address}, {post.location?.district},{" "}
                       {post.location?.city}
-                    </p>
-                  </div>
+                    </span>
+                  </p>
+                  <p className="text-lg font-semibold text-white font-bolder">
+                    Coordinates:{" "}
+                    <span className="text-light-1">
+                      {post.location?.latitude}, {post.location?.longitude}
+                    </span>
+                  </p>
                 </div>
+                <div id="map" style={{ width: "100%", height: "400px" }}></div>
+                <div className="text-2xl font-bold my-4">Comments</div>
+                {post && <CommentList postId={post.postId} />}
+
+                {selectedImage && (
+                  <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="Image Modal"
+                    className="flex items-center justify-center h-full"
+                    overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+                  >
+                    <div className="p-4 rounded-lg max-w-4xl mx-auto">
+                      <img
+                        src={selectedImage}
+                        alt="Selected post"
+                        className="w-full h-auto rounded-lg"
+                      />
+                      <button
+                        onClick={closeModal}
+                        className="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </Modal>
+                )}
               </div>
-              {user?.id.toString() === post.user.userId && (
-                <Link to={`/update-post/${post.postId}`}>
-                  <img
-                    src="/assets/icons/edit.svg"
-                    alt="edit"
-                    className="w-5 h-5"
-                  />
-                </Link>
-              )}
             </div>
-
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-white mb-4">
-                {post.title}
-              </h1>
-              <p className="text-gray-100 mb-4">{post.description}</p>
-              <Slider {...sliderSettings}>
-                {post.imageSet.map((image: any) => (
-                  <div
-                    key={image.imageId}
-                    onClick={() => openModal(image.url)}
-                    className="cursor-pointer"
-                  >
-                    <img
-                      src={image.url}
-                      alt="post image"
-                      className="w-full h-auto rounded-lg"
-                    />
-                  </div>
-                ))}
-              </Slider>
-            </div>
-
-            <div className="mb-6">
-              <p className="text-lg font-semibold text-white">
-                Price:{" "}
-                <span className="text-purple-400">
-                  {post.propertyDetail.price
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                  / Tháng
-                </span>
-              </p>
-              <p className="text-lg font-semibold text-white font-bolder">
-                Acreage:{" "}
-                <span className="text-light-1">
-                  {post.propertyDetail.acreage}
-                </span>
-              </p>
-              <p className="text-lg font-semibold text-white font-bolder">
-                Capacity:{" "}
-                <span className="text-light-1">
-                  {post.propertyDetail.capacity}
-                </span>
-              </p>
-              <p className="text-lg font-semibold text-white font-bolder">
-                Address:{" "}
-                <span className="text-light-1">
-                  {post.location?.address}, {post.location?.district},{" "}
-                  {post.location?.city}
-                </span>
-              </p>
-              <p className="text-lg font-semibold text-white font-bolder">
-                Coordinates:{" "}
-                <span className="text-light-1">
-                  {post.location?.latitude}, {post.location?.longitude}
-                </span>
-              </p>
-            </div>
-            <div id="map" style={{ width: "100%", height: "400px" }}></div>
-            <div className="text-2xl font-bold my-4">Comments</div>
-            <CommentList postId={post.postId} />
-
-            {selectedImage && (
-              <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                contentLabel="Image Modal"
-                className="flex items-center justify-center h-full"
-                overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-              >
-                <div className="p-4 rounded-lg max-w-4xl mx-auto">
-                  <img
-                    src={selectedImage}
-                    alt="Selected post"
-                    className="w-full h-auto rounded-lg"
-                  />
-                  <button
-                    onClick={closeModal}
-                    className="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg"
-                  >
-                    Close
-                  </button>
-                </div>
-              </Modal>
-            )}
+          </>
+        ) : (
+          <div className="flex flex-1 text-primary-500 font-bold text-2xl">
+            Post not found
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

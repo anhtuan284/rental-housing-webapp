@@ -26,7 +26,7 @@
             <div class="card mb-4 shadow btn-outline-success">
                 <div class="card-body">
                     <h5 class="card-title">Renter</h5>
-                    <p class="card-text fw-bolder ">${usersByRole[2][1]}</p>
+                    <p class="card-text fw-bolder fs-3">${usersByRole[2][1]}</p>
                     <p class="text-success">3.65% Since last week</p>
                 </div>
             </div>
@@ -35,7 +35,7 @@
             <div class="card mb-4 shadow btn-outline-success">
                 <div class="card-body">
                     <h5 class="card-title">Landlord</h5>
-                    <p class="card-text fw-bolder ">${usersByRole[1][1]}</p>
+                    <p class="card-text fw-bolder fs-3">${usersByRole[1][1]}</p>
                     <p class="text-success">6.65% Since last week</p>
                 </div>
             </div>
@@ -44,7 +44,7 @@
             <div class="card mb-4 shadow btn-outline-success">
                 <div class="card-body">
                     <h5 class="card-title">Published Post</h5>
-                    <p class="card-text fw-bolder ">${post[0][1]}</p>
+                    <p class="card-text fw-bolder fs-3">${post[0][1]}</p>
                     <p class="text-success">5.25% Since last week</p>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                     <h5 class="card-title">Uncensored Post</h5>
                     <c:choose>
                         <c:when test="${post[1] != null}">
-                            <p class="card-text fw-bolder ">${post[1][1]}</p>
+                            <p class="card-text fw-bolder fs-3">${post[1][1]}</p>
                         </c:when>
                         <c:otherwise>
                             <p class="card-text fw-bolder ">0</p>

@@ -96,10 +96,14 @@ export type IUser = {
   id: number;
   name: string;
   username: string;
+  phone: string;
+  address: string;
+  cccd: string;
   email: string;
   avatar: string;
   followers: any[];
   following: any[];
+  role: string;
 };
 
 export type INewUser = {
@@ -115,6 +119,20 @@ export type INewUser = {
 export interface Conversation {
   users: string[];
 }
+
+export interface IComment {
+  commentId: number;
+  content: string;
+  createdDate: number;
+  updatedDate: number;
+  positive: number;
+  user: {
+    userId: string;
+    name: string;
+    avatar: string;
+  };
+}
+
 export interface IMessage {
   id: string;
   conversation_id: string;

@@ -5,6 +5,8 @@
 package com.th.services;
 
 import com.th.pojo.Post;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -23,4 +25,5 @@ public interface PostService {
     Post getPostDetail(int postId);
     void unActivedPost(int postId);
 
+    List<Post> findNearHouse(BigDecimal userLat, BigDecimal userLon, int dist);
 }

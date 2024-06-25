@@ -20,7 +20,7 @@ import {
   SelectValue,
   SelectContent,
 } from "@/components/ui";
-import { PostValidation } from "@/lib/validation";
+import { PostValidation, RenterPostValidation } from "@/lib/validation";
 import { FileUploader, Loader } from "@/components/shared";
 import { useEffect, useState } from "react";
 import { INewPost, IPost, IUpdatePost } from "@/types";
@@ -57,22 +57,19 @@ declare global {
 // Declare Microsoft object
 declare var Microsoft: any;
 
-const PostForm = ({ post, action }: PostFormProps) => {
+const RenterPostForm = ({ post, action }: PostFormProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [cities, setCities] = useState<City[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
 
-  const form = useForm<z.infer<typeof PostValidation>>({
-    resolver: zodResolver(PostValidation),
+  const form = useForm<z.infer<typeof RenterPostValidation>>({
+    resolver: zodResolver(RenterPostValidation),
     defaultValues: {
       postId: post ? post?.postId : undefined,
       title: post ? post?.title : "",
       description: post ? post?.description : "",
       files: [],
-      acreage: post ? post?.acreage : "",
-      price: post ? post?.price : "",
-      capacity: post ? post?.capacity : "",
       address: post ? post?.address : "",
       city: post ? post?.city : "",
       district: post ? post?.district : "",
@@ -178,7 +175,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
   }, [form.watch("address"), form.watch("district")]);
 
   // Handler
-  const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
+  const handleSubmit = async (value: z.infer<typeof RenterPostValidation>) => {
     // ACTION = UPDATE
     if (value.files.length < 3) {
       toast({
@@ -198,9 +195,6 @@ const PostForm = ({ post, action }: PostFormProps) => {
     const formData = new FormData();
     formData.append("title", value.title);
     formData.append("description", value.description);
-    formData.append("price", value.price);
-    formData.append("acreage", value.acreage);
-    formData.append("capacity", value.capacity);
     formData.append("address", value.address);
     formData.append(
       "district",
@@ -431,48 +425,6 @@ const PostForm = ({ post, action }: PostFormProps) => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="price"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="shad-form_label">Price</FormLabel>
-              <FormControl>
-                <Input type="text" className="shad-input" {...field} />
-              </FormControl>
-              <FormMessage className="shad-form_message" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="acreage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="shad-form_label">Acreage</FormLabel>
-              <FormControl>
-                <Input type="text" className="shad-input" {...field} />
-              </FormControl>
-              <FormMessage className="shad-form_message" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="capacity"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="shad-form_label">Capacity</FormLabel>
-              <FormControl>
-                <Input type="text" className="shad-input" {...field} />
-              </FormControl>
-              <FormMessage className="shad-form_message" />
-            </FormItem>
-          )}
-        />
-
         <div className="flex gap-4 items-center justify-end">
           <Button
             type="button"
@@ -495,4 +447,4 @@ const PostForm = ({ post, action }: PostFormProps) => {
   );
 };
 
-export default PostForm;
+export default RenterPostForm;

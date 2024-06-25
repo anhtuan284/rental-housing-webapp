@@ -56,6 +56,11 @@ public class HomeController {
         return "index";
     }
 
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     @GetMapping("/post/all")
     public String getListPendingLesaePost(@RequestParam(required = false) Map<String, String> params, Model model) {
         List<Post> posts = postSe.getPosts(1, false,true, params);

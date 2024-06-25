@@ -184,4 +184,37 @@ public class PostRepositoryImpl implements PostRepository {
             return null; // Return null if no post found with the given postId
         }
     }
+
+//    public double haversine(double lat1, double lon1, double lat2, double lon2) {
+//        final int R = 6371; // Bán kính trái đất tính bằng km
+//
+//        double latDistance = Math.toRadians(lat2 - lat1);
+//        double lonDistance = Math.toRadians(lon2 - lon1);
+//        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+//                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+//                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//        double distance = R * c; // Tính khoảng cách
+//
+//        return distance;
+//    }
+
+    @Override
+    public List<Post> findNearHouse(BigDecimal userLat, BigDecimal userLon, int dist) {
+        Session s = this.factoryBean.getObject().getCurrentSession();
+
+        String hql = "SELECT p FROM Post p JOIN p.location l WHERE " +
+                "(6371 * acos(cos(radians(:userLat)) * cos(radians(l.latitude)) * " +
+                "cos(radians(l.longitude) - radians(:userLon)) + sin(radians(:userLat)) * sin(radians(l.latitude)))) <= :distance";
+
+        Query query = s.createQuery(hql, Post.class);
+        query.setParameter("userLat", userLat);
+        query.setParameter("userLon", userLon);
+        query.setParameter("distance", (double) dist);
+
+        return query.getResultList();
+    }
+
+
+
 }

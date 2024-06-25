@@ -79,13 +79,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+//    @Cacheable(value = "users")
     public List<User> getAllUsers(Map<String, String> params) {
         List<User> users = userRepo.getAllUser(params);
         return users;
     }
 
     @Override
-    @Cacheable(value = "users", key = "#id")
+//    @Cacheable(value = "users", key = "#id")
     public User getUserById(Integer id) {
         User u = this.userRepo.getUserById(id);
         return u;
@@ -99,7 +100,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addOrUpdate(User user) {
-        if (user.getFile() != null || !user.getFile().isEmpty()) {
+        if (user.getFile() != null && !user.getFile().isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
@@ -111,6 +112,7 @@ public class UserServiceImpl implements UserService {
         this.userRepo.addOrUpdate(user);
     }
     
+
 
     @Override
     public boolean authUser(String username, String password) {

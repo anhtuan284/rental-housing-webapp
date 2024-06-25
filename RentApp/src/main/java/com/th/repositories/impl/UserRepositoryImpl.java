@@ -54,6 +54,7 @@ public class UserRepositoryImpl implements UserRepository {
                 "LEFT JOIN FETCH f1.followeeId followee " +
                 "LEFT JOIN FETCH u.followSet1 f2 " +
                 "LEFT JOIN FETCH f2.followerId follower " +
+                "LEFT JOIN FETCH u.roleId role " +
                 "WHERE u.username = :username", User.class);
         q.setParameter("username", username);
         return (User) q.getSingleResult();
@@ -83,8 +84,8 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void addUser(User user) {
         Session s = this.factory.getObject().getCurrentSession();
-        Role role = roleRepository.getRoleById(3);
-        user.setRoleId(role);
+//        Role role = roleRepository.getRoleById(3);
+//        user.setRoleId(role);
         s.save(user);
     }
 

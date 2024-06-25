@@ -60,6 +60,10 @@
     function changeLanguage(lang) {
         const url = new URL(window.location.href);
         url.searchParams.set('lang', lang);
-        window.location.href = url.href;
+        function reload() {
+            window.location.href = url.href;
+            clearTimeout(myTimeout);
+        }
+        const myTimeout = setTimeout(reload, 2000);
     }
 </script>

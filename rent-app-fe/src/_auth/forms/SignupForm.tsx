@@ -19,6 +19,15 @@ import { useToast } from "@/components/ui/use-toast";
 import { SignupValidation } from "@/lib/validation";
 import { useState } from "react";
 import APIs, { endpoints } from "@/configs/APIs";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui";
 
 const SignupForm = () => {
   const { toast } = useToast();
@@ -36,6 +45,7 @@ const SignupForm = () => {
       phone: "",
       address: "",
       files: null,
+      role: "",
     },
   });
 
@@ -208,6 +218,35 @@ const SignupForm = () => {
                     }
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ROLE</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Account Type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-gray-950">
+                    <SelectItem className="hover:bg-gray-800" value="2">
+                      LANDLORD
+                    </SelectItem>
+                    <SelectItem className="hover:bg-gray-800" value="">
+                      RENTER
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

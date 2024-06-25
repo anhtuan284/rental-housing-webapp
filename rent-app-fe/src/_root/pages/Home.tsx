@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
-import { Loader, PostCard } from "@/components/shared";
+import { BingMap, Loader, MapModal, PostCard } from "@/components/shared";
 import { usePosts } from "@/context/PostsContext";
 import { Button, Input, useToast } from "@/components/ui";
 import { IPost } from "@/types";
+import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   const { posts, loading, loadMorePosts, setFilters, hasMore } = usePosts();
+
   const { toast } = useToast();
   const observer = useRef<IntersectionObserver | null>(null);
   const [filters, updateFilters] = useState({
@@ -16,7 +18,7 @@ const Home: React.FC = () => {
     maxAcreage: 0,
     capacity: 0,
   });
-
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false); // State to control modal visibility
   const lastPostElementRef = useCallback(
     (node: HTMLLIElement | null) => {
       if (loading) return;
@@ -156,7 +158,7 @@ const Home: React.FC = () => {
                 onChange={handleFilterChange}
               />
             </div>
-            <Button type="submit" className="bg-primary-500 col-span-3">
+            <Button type="submit" className="bg-primary-500 col-span-1">
               Apply Filters
             </Button>
           </form>

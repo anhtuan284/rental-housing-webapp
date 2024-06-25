@@ -21,6 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api")
 public class ApiUserController {
@@ -38,8 +40,8 @@ public class ApiUserController {
     private GoogleIdTokenVerifier googleIdTokenVerifier;
 
     @PostMapping(path = "/users/", consumes = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE
     })
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
@@ -52,18 +54,18 @@ public class ApiUserController {
         user.setEmail(params.get("email"));
         user.setCccd(params.get("cccd"));
         user.setAddress(params.get("address"));
-
+        if (params.get("role") != null && !params.get("role").equals("")) {
+            user.setRoleId(roleSe.getRoleById(Integer.parseInt(params.get("role"))));
+        }
         if (files.length > 0) {
             user.setFile(files[0]);
         }
-
         this.userService.addUser(user);
     }
 
     @PostMapping("/login/")
     @CrossOrigin
     public ResponseEntity<String> login(@RequestBody User user) {
-        System.out.println("Login");
         if (this.userService.authUser(user.getUsername(), user.getPassword())) {
             String token = this.jwtService.generateTokenLogin(user.getUsername());
             return new ResponseEntity<>(token, HttpStatus.OK);
@@ -128,4 +130,42 @@ public class ApiUserController {
             return new ResponseEntity<>("Invalid ID token", HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @PostMapping(path = "/profile/{id}/update", consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+    })
+    @CrossOrigin
+    public ResponseEntity<String> updateUserProfile(
+            @PathVariable int id,
+            @RequestParam Map<String, String> params,
+            @RequestPart(required = false) MultipartFile[] files) {
+
+        try {
+            User u = this.userService.getUserProfile(id);
+            if (u == null) {
+                return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
+            }
+            u.setName(params.getOrDefault("name", u.getName()));
+            u.setUsername(params.getOrDefault("username", u.getUsername()));
+            u.setAddress(params.getOrDefault("address", u.getAddress()));
+            u.setCccd(params.getOrDefault("cccd", u.getCccd()));
+            u.setEmail(params.getOrDefault("email", u.getEmail()));
+            u.setNumberPhone(params.getOrDefault("phone", u.getNumberPhone()));
+            u.setPassword(params.getOrDefault("password", u.getPassword()));
+            if (params.get("password") != null) {
+                u.setPassword(passswordEncoder.encode(params.get("password")));
+            }
+            if (files != null && files.length > 0) {
+                u.setFile(files[0]);
+            }
+
+            this.userService.addOrUpdate(u);
+            return new ResponseEntity<>("User profile updated successfully!", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("An error occurred while updating the profile.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

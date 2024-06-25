@@ -17,11 +17,13 @@ import com.th.services.PropertyDetailService;
 //import com.th.services.PropertyDetailService;
 import com.th.services.TypeOfPostService;
 import com.th.services.UserService;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- *
  * @author voquochuy
  */
 @RequestMapping("/api")
@@ -153,5 +154,15 @@ public class ApiPostController {
     public ResponseEntity<Post> getPost(@PathVariable(value = "postId") Integer postId) {
         System.out.println(this.postSe.getPostById(postId));
         return new ResponseEntity<>(this.postSe.getPostById(postId), HttpStatus.OK);
+    }
+
+    @PostMapping("/posts/near-you")
+    public ResponseEntity<Object[]> findNearHouse(@RequestBody Map<String, String> body) {
+        if (body.get("longitude") == null || body.get("latitude") == null || body.get("dist") == null) {
+            return ResponseEntity.badRequest().body(new Object[] { null });
+        }
+        System.out.println(new BigDecimal(body.get("latitude")));
+        List<Post> res =  this.postSe.findNearHouse(new BigDecimal(body.get("latitude")), new BigDecimal(body.get("longitude")), Integer.parseInt(body.get("dist")));
+        return ResponseEntity.ok(res.toArray());
     }
 }

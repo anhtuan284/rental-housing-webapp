@@ -5,17 +5,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User List</title>
+    <title><spring:message code="admin.user.label"/></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="mb-4">User List</h1>
+    <h1 class="mb-4"><spring:message code="admin.user.label"/></h1>
 
     <form method="get" action="<c:url value='/user/all'/>" class="mb-4">
         <div class="form-row">
             <div class="col">
-                <a class="btn btn-success" href="<c:url value='/user' />">Thêm người dùng</a>
+                <a class="btn btn-success" href="<c:url value='/user' />"><spring:message code="admin.add.label"/></a>
             </div>
             <div class="col">
                 <input type="text" class="form-control" name="kw" placeholder="Username" value="${param.kw}">

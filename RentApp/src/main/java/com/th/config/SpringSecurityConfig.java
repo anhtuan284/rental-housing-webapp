@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,17 +34,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- *
  * @author admin
  */
 @Configuration
 @EnableWebSecurity
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
-    "com.th.controllers",
-    "com.th.repositories",
-    "com.th.services",
-    "com.th.dto"
+        "com.th.controllers",
+        "com.th.repositories",
+        "com.th.services",
+        "com.th.dto"
 
 })
 @Order(2)
@@ -71,19 +71,24 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http)
             throws Exception {
-        http.formLogin().usernameParameter("username").passwordParameter("password");
+        http.authorizeRequests()
+                .antMatchers("/login", "/logout").permitAll()
+                .anyRequest().hasRole("ADMIN");
 
-        http.formLogin().defaultSuccessUrl("/")
-                .failureUrl("/login?error");
-        http.logout().logoutSuccessUrl("/login");
+        http.formLogin()
+                .loginPage("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/")
+                .failureUrl("/login?error")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login");
 
         http.exceptionHandling()
                 .accessDeniedPage("/login?accessDenied");
-        http.authorizeRequests().antMatchers("/").permitAll();
-        //                .antMatchers("/**/add")
-        //                .access("hasRole('ROLE_ADMIN')");
-        //        .antMatchers("/**/pay")
-        //                .access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+
         http.csrf().disable();
     }
 
@@ -91,10 +96,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public Cloudinary cloudinary() {
         Cloudinary cloudinary
                 = new Cloudinary(ObjectUtils.asMap(
-                        "cloud_name", "dwvkjyixu",
-                        "api_key", "536683637118642",
-                        "api_secret", "FskS9miJ-HPA2-27m4vqpokOov4",
-                        "secure", true));
+                "cloud_name", "dwvkjyixu",
+                "api_key", "536683637118642",
+                "api_secret", "FskS9miJ-HPA2-27m4vqpokOov4",
+                "secure", true));
         return cloudinary;
     }
 
