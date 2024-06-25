@@ -25,18 +25,32 @@ const StyledContainer = styled.div`
 `;
 
 const SidebarChatContainer = styled.div``;
-
 const StyledConversationContainer = styled.div`
   flex: 1;
-  overflow-x: none;
-  overflow-y: none;
+  overflow-y: auto;
   height: 100vh;
   width: 67.5vw;
+
   ::-webkit-scrollbar {
-    display: none;
+    width: 8px;
+    height: 8px;
   }
-  -ms-overflow-style: none;
+
+  ::-webkit-scrollbar-track {
+    background: #313031;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #72667c;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #e8d0e7;
+  }
+
   scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 const SpinnerContainer = styled.div`
   display: flex;

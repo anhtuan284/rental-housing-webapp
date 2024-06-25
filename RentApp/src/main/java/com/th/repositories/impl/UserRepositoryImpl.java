@@ -84,7 +84,6 @@ public class UserRepositoryImpl implements UserRepository {
     public void addUser(User user) {
         Session s = this.factory.getObject().getCurrentSession();
         Role role = roleRepository.getRoleById(3);
-        System.out.println(role);
         user.setRoleId(role);
         s.save(user);
     }

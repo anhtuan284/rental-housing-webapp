@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RoleServiceImpl implements RoleService {
+
     @Autowired
     private RoleRepository roleRepo;
-
 
     @Override
     public String getUserRoleName(int userRoleId) {
@@ -30,6 +30,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> getRoles() {
         return roleRepo.getRoles();
+    }
+
+    @Override
+    public Role getRoleById(int roleId) {
+        return roleRepo.getRoleById(roleId);
     }
 
 }

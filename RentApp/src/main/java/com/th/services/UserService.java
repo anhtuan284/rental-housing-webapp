@@ -28,6 +28,8 @@ public interface UserService extends UserDetailsService {
 
     void addOrUpdate(User user);
 
+    void mergeGgAcc(User user);
+
     boolean authUser(String username, String password);
 
     List<User> getListUserFollower(User user);

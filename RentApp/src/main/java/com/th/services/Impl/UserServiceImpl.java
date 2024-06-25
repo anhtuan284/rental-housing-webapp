@@ -87,7 +87,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable(value = "users", key = "#id")
     public User getUserById(Integer id) {
-        System.out.println("Call getUserById");
         User u = this.userRepo.getUserById(id);
         return u;
     }
@@ -111,6 +110,7 @@ public class UserServiceImpl implements UserService {
         }
         this.userRepo.addOrUpdate(user);
     }
+    
 
     @Override
     public boolean authUser(String username, String password) {
@@ -140,5 +140,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String userEmail) {
         return userRepo.getUserByEmail(userEmail);
+    }
+
+    @Override
+    public void mergeGgAcc(User user) {
+        this.userRepo.addOrUpdate(user);
     }
 }

@@ -41,25 +41,30 @@ const StyledTimestamp = styled.span`
 
 // Styled component for image container in flex format
 const ImageContainer = styled.div`
-  max-width: 500px;
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
   margin-top: 10px;
+  flex-grow: 1;
+  width: 500px;
 `;
 
 // Styled component for individual image
 const SingleImage = styled.img`
-  width: 500px;
-  height: auto;
-  border-radius: 8px;
-`;
-
-const MultipleImages = styled.img`
-  width: calc(250px - 5px);
+  width: 100%;
   height: auto;
   border-radius: 8px;
   object-fit: cover;
+  flex-grow: 1;
+`;
+
+// Styled component for multiple images
+const MultipleImages = styled.img`
+  width: calc(50% - 5px); // Adjust width for wrapping
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-grow: 1;
 `;
 
 // Function to format the timestamp to a readable string
