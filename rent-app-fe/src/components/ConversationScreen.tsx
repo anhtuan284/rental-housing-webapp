@@ -63,7 +63,7 @@ const StyledHeaderIcons = styled.div`
 
 const StyledMessageContainer = styled.div`
   margin-bottom: 0px;
-  height: 84%; /* Calculate height minus header */
+  height: 84%;
   overflow-y: auto;
 `;
 

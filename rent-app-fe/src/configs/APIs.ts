@@ -5,6 +5,7 @@ const BASE_URL = 'http://localhost:8080/RentApp';
 
 export const endpoints = {
     'login': '/api/login/',
+    'login-google': '/api/google-login/',
     'register': '/api/users/',
     'current-user': '/api/current-user/',
     'profile': (id?: string) => `/api/profile/${id}`,

@@ -4,19 +4,11 @@
  */
 package com.th.services;
 
-import com.th.pojo.Role;
-import java.util.List;
-
 /**
  *
  * @author voquochuy
  */
-public interface RoleService {
 
-    String getUserRoleName(int userRoleId);
-
-    List<Role> getRoles();
-
-    Role getRoleById(int roleId);
-
+public interface GoogleAuthService {
+    boolean verifyGoogleToken(String idTokenString);
 }

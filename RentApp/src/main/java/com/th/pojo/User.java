@@ -55,20 +55,17 @@ public class User implements Serializable {
     private String avatar;
 
     @Basic(optional = false)
-    @NotNull(message = "{user.username.nullErr}")
     @Size(min = 1, max = 30, message = "{user.name.err}")
     @Column(name = "username")
     private String username;
 
     @Basic(optional = false)
-    @NotNull(message = "{user.password.nullErr}")
     @Size(min = 1, max = 255)
     @Column(name = "password")
     private String password;
 
     @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="{user.email.err}")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
-    @NotNull(message = "{user.email.nullErr}")
     @Size(min = 1, max = 255, message = "{user.email.err}")
     @Column(name = "email")
     private String email;
@@ -84,13 +81,11 @@ public class User implements Serializable {
     private String name;
 
     @Basic(optional = false)
-    @NotNull(message = "{user.cccd.nullErr}")
     @Size(min = 1, max = 255, message = "{user.cccd.err")
     @Column(name = "cccd")
     private String cccd;
 
     @Basic(optional = false)
-    @NotNull(message = "{user.numberPhone.nullErr}")
     @Size(min = 1, max = 12, message = "{user.numberPhone.err}")
     @Column(name = "numberPhone")
     private String numberPhone;
