@@ -117,7 +117,7 @@ public class User implements Serializable {
     @JsonIgnore
     private Set<Post> postSet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userId")
     @JsonIgnore
     private Set<Comment> commentSet;
 

@@ -42,7 +42,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     public void delete(Comment cmt) {
         Session s = this.factoryBean.getObject().getCurrentSession();
         if (cmt != null) {
-            s.delete(cmt);
+            s.remove(cmt);
         }
     }
 
