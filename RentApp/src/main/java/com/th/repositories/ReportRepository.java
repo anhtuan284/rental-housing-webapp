@@ -4,21 +4,18 @@
  */
 package com.th.repositories;
 
-import com.th.pojo.Notification;
-import com.th.pojo.Post;
-import com.th.pojo.User;
+import com.th.pojo.ReportPost;
 import java.util.List;
 
 /**
  *
  * @author voquochuy
  */
-public interface NotificationRepository {
+public interface ReportRepository {
 
-    void addNotification(User user, Post post);
+    void unReportForPostById(int postId);
+    
+    List<ReportPost> getListReportById(int postId);
 
-    List<Notification> listNoti(int userId);
-
-    void addNotificationDelele(User userId);
-
+     void add(ReportPost report);
 }

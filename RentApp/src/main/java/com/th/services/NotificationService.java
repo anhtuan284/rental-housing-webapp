@@ -19,4 +19,6 @@ public interface NotificationService {
 
     List<Notification> listNoti(int userId) throws IllegalArgumentException;
 
+    void addNotificationDelele(User userId);
+
 }

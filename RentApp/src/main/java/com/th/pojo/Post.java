@@ -47,6 +47,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Post.findByUpdatedDate", query = "SELECT p FROM Post p WHERE p.updatedDate = :updatedDate")})
 public class Post implements Serializable {
 
+    @Column(name = "actived")
+    private Boolean actived;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,17 +69,13 @@ public class Post implements Serializable {
     @NotNull
     @Column(name = "status")
     private boolean status;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "actived")
-    private boolean actived;
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Image> imageSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
     @JsonIgnore
@@ -92,6 +91,8 @@ public class Post implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Comment> commentSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
+    private Set<ReportPost> reportPostSet;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
     private Location location;
 
@@ -256,15 +257,24 @@ public class Post implements Serializable {
     /**
      * @return the actived
      */
-    public boolean isActived() {
+    public Boolean getActived() {
         return actived;
     }
 
     /**
      * @param actived the actived to set
      */
-    public void setActived(boolean actived) {
+    public void setActived(Boolean actived) {
         this.actived = actived;
+    }
+
+    @XmlTransient
+    public Set<ReportPost> getReportPostSet() {
+        return reportPostSet;
+    }
+
+    public void setReportPostSet(Set<ReportPost> reportPostSet) {
+        this.reportPostSet = reportPostSet;
     }
 
 }

@@ -97,7 +97,7 @@ public class ApiPostController {
             post.setTypeId(typeService.getTypeById(1));
 
             prop.setAcreage(Integer.parseInt(params.get("acreage")));
-            prop.setCapacity( Integer.parseInt(params.get("capacity")));
+            prop.setCapacity(Integer.parseInt(params.get("capacity")));
             prop.setPrice(new BigDecimal(params.get("price"))); // Correctly convert String to BigDecimal
 
             location.setAddress(params.get("address"));
@@ -163,6 +163,26 @@ public class ApiPostController {
         }
         System.out.println(new BigDecimal(body.get("latitude")));
         List<Post> res =  this.postSe.findNearHouse(new BigDecimal(body.get("latitude")), new BigDecimal(body.get("longitude")), Integer.parseInt(body.get("dist")));
-        return ResponseEntity.ok(res.toArray());
+        return ResponseEntity.ok(res.toArray());}
+    @DeleteMapping("/post/Delete")
+    @Transactional
+    public ResponseEntity<String> deletePost(@RequestParam Map<String, String> params) {
+        try {
+            String postId = params.get("postId");
+            User currentUser = userService.getCurrentUser();
+
+            if (postId == null) {
+                return new ResponseEntity<>("No valid input: " + postId, HttpStatus.BAD_REQUEST);
+            }
+            Post post = postSe.getPostById(Integer.parseInt(postId));
+            if (currentUser.getRoleId().getId() == 1 || currentUser.getId() == post.getUserId().getId()) {
+                postSe.deletePost(Integer.parseInt(postId));
+                return new ResponseEntity<>("Post deleted successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception ex) {
+            return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

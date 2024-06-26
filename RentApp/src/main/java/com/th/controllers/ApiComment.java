@@ -38,9 +38,6 @@ public class ApiComment {
     private PostService postService;
 
     @Autowired
-    private PostService postSe;
-
-    @Autowired
     private CommentService commentService;
 
     private JSONObject callExternalSentimentAnalysisAPI(String content) throws IOException {
