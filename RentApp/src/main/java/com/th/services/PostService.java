@@ -26,4 +26,7 @@ public interface PostService {
     void unActivedPost(int postId);
 
     List<Post> findNearHouse(BigDecimal userLat, BigDecimal userLon, int dist);
+    List<Post> getListreportedPosts( boolean status, boolean actived, Map<String, String> params);
+
+
 }

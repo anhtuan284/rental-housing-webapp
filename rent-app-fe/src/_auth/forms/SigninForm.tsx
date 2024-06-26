@@ -48,11 +48,8 @@ const SigninForm = () => {
 
   const handleGoogleLoginSuccess = async (token: any) => {
     Cookies.set("access_token", token, { expires: 3 });
-    console.log(token);
     const res2 = await authApi(token).get(endpoints["current-user"]);
     const currentUser = res2.data;
-    console.log("12123123123");
-    console.log(currentUser);
     const transformedUser = transformToIUser(currentUser);
     loginFirebase(transformedUser);
 

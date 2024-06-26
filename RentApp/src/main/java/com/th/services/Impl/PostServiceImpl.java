@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class PostServiceImpl implements PostService {
+
     @Autowired
     private PostRepository postRepo;
 
@@ -30,8 +31,6 @@ public class PostServiceImpl implements PostService {
         return this.postRepo.getPostById(id);
     }
 
-
-        
     @Override
     @Transactional
     public void addOrUpdate(Post post) {
@@ -43,10 +42,9 @@ public class PostServiceImpl implements PostService {
         postRepo.deletePost(id);
     }
 
-
     @Override
-    public List<Post> getPosts(int typeId, boolean status,boolean actived, Map<String, String> params) {
-        return postRepo.getPosts(typeId, status,actived, params);
+    public List<Post> getPosts(int typeId, boolean status, boolean actived, Map<String, String> params) {
+        return postRepo.getPosts(typeId, status, actived, params);
     }
 
     @Override
@@ -56,15 +54,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getPostOfRenter(Map<String, String> param) {
-        return postRepo.getPosts(2, true,true, param);
-    }
-    @Override
-    public List<Post> getPostOfLandlord(Map<String, String> param) {
-        return postRepo.getPosts(1, true,true, param);
+        return postRepo.getPosts(2, true, true, param);
     }
 
     @Override
-    public Post getPostDetail(int postId ) {
+    public List<Post> getPostOfLandlord(Map<String, String> param) {
+        return postRepo.getPosts(1, true, true, param);
+    }
+
+    @Override
+    public Post getPostDetail(int postId) {
         return postRepo.getPostDetail(postId);
     }
 
@@ -77,4 +76,9 @@ public class PostServiceImpl implements PostService {
     public List<Post> findNearHouse(BigDecimal userLat, BigDecimal userLon, int dist) {
         return postRepo.findNearHouse(userLat, userLon, dist);
     }
+
+    public List<Post> getListreportedPosts(boolean status, boolean actived, Map<String, String> params) {
+        return postRepo.getListreportedPosts(status, actived, params);
+    }
+
 }

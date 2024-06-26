@@ -64,7 +64,6 @@ public class Notification implements Serializable {
     @NotNull
     @Column(name = "user_id")
     private Integer userId;
-    @NotNull
     @Column(name = "post_id")
     private Integer postIdInt;
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)

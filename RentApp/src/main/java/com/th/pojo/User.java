@@ -43,6 +43,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByActivated", query = "SELECT u FROM User u WHERE u.activated = :activated")})
 public class User implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reporterId")
+    @JsonIgnore
+    private Set<ReportPost> reportPostSet;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -352,5 +356,14 @@ public class User implements Serializable {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    @XmlTransient
+    public Set<ReportPost> getReportPostSet() {
+        return reportPostSet;
+    }
+
+    public void setReportPostSet(Set<ReportPost> reportPostSet) {
+        this.reportPostSet = reportPostSet;
     }
 }

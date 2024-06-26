@@ -39,7 +39,7 @@ public class PostRepositoryImpl implements PostRepository {
     private Environment env;
 
     @Override
-    public List<Post> getPosts(int typeId, boolean status,boolean actived, Map<String, String> params) {
+    public List<Post> getPosts(int typeId, boolean status, boolean actived, Map<String, String> params) {
         Session s = this.factoryBean.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Post> q = b.createQuery(Post.class);
@@ -143,6 +143,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    @Transactional
     public void deletePost(int id) {
         Session s = this.factoryBean.getObject().getCurrentSession();
         Post post = this.getPostById(id);
@@ -161,7 +162,7 @@ public class PostRepositoryImpl implements PostRepository {
             s.update(post);
         }
     }
-    
+
     @Override
     public void unActivedPost(int postId) {
         Session s = this.factoryBean.getObject().getCurrentSession();
@@ -215,6 +216,39 @@ public class PostRepositoryImpl implements PostRepository {
         return query.getResultList();
     }
 
+
+
+    @Override
+    public List<Post> getListreportedPosts(boolean status, boolean actived, Map<String, String> params) {
+        Session session = this.factoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Post> query = builder.createQuery(Post.class);
+        Root<Post> root = query.from(Post.class);
+
+        Join<Post, PropertyDetail> propJoin = root.join("propertyDetail", JoinType.INNER);
+        Join<Post, Location> locationJoin = root.join("location", JoinType.INNER);
+        Join<Post, ReportPost> reportJoin = root.join("reportPostSet", JoinType.LEFT); 
+
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(builder.equal(root.get("status"), status));
+        predicates.add(builder.equal(root.get("actived"), actived));
+        predicates.add(builder.greaterThan(builder.size(root.get("reportPostSet")), 0)); 
+        query.groupBy(root.get("postId"));
+        query.orderBy(builder.desc(builder.count(reportJoin)));
+        query.where(predicates.toArray(new Predicate[0]));
+
+        Query q = session.createQuery(query);
+
+        String page = params.get("page");
+        if (page != null && !page.isEmpty()) {
+            int pageNumber = Integer.parseInt(page);
+            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize", "10")); 
+            int start = (pageNumber - 1) * pageSize;
+            q.setFirstResult(start);
+            q.setMaxResults(pageSize);
+        }
+        return q.getResultList();
+    }
 
 
 }

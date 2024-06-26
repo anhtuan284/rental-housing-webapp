@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface PostRepository {
 
-    List<Post> getPosts(int typeId, boolean status,boolean actived, Map<String, String> params);
+    List<Post> getPosts(int typeId, boolean status, boolean actived, Map<String, String> params);
 
     void addOrUpdate(Post post);
 
@@ -27,8 +27,11 @@ public interface PostRepository {
     void approvePost(int postId);
 
     Post getPostDetail(int postId);
-    
+
     void unActivedPost(int postId);
 
     List<Post> findNearHouse(BigDecimal userLat, BigDecimal userLon, int dist);
+
+    List<Post> getListreportedPosts(boolean status, boolean actived, Map<String, String> params);
+
 }

@@ -12,6 +12,7 @@ import com.th.services.*;
 
 import com.th.pojo.User;
 import com.th.services.PostService;
+import java.security.Principal;
 
 import java.util.Date;
 import java.util.List;
@@ -67,7 +68,12 @@ public class HomeController {
         model.addAttribute("posts", posts);
         return "postlist";
     }
-
+    @GetMapping("/post/reportedPosts")
+    public String getListreportedPosts(@RequestParam(required = false) Map<String, String> params, Model model) {
+        List<Post> posts = postSe.getListreportedPosts(true,true, params);
+        model.addAttribute("posts", posts);
+        return "reportedPosts";
+    }
 
     @GetMapping("/post/add")
     public String creatPostView(@RequestParam(required = false) Map<String, String> params, Model model) {
@@ -77,11 +83,11 @@ public class HomeController {
 
     @PostMapping("post/add")
     @Transactional
-    public String createProduct(@ModelAttribute(value = "post") @Valid Post p,
+    public String createProduct(Principal pri, @ModelAttribute(value = "post") @Valid Post p,
             BindingResult rs, @RequestParam("files") MultipartFile[] files) {
         if (!rs.hasErrors()) {
             try {
-                User u = userSe.getUserByUsername("admin");
+                User u = userSe.getUserByUsername(pri.getName());
                 p.setUserId(u);
                 p.setStatus(false);
                 p.setTypeId(typeSe.getTypeById(2));

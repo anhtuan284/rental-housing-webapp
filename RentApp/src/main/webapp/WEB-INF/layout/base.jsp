@@ -83,7 +83,8 @@
                             <a class="nav-link" href="/RentApp/post/all"><spring:message code="admin.post.label"/> </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Item 2</a>
+
+                            <a class="nav-link" href="/RentApp/post/reportedPosts"><spring:message code="admin.report.label"/></a>
                         </li>
                     </ul>
                 </li>

@@ -53,7 +53,7 @@
         <put-attribute name="title" value="Not Found" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/errors/notFound.jsp" />
-       </definition>
+    </definition>
 
     <definition name="createPost" extends="baseLayout">
         <put-attribute name="title" value="Tạo bài đăng" />
@@ -65,5 +65,12 @@
         <put-attribute name="title" value="Login" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/login.jsp" />
+    </definition>
+
+    
+    <definition name="reportedPosts" extends="baseLayout">
+        <put-attribute name="title" value="Danh sách bài đăng bị báo cáo" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/post/reportedPosts.jsp" />
     </definition>
 </tiles-definitions>

@@ -50,4 +50,9 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    @Override
+    public void addNotificationDelele(User userId) {
+        notiRepo.addNotificationDelele(userId);
+    }
+
 }
