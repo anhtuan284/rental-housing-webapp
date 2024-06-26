@@ -88,7 +88,7 @@ public class Post implements Serializable {
     private User userId;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "post", fetch = FetchType.EAGER)
     private PropertyDetail propertyDetail;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "postId", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Comment> commentSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)

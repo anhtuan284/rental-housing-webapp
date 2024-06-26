@@ -63,13 +63,14 @@ public class Comment implements Serializable {
     private Date updatedDate;
     @Column(name = "positive")
     private Short positive;
+
     @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     @ManyToOne(optional = false)
     @JsonIgnore
     private Post postId;
+
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY )
-//    @JsonIgnore
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User userId;
 
     public Comment() {
