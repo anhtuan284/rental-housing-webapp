@@ -75,9 +75,9 @@ public class Post implements Serializable {
     @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "postId", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Image> imageSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "postId", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Notification> notificationSet;
     @JoinColumn(name = "type_id", referencedColumnName = "type_id")
@@ -86,14 +86,14 @@ public class Post implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "post", fetch = FetchType.EAGER)
     private PropertyDetail propertyDetail;
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "postId", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Comment> commentSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "postId", fetch = FetchType.EAGER)
     private Set<ReportPost> reportPostSet;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "post")
     private Location location;
 
     public Post() {

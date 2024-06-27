@@ -6,7 +6,7 @@ import {
   orderBy,
   Timestamp,
   QueryDocumentSnapshot,
-} from 'firebase/firestore';import { Conversation, IComment, IMessage } from './../types/index';
+} from 'firebase/firestore';import { Conversation, IComment, IMessage, IReport } from './../types/index';
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { db } from '@/configs/firebase';
@@ -113,6 +113,12 @@ export const convertToIPost = (data: any): IPost => {
       district: data.location.district || "",
       city: data.location.city || "",
     } : { longitude: "", latitude: "", address: "", district: "", city: "" },
+    report: data.reportPostSet ? data.reportPostSet.map((report: any): IReport => ({
+      reportId: data.id || "",
+      reason: data.reason || "",
+      timestamp: data.timestamp || "",
+    })):[],
+   
   };
 };
 

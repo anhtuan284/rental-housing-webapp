@@ -44,14 +44,15 @@ public class PostRepositoryImpl implements PostRepository {
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Post> q = b.createQuery(Post.class);
         Root<Post> post = q.from(Post.class);
-
-        Join<Post, PropertyDetail> propJoin = post.join("propertyDetail", JoinType.INNER);
-        Join<Post, Location> locationJoin = post.join("location", JoinType.INNER);
-
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(post.get("status"), status));
         predicates.add(b.equal(post.get("actived"), actived));
         predicates.add(b.equal(post.get("typeId").get("typeId"), typeId));
+        if(typeId == 1){
+        Join<Post, PropertyDetail> propJoin = post.join("propertyDetail", JoinType.INNER);
+        Join<Post, Location> locationJoin = post.join("location", JoinType.INNER);
+        
+
 
         String userId = params.get("userId");
         if (userId != null && !userId.isEmpty()) {
@@ -96,6 +97,7 @@ public class PostRepositoryImpl implements PostRepository {
         String capacity = params.get("capacity");
         if (capacity != null && !capacity.isEmpty()) {
             predicates.add(b.equal(propJoin.get("capacity"), Integer.parseInt(capacity)));
+        }
         }
 
         q.where(predicates.toArray(new Predicate[0]));
@@ -224,15 +226,15 @@ public class PostRepositoryImpl implements PostRepository {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> query = builder.createQuery(Post.class);
         Root<Post> root = query.from(Post.class);
-
+        
+        Join<Post, ReportPost> reportJoin = root.join("reportPostSet", JoinType.INNER); 
         Join<Post, PropertyDetail> propJoin = root.join("propertyDetail", JoinType.INNER);
         Join<Post, Location> locationJoin = root.join("location", JoinType.INNER);
-        Join<Post, ReportPost> reportJoin = root.join("reportPostSet", JoinType.LEFT); 
 
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("status"), status));
         predicates.add(builder.equal(root.get("actived"), actived));
-        predicates.add(builder.greaterThan(builder.size(root.get("reportPostSet")), 0)); 
+//        predicates.add(builder.greaterThan(builder.size(root.get("reportPostSet")), 0)); 
         query.groupBy(root.get("postId"));
         query.orderBy(builder.desc(builder.count(reportJoin)));
         query.where(predicates.toArray(new Predicate[0]));
