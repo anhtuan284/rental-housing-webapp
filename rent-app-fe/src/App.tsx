@@ -11,6 +11,7 @@ import {
   NoPage,
   PostDetails,
   Profile,
+  NotificationList,
 } from "./_root/pages";
 import MyUserReducer from "./reducer/MyReducer";
 import { useEffect, useReducer } from "react";
@@ -25,6 +26,7 @@ import Conversation from "./_root/pages/conversations/[id]";
 import { PostsProvider, usePosts } from "./context/PostsContext";
 import UpdateProfile from "./_root/pages/UpdateProfile";
 import { BingMap, MapModal } from "./components/shared";
+import { WebSocketProvider } from "./context/WebSocketContext";
 
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
@@ -54,6 +56,14 @@ function App() {
         dispatch({ type: "logout" });
         navigate("/sign-in");
       }
+    } else {
+      toast({
+        title: "Session expired",
+        description: "Your session has expired. Please log in again.",
+      });
+      Cookie.remove("access_token");
+      dispatch({ type: "logout" });
+      navigate("/sign-in");
     }
   };
   useEffect(() => {
@@ -61,6 +71,7 @@ function App() {
   }, []);
 
   return (
+    // <WebSocketProvider>
     <UserContext.Provider value={{ user, dispatch }}>
       <PostsProvider>
         <main className="flex h-screen">
@@ -82,6 +93,7 @@ function App() {
               <Route path="/posts/:postId" element={<PostDetails />} />
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="/explore" element={<MapModal />} />
+              <Route path="/notifications" element={<NotificationList />} />
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>
@@ -90,6 +102,7 @@ function App() {
         </main>
       </PostsProvider>
     </UserContext.Provider>
+    // </WebSocketProvider>
   );
 }
 

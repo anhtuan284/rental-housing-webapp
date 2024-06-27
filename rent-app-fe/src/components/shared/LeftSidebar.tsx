@@ -6,6 +6,7 @@ import { Loader } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { useContext, useState } from "react";
 import UserContext from "@/context/UserContext";
+import Cookies from "js-cookie";
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const LeftSidebar = () => {
     dispatch({
       type: "logout",
     });
+    Cookies.remove("access_token");
     navigate("/sign-in");
   };
 

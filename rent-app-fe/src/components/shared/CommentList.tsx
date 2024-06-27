@@ -45,13 +45,14 @@ const CommentList = ({ postId }: { postId: string }) => {
       return;
     }
     setSubmitting(true);
+
     try {
       const res = await authApi().post(endpoints["add-comment"], {
         postId: postId,
         content: newComment,
       });
 
-      if (res.status === 201) {
+      if (res.status === 200) {
         // Temporarily add the new comment with a gray color
         const tempComment: IComment = {
           content: newComment,
@@ -82,7 +83,14 @@ const CommentList = ({ postId }: { postId: string }) => {
       });
     } finally {
       setSubmitting(false);
+      setNewComment("");
     }
+  };
+
+  const handleDelete = (commentId: number) => {
+    setComments((prevComments) =>
+      prevComments.filter((comment) => comment.commentId !== commentId)
+    );
   };
 
   return (
@@ -93,7 +101,11 @@ const CommentList = ({ postId }: { postId: string }) => {
         <>
           {comments && comments.length > 0 ? (
             comments.map((comment) => (
-              <Comment key={comment.commentId} comment={comment} />
+              <Comment
+                key={comment.commentId}
+                comment={comment}
+                onDelete={handleDelete} // Truyền hàm onDelete vào Comment
+              />
             ))
           ) : (
             <div className="text-slate-400 justify-center">

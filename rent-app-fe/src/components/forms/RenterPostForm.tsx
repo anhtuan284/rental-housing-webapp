@@ -177,13 +177,6 @@ const RenterPostForm = ({ post, action }: PostFormProps) => {
   // Handler
   const handleSubmit = async (value: z.infer<typeof RenterPostValidation>) => {
     // ACTION = UPDATE
-    if (value.files.length < 3) {
-      toast({
-        title: "Fail to upload.",
-        description: "Please upload at least 3 photos",
-      });
-      return;
-    }
 
     const selectedCity = cities.find(
       (city) => city.province_id.toString() === value.city
@@ -219,7 +212,7 @@ const RenterPostForm = ({ post, action }: PostFormProps) => {
 
     if (post && action === "Update") {
       const updatedPost: IPost = await authApi(token).post(
-        endpoints["create-post-landlord"],
+        endpoints["create-post-renter"],
         formData
       );
       if (!updatedPost) {
@@ -232,7 +225,7 @@ const RenterPostForm = ({ post, action }: PostFormProps) => {
 
     // ACTION = CREATE
     const newPost: IPost = await authApi(token).post(
-      endpoints["create-post-landlord"],
+      endpoints["create-post-renter"],
       formData
     );
 

@@ -17,6 +17,7 @@ export const endpoints = {
     'check-follow': '/api/CheckFollow/',
     'check-user-by-email': '/api/CheckUserByEmail/',
     'update-profile': (userId?: string) => `/api/profile/${userId}/update`,
+    'get-notifications': '/api/Notification/getNotificationOfUser',
 
     // POSTS
     'create-post-landlord': '/api/post/landlordUpPost',
@@ -28,7 +29,8 @@ export const endpoints = {
     'add-comment': '/api/comment/add',
     'edit-comment': '/api/comment/update',
     'delete-comment': (commentId?: string) => `/api/comment/${commentId}/delete`,
-    'get-post-near-pin': '/api/posts/near-you/'
+    'get-post-near-pin': '/api/posts/near-you/', 
+    'report-post': `/api/report/add`
     
 }
 

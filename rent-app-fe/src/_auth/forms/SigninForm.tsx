@@ -113,6 +113,10 @@ const SigninForm = () => {
           description: "Vui lòng kiểm tra tên người dùng và mật khẩu của bạn!",
         });
       } else {
+        toast({
+          title: "Login Error",
+          description: "Username not found !",
+        });
         console.error("Lỗi trong quá trình đăng nhập:", ex);
       }
     } finally {

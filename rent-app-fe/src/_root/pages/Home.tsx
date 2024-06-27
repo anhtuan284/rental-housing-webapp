@@ -1,12 +1,22 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { BingMap, Loader, MapModal, PostCard } from "@/components/shared";
 import { usePosts } from "@/context/PostsContext";
-import { Button, Input, useToast } from "@/components/ui";
+import {
+  Button,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  useToast,
+} from "@/components/ui";
 import { IPost } from "@/types";
 import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
-  const { posts, loading, loadMorePosts, setFilters, hasMore } = usePosts();
+  const { posts, loading, loadMorePosts, setFilters, hasMore, setType } =
+    usePosts();
 
   const { toast } = useToast();
   const observer = useRef<IntersectionObserver | null>(null);
@@ -158,6 +168,24 @@ const Home: React.FC = () => {
                 onChange={handleFilterChange}
               />
             </div>
+            <Select
+              onValueChange={(value) => {
+                setType(value === "true");
+              }}
+              defaultValue=""
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select post Type" />
+              </SelectTrigger>
+              <SelectContent className="bg-gray-950">
+                <SelectItem className="hover:bg-gray-800" value="true">
+                  For rent
+                </SelectItem>
+                <SelectItem className="hover:bg-gray-800" value="false">
+                  Find rent
+                </SelectItem>
+              </SelectContent>
+            </Select>
             <Button type="submit" className="bg-primary-500 col-span-1">
               Apply Filters
             </Button>

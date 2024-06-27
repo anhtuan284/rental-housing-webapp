@@ -9,9 +9,10 @@ import Loader from "./Loader";
 
 type CommentProps = {
   comment: IComment;
+  onDelete: (commentId: number) => void; // Thêm prop onDelete
 };
 
-const Comment = ({ comment }: CommentProps) => {
+const Comment = ({ comment, onDelete }: CommentProps) => {
   const { user } = useContext(UserContext); // Assume this hook gives you the current user's ID
   const { toast } = useToast();
   const [visible, setVisible] = useState<boolean>(comment.positive === 1);
@@ -48,16 +49,17 @@ const Comment = ({ comment }: CommentProps) => {
     try {
       let res = await authApi().delete(endpoints["delete-comment"](commentId));
       if (res.status === 200) {
-        comment.content = editedContent;
+        onDelete(comment.commentId); // Gọi hàm onDelete sau khi xóa thành công
+        toast({
+          title: "Comment deleted successfully",
+          description: "Your comment has been deleted.",
+        });
       }
-      setIsEditing(false);
     } catch (ex: any) {
       toast({
-        title: "Error updating comment",
+        title: "Error deleting comment",
         description: ex.message,
       });
-    } finally {
-      setIsEditing(false);
     }
   };
 

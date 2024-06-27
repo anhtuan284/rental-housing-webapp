@@ -10,7 +10,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { IPost } from "@/types";
 import { authApi, endpoints } from "@/configs/APIs";
-import { useToast } from "@/components/ui";
+import { Button, useToast } from "@/components/ui";
+import ReportForm from "@/components/forms/ReportForm";
 // Declare the global variable on window
 declare global {
   interface Window {
@@ -30,6 +31,7 @@ const PostDetails = () => {
   const [post, setPost] = useState<any>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
   const { toast } = useToast();
 
   // Fetch post data based on postId
@@ -101,6 +103,10 @@ const PostDetails = () => {
     setModalIsOpen(false);
   };
 
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+  };
+
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -170,7 +176,7 @@ const PostDetails = () => {
                       </div>
                     </div>
                   </div>
-                  {user?.id.toString() === post.user.userId && (
+                  {user?.id.toString() == post.user.userId ? (
                     <Link to={`/update-post/${post.postId}`}>
                       <img
                         src="/assets/icons/edit.svg"
@@ -178,6 +184,15 @@ const PostDetails = () => {
                         className="w-5 h-5"
                       />
                     </Link>
+                  ) : (
+                    <Button onClick={() => setIsReportModalOpen(true)}>
+                      <img
+                        src="/assets/icons/warning.svg"
+                        alt="logo"
+                        width={30}
+                        height={30}
+                      />
+                    </Button>
                   )}
                 </div>
 
@@ -203,11 +218,12 @@ const PostDetails = () => {
                   </Slider>
                 </div>
 
+                <div className="text-2xl font-bold my-4">Post details</div>
                 <div className="mb-6">
                   <p className="text-lg font-semibold text-white">
                     Price:{" "}
                     <span className="text-purple-400">
-                      {post.propertyDetail.price
+                      {post.propertyDetail?.price
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
                       / Tháng
@@ -216,13 +232,13 @@ const PostDetails = () => {
                   <p className="text-lg font-semibold text-white font-bolder">
                     Acreage:{" "}
                     <span className="text-light-1">
-                      {post.propertyDetail.acreage}
+                      {post.propertyDetail?.acreage}
                     </span>
                   </p>
                   <p className="text-lg font-semibold text-white font-bolder">
                     Capacity:{" "}
                     <span className="text-light-1">
-                      {post.propertyDetail.capacity}
+                      {post.propertyDetail?.capacity}
                     </span>
                   </p>
                   <p className="text-lg font-semibold text-white font-bolder">
@@ -264,6 +280,21 @@ const PostDetails = () => {
                         Close
                       </button>
                     </div>
+                  </Modal>
+                )}
+
+                {isReportModalOpen && (
+                  <Modal
+                    isOpen={isReportModalOpen}
+                    onRequestClose={() => setIsReportModalOpen(false)}
+                    contentLabel="Report Modal"
+                    className="flex items-center   justify-center h-full"
+                    overlayClassName="fixed inset-0 bg-black bg-opacity-80"
+                  >
+                    <ReportForm
+                      postId={post.postId}
+                      onClose={closeReportModal}
+                    />
                   </Modal>
                 )}
               </div>
