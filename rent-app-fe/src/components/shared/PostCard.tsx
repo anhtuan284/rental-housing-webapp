@@ -3,18 +3,29 @@ import { multiFormatDateString } from "@/lib/utils";
 import { IPost } from "@/types";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import ReportBadge from "../ui/report";
+import styled from "styled-components";
 
 type PostCardProps = {
   post: IPost;
 };
+const PostCardWrapper = styled.div`
+  position: relative;
+`;
 
+const ReportBadgeWrapper = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useContext(UserContext);
 
   if (!post.user) return;
+  const reportCount = post.report ? post.report.length : 0;
 
   return (
-    <div className="post-card">
+    <PostCardWrapper className="post-card">
       <div className="flex-between">
         <div className="flex items-center gap-3">
           <Link to={`/profile/${post.user.userId}`}>
@@ -24,14 +35,13 @@ const PostCard = ({ post }: PostCardProps) => {
               className="w-12 lg:h-12 rounded-full"
             />
           </Link>
-
           <div className="flex flex-col">
             <Link to={`/profile/${post.user.userId}`}>
               <p className="base-medium lg:body-bold text-light-1">
                 {post.user.name}
               </p>
             </Link>
-            <div className="flex-center gap-2 text-light-3">
+            <div className="flex-center gap-2 text-light-3 ">
               <p className="subtle-semibold lg:small-regular ">
                 <i>{multiFormatDateString(post.created_date)}</i>
               </p>
@@ -41,6 +51,11 @@ const PostCard = ({ post }: PostCardProps) => {
               </p>
             </div>
           </div>
+          {reportCount > 0 && (
+            <ReportBadgeWrapper>
+              <ReportBadge reportCount={reportCount} />
+            </ReportBadgeWrapper>
+          )}{" "}
         </div>
 
         <Link
@@ -78,7 +93,7 @@ const PostCard = ({ post }: PostCardProps) => {
       </Link>
 
       {/* <PostStats post={post} userId={user.id} /> */}
-    </div>
+    </PostCardWrapper>
   );
 };
 

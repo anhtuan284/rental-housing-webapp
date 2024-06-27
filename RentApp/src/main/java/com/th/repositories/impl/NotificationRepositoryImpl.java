@@ -65,7 +65,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                 notification.setPostId(post);
                 notification.setUserId(follower.getId());
                 session.save(notification);
-                
+
                 CompletableFuture.runAsync(() -> {
                     String subject = "Thông báo: Bài đăng từ trang web hỗ trợ thuê trọ";
                     String body = "<html>"
@@ -87,9 +87,9 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                             + "<img src='https://i.etsystatic.com/19318192/r/il/31c855/4789888185/il_fullxfull.4789888185_6h9z.jpg' alt='Logo'>"
                             + "<h2>Xin chào " + follower.getName() + ",</h2>"
                             + "</div>"
-                            + "<p><strong>Bài đăng của bạn có vấn đề và đã bị từ chối.</strong></p>"
+                            + "<p><strong>" + user.getName() + " vừa đăng bài cho thuê mới trên trang hỗ trợ thuê phòng trọ" + "</strong></p>"
                             + "<p>Bạn có thể xem chi tiết bài đăng tại đây:</p>"
-                            + "<p><a class='btn' href=\"http://localhost:8080/RentApp/\">" + notification.getMessage() + "</a></p>"
+                    + "<p><a class='btn' href=\"http://localhost:5173/posts/" + post.getPostId() + "\">" + notification.getMessage() + "</a></p>"
                             + "</div>"
                             + "</body>"
                             + "</html>";
@@ -129,7 +129,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                     + "</div>"
                     + "<p><strong>Bài đăng của bạn có vấn đề và đã bị từ chối.</strong></p>"
                     + "<p>Bạn có thể xem chi tiết bài đăng tại đây:</p>"
-                    + "<p><a class='btn' href=\"http://localhost:8080/RentApp/\">" + notification.getMessage() + "</a></p>"
+                    + "<p><a class='btn' href=\"http://localhost:5173/posts/" + post.getPostId() + "\">" + notification.getMessage() + "</a></p>"
                     + "</div>"
                     + "</body>"
                     + "</html>";
@@ -161,7 +161,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     public void addNotificationDelele(User user) {
         Session session = this.session.getObject().getCurrentSession();
         Notification notification = new Notification();
-        notification.setMessage("Bài viết đã bị admin từ chối");
+        notification.setMessage("Bài viết đã bị admin xoá");
         notification.setUserId(user.getId());
         String subject = "Thông báo: Bài đăng từ trang web hỗ trợ thuê trọ";
         String body = "<html>"
@@ -184,8 +184,6 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                 + "<h2>Xin chào " + user.getName() + ",</h2>"
                 + "</div>"
                 + "<p><strong>Bài đăng của bạn có vấn đề và đã bị xoá bởi Admin.</strong></p>"
-                + "<p>Bạn có thể xem chi tiết bài đăng tại đây:</p>"
-                + "<p><a class='btn' href=\"http://localhost:8080/RentApp/\">" + notification.getMessage() + "</a></p>"
                 + "</div>"
                 + "</body>"
                 + "</html>";

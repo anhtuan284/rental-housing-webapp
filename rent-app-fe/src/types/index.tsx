@@ -39,6 +39,11 @@ export type IPostLocation = {
   district: string;
   city: string;
 };
+export type IReport = {
+  reportId: string;
+  reason: string;
+  timestamp: string;
+};
 
 export type IPost = {
   postId: string;
@@ -54,6 +59,7 @@ export type IPost = {
   created_date: string;
   typeId: IPostType;
   propertyDetail: IPropertyDetail;
+  report: IReport[];
 };
 
 export type INewPost = {

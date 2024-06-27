@@ -109,11 +109,11 @@ public class User implements Serializable {
     @Column(name = "activated")
     private Short activated;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userId")
     @JsonIgnore
     private Set<Notification> notificationSet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userId")
     @JsonIgnore
     private Set<Post> postSet;
 

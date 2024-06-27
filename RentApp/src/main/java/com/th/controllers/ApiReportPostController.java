@@ -40,7 +40,7 @@ public class ApiReportPostController {
     private ReportService ReportPostSe;
 
     @PostMapping("/report/add")
-    @Transactional
+    @Transactional  
     public ResponseEntity<String> addReport(@RequestBody Map<String, String> params) {
         User currentUser = userService.getCurrentUser();
         if (currentUser == null) {
