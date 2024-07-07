@@ -242,7 +242,7 @@ const SignupForm = () => {
                     <SelectItem className="hover:bg-gray-800" value="2">
                       LANDLORD
                     </SelectItem>
-                    <SelectItem className="hover:bg-gray-800" value="">
+                    <SelectItem className="hover:bg-gray-800" value="3">
                       RENTER
                     </SelectItem>
                   </SelectContent>

@@ -20,7 +20,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +46,8 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder passEncoder;
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private CacheManager cacheManager;
 
     @Override
     public User getUserByUsername(String username) {
@@ -65,7 +70,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+//    @Caching(evict = {
+//            @CacheEvict(value = "statsUsersByPeriod"),
+//            @CacheEvict(value = "statsUserByRole"),
+//            @CacheEvict(value = "countCreatedUser")
+//    })
     public void addUser(User user) {
+        cacheManager.getCache("statsUsersByPeriod").clear();
+        cacheManager.getCache("statsUserByRole").clear();
+        cacheManager.getCache("countCreatedUser").clear();
         user.setPassword(passEncoder.encode(user.getPassword()).toString());
         if (!user.getFile().isEmpty()) {
             try {
@@ -99,7 +112,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+//    @Caching(evict = {
+//            @CacheEvict(value = "statsUsersByPeriod"),
+//            @CacheEvict(value = "statsUserByRole"),
+//            @CacheEvict(value = "countCreatedUser")
+//    })
     public void addOrUpdate(User user) {
+        cacheManager.getCache("statsUsersByPeriod").clear();
+        cacheManager.getCache("statsUserByRole").clear();
+        cacheManager.getCache("countCreatedUser").clear();
         if (user.getFile() != null && !user.getFile().isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(),

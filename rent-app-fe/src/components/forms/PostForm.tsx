@@ -310,20 +310,6 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
         <FormField
           control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="shad-form_label">Address</FormLabel>
-              <FormControl>
-                <Input type="text" className="shad-input" {...field} />
-              </FormControl>
-              <FormMessage className="shad-form_message" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="city"
           render={({ field }) => (
             <FormItem>
@@ -384,6 +370,20 @@ const PostForm = ({ post, action }: PostFormProps) => {
                 </SelectContent>
               </Select>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="shad-form_label">Address</FormLabel>
+              <FormControl>
+                <Input type="text" className="shad-input" {...field} />
+              </FormControl>
+              <FormMessage className="shad-form_message" />
             </FormItem>
           )}
         />

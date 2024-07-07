@@ -97,7 +97,9 @@ const EndOfMessagesForAutoScroll = styled.div`
 const PreviewImagesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-top: 10px;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 80px;
 `;
 
 const PreviewImage = styled.img`
@@ -275,42 +277,41 @@ const ConversationScreen: React.FC<ConversationScreenProps> = ({
           <Message key={message.id} message={message} />
         ))}
         <EndOfMessagesForAutoScroll ref={endOfMessagesRef} />
-      </StyledMessageContainer>
-
-      {tempImageUrl.length > 0 && (
-        <PreviewImagesContainer>
-          <IconButton>
-            <AddToPhotosIcon
-              onClick={() => fileInputRef.current?.click()}
-              style={{
-                width: "50px",
-                height: "50px",
-                position: "relative",
-                top: 0,
-                right: 0,
-                color: "rgba(255,255,255)",
-                zIndex: 1,
-              }}
-            />
-          </IconButton>
-          {tempImageUrl.map((url, index) => (
-            <div key={index} style={{ position: "relative" }}>
-              <PreviewImage src={url} alt="Preview" />
-              <IconButton
+        {tempImageUrl.length > 0 && (
+          <PreviewImagesContainer>
+            <IconButton>
+              <AddToPhotosIcon
+                onClick={() => fileInputRef.current?.click()}
                 style={{
-                  position: "absolute",
+                  width: "50px",
+                  height: "50px",
+                  position: "relative",
                   top: 0,
                   right: 0,
-                  backgroundColor: "rgba(255, 255, 255, 0.5)",
+                  color: "rgba(255,255,255)",
+                  zIndex: 1,
                 }}
-                onClick={() => deleteImage(index)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </div>
-          ))}
-        </PreviewImagesContainer>
-      )}
+              />
+            </IconButton>
+            {tempImageUrl.map((url, index) => (
+              <div key={index} style={{ position: "relative" }}>
+                <PreviewImage src={url} alt="Preview" />
+                <IconButton
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                  }}
+                  onClick={() => deleteImage(index)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            ))}
+          </PreviewImagesContainer>
+        )}
+      </StyledMessageContainer>
 
       <StyledInputContainer onSubmit={(e) => e.preventDefault()}>
         <IconButton onClick={() => fileInputRef.current?.click()}>

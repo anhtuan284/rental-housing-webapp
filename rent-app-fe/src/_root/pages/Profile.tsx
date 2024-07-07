@@ -184,7 +184,7 @@ const Profile = () => {
     if (!conversation) {
       await createConversation();
       setTimeout(() => {
-        setLoading(true); // Set loading to false after simulated delay
+        setLoading(false); // Set loading to false after simulated delay
       }, 2000); // Adjust the timeout as needed
     } else {
       navigate(`/conversations/${conversation.id}`);
@@ -213,16 +213,12 @@ const Profile = () => {
     );
   if (!loading) {
     if (!currentUser?.email) {
+      console.log(31231231);
       const newConversation = ConversationAlreadyExists(currentUser?.email);
       if (newConversation) {
         navigate(`/conversations/${newConversation.id}`);
       }
     }
-    return (
-      <div className="flex-center w-full h-full">
-        <Loader />
-      </div>
-    );
   }
   return (
     <div className="profile-container">
