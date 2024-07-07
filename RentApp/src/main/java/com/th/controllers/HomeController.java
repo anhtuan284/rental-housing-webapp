@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -51,6 +52,9 @@ public class HomeController {
 
     @Autowired
     private RoleService roleSe;
+      @Autowired
+    private Environment env;
+
 
     @RequestMapping("/")
     public String home(@RequestParam(required = false) Map<String, String> params, Model model) {
@@ -62,12 +66,26 @@ public class HomeController {
         return "login";
     }
 
-    @GetMapping("/post/all")
-    public String getListPendingLesaePost(@RequestParam(required = false) Map<String, String> params, Model model) {
-        List<Post> posts = postSe.getPosts(1, false,true, params);
-        model.addAttribute("posts", posts);
-        return "postlist";
+@GetMapping("/post/all")
+public String getListPendingLesaePost(@RequestParam(required = false) Map<String, String> params, Model model) {
+    List<Post> posts = postSe.getPosts(1, false, true, params);
+    model.addAttribute("posts", posts);
+
+    int pageSize = Integer.parseInt(env.getProperty("posts.pageSize", "2"));
+    int totalNewPost = postSe.countNewPost();
+    int totalPages = (int) Math.ceil((double) totalNewPost / pageSize);
+
+    int currentPage = 1;
+    if (params.containsKey("page") && params.get("page") != null && !params.get("page").isEmpty()) {
+        currentPage = Integer.parseInt(params.get("page"));
     }
+
+    model.addAttribute("currentPage", currentPage);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("params", params);
+
+    return "postlist";
+}
     @GetMapping("/post/reportedPosts")
     public String getListreportedPosts(@RequestParam(required = false) Map<String, String> params, Model model) {
         List<Post> posts = postSe.getListreportedPosts(true,true, params);

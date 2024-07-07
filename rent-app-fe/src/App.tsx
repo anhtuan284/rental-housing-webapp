@@ -26,7 +26,6 @@ import Conversation from "./_root/pages/conversations/[id]";
 import { PostsProvider, usePosts } from "./context/PostsContext";
 import UpdateProfile from "./_root/pages/UpdateProfile";
 import { BingMap, MapModal } from "./components/shared";
-import { WebSocketProvider } from "./context/WebSocketContext";
 
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);

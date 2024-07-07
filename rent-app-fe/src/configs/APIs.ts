@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const BASE_URL = 'http://localhost:8080/RentApp';
-export const CLIENT_URL = 'http://localhost:5173';
+export const BASE_URL = 'http://42.114.84.109:8080/RentApp';
+export const CLIENT_URL = 'http://42.114.84.109:5173';
 
 
 export const endpoints = {

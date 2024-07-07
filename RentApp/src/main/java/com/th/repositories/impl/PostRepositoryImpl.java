@@ -48,57 +48,57 @@ public class PostRepositoryImpl implements PostRepository {
         predicates.add(b.equal(post.get("status"), status));
         predicates.add(b.equal(post.get("actived"), actived));
         predicates.add(b.equal(post.get("typeId").get("typeId"), typeId));
-        if(typeId == 1){
-        Join<Post, PropertyDetail> propJoin = post.join("propertyDetail", JoinType.INNER);
         Join<Post, Location> locationJoin = post.join("location", JoinType.INNER);
-        
 
+        if (typeId == 1) {
+            Join<Post, PropertyDetail> propJoin = post.join("propertyDetail", JoinType.INNER);
 
-        String userId = params.get("userId");
-        if (userId != null && !userId.isEmpty()) {
-            predicates.add(b.equal(post.get("userId"), Integer.parseInt(userId)));
-        }
+            String userId = params.get("userId");
+            if (userId != null && !userId.isEmpty()) {
+                predicates.add(b.equal(post.get("userId"), Integer.parseInt(userId)));
+            }
 
-        String kw = params.get("kw");
-        if (kw != null && !kw.isEmpty()) {
-            predicates.add(b.or(b.like(post.get("title"), String.format("%%%s%%", kw)), b.like(post.get("description"), String.format("%%%s%%", kw))));
-        }
+            String kw = params.get("kw");
+            if (kw != null && !kw.isEmpty()) {
+                predicates.add(b.or(b.like(post.get("title"), String.format("%%%s%%", kw)), b.like(post.get("description"), String.format("%%%s%%", kw))));
+            }
 
-        String city = params.get("city");
-        if (city != null && !city.isEmpty()) {
-            predicates.add(b.like(locationJoin.get("city"), String.format("%%%s%%", city)));
-        }
+      
 
-        String district = params.get("district");
-        if (district != null && !district.isEmpty()) {
-            predicates.add(b.like(locationJoin.get("district"), String.format("%%%s%%", district)));
-        }
+            String minPrice = params.get("minPrice");
+            if (minPrice != null && !minPrice.isEmpty()) {
+                predicates.add(b.greaterThanOrEqualTo(propJoin.get("price"), new BigDecimal(minPrice)));
+            }
 
-        String minPrice = params.get("minPrice");
-        if (minPrice != null && !minPrice.isEmpty()) {
-            predicates.add(b.greaterThanOrEqualTo(propJoin.get("price"), new BigDecimal(minPrice)));
-        }
+            String maxPrice = params.get("maxPrice");
+            if (maxPrice != null && !maxPrice.isEmpty()) {
+                predicates.add(b.lessThanOrEqualTo(propJoin.get("price"), new BigDecimal(maxPrice)));
+            }
 
-        String maxPrice = params.get("maxPrice");
-        if (maxPrice != null && !maxPrice.isEmpty()) {
-            predicates.add(b.lessThanOrEqualTo(propJoin.get("price"), new BigDecimal(maxPrice)));
-        }
+            String minAcreage = params.get("minAcreage");
+            if (minAcreage != null && !minAcreage.isEmpty()) {
+                predicates.add(b.greaterThanOrEqualTo(propJoin.get("acreage"), Integer.parseInt(minAcreage)));
+            }
 
-        String minAcreage = params.get("minAcreage");
-        if (minAcreage != null && !minAcreage.isEmpty()) {
-            predicates.add(b.greaterThanOrEqualTo(propJoin.get("acreage"), Integer.parseInt(minAcreage)));
-        }
+            String maxAcreage = params.get("maxAcreage");
+            if (maxAcreage != null && !maxAcreage.isEmpty()) {
+                predicates.add(b.lessThanOrEqualTo(propJoin.get("acreage"), Integer.parseInt(maxAcreage)));
+            }
 
-        String maxAcreage = params.get("maxAcreage");
-        if (maxAcreage != null && !maxAcreage.isEmpty()) {
-            predicates.add(b.lessThanOrEqualTo(propJoin.get("acreage"), Integer.parseInt(maxAcreage)));
+            String capacity = params.get("capacity");
+            if (capacity != null && !capacity.isEmpty()) {
+                predicates.add(b.equal(propJoin.get("capacity"), Integer.parseInt(capacity)));
+            }
         }
+              String city = params.get("city");
+            if (city != null && !city.isEmpty()) {
+                predicates.add(b.like(locationJoin.get("city"), String.format("%%%s%%", city)));
+            }
 
-        String capacity = params.get("capacity");
-        if (capacity != null && !capacity.isEmpty()) {
-            predicates.add(b.equal(propJoin.get("capacity"), Integer.parseInt(capacity)));
-        }
-        }
+            String district = params.get("district");
+            if (district != null && !district.isEmpty()) {
+                predicates.add(b.like(locationJoin.get("district"), String.format("%%%s%%", district)));
+            }
 
         q.where(predicates.toArray(new Predicate[0]));
         q.orderBy(b.desc(post.get("postId")));
@@ -106,7 +106,7 @@ public class PostRepositoryImpl implements PostRepository {
         Query query = s.createQuery(q);
         String p = params.get("page");
         if (p != null && !p.isEmpty()) {
-            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize", "2"));
+            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize", "5"));
             int start = (Integer.parseInt(p) - 1) * pageSize;
             query.setFirstResult(start);
             query.setMaxResults(pageSize);
@@ -201,14 +201,13 @@ public class PostRepositoryImpl implements PostRepository {
 //
 //        return distance;
 //    }
-
     @Override
     public List<Post> findNearHouse(BigDecimal userLat, BigDecimal userLon, int dist) {
         Session s = this.factoryBean.getObject().getCurrentSession();
 
-        String hql = "SELECT p FROM Post p JOIN p.location l WHERE " +
-                "(6371 * acos(cos(radians(:userLat)) * cos(radians(l.latitude)) * " +
-                "cos(radians(l.longitude) - radians(:userLon)) + sin(radians(:userLat)) * sin(radians(l.latitude)))) <= :distance";
+        String hql = "SELECT p FROM Post p JOIN p.location l WHERE "
+                + "(6371 * acos(cos(radians(:userLat)) * cos(radians(l.latitude)) * "
+                + "cos(radians(l.longitude) - radians(:userLon)) + sin(radians(:userLat)) * sin(radians(l.latitude)))) <= :distance";
 
         Query query = s.createQuery(hql, Post.class);
         query.setParameter("userLat", userLat);
@@ -218,16 +217,14 @@ public class PostRepositoryImpl implements PostRepository {
         return query.getResultList();
     }
 
-
-
     @Override
     public List<Post> getListreportedPosts(boolean status, boolean actived, Map<String, String> params) {
         Session session = this.factoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> query = builder.createQuery(Post.class);
         Root<Post> root = query.from(Post.class);
-        
-        Join<Post, ReportPost> reportJoin = root.join("reportPostSet", JoinType.INNER); 
+
+        Join<Post, ReportPost> reportJoin = root.join("reportPostSet", JoinType.INNER);
         Join<Post, PropertyDetail> propJoin = root.join("propertyDetail", JoinType.INNER);
         Join<Post, Location> locationJoin = root.join("location", JoinType.INNER);
 
@@ -244,7 +241,7 @@ public class PostRepositoryImpl implements PostRepository {
         String page = params.get("page");
         if (page != null && !page.isEmpty()) {
             int pageNumber = Integer.parseInt(page);
-            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize", "10")); 
+            int pageSize = Integer.parseInt(env.getProperty("posts.pageSize", "10"));
             int start = (pageNumber - 1) * pageSize;
             q.setFirstResult(start);
             q.setMaxResults(pageSize);
@@ -252,5 +249,23 @@ public class PostRepositoryImpl implements PostRepository {
         return q.getResultList();
     }
 
+    @Override
+    public int countNewPost() {
+        Session s = this.factoryBean.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Long> q = b.createQuery(Long.class);
+        Root<Post> post = q.from(Post.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(post.get("status"), false));
+        predicates.add(b.equal(post.get("actived"), true));
+        predicates.add(b.equal(post.get("typeId").get("typeId"), 1));
+
+        q.select(b.count(post));
+        q.where(predicates.toArray(new Predicate[0]));
+
+        Long count = s.createQuery(q).getSingleResult();
+        return count.intValue();
+    }
 
 }

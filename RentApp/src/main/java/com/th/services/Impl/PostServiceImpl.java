@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,9 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepo;
 
+    @Autowired
+    private CacheManager cacheManager;
+
     @Override
     public Post getPostById(int id) {
         return this.postRepo.getPostById(id);
@@ -33,12 +38,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+//    @CacheEvict("countPost")
     public void addOrUpdate(Post post) {
+        cacheManager.getCache("countPost").clear();
         postRepo.addOrUpdate(post);
     }
 
     @Override
+//    @CacheEvict("countPost")
     public void deletePost(int id) {
+        cacheManager.getCache("countPost").clear();
         postRepo.deletePost(id);
     }
 
@@ -79,6 +88,11 @@ public class PostServiceImpl implements PostService {
 
     public List<Post> getListreportedPosts(boolean status, boolean actived, Map<String, String> params) {
         return postRepo.getListreportedPosts(status, actived, params);
+    }
+
+    @Override
+    public int countNewPost() {
+        return postRepo.countNewPost();
     }
 
 }

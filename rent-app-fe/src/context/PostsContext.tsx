@@ -39,7 +39,8 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
   const cleanFilters = (filters: any) => {
     return Object.fromEntries(
       Object.entries(filters).filter(
-        ([key, value]) => value !== 0 && value !== undefined && value !== null
+        ([key, value]) =>
+          value !== 0 && value !== undefined && value !== null && value !== ""
       )
     );
   };

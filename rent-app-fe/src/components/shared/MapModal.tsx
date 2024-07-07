@@ -36,6 +36,7 @@ declare global {
     initializeMap: () => void;
   }
 }
+Modal.setAppElement("#root");
 
 declare var Microsoft: any;
 

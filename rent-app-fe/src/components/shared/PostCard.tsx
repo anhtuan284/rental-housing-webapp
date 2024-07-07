@@ -9,15 +9,8 @@ import styled from "styled-components";
 type PostCardProps = {
   post: IPost;
 };
-const PostCardWrapper = styled.div`
-  position: relative;
-`;
 
-const ReportBadgeWrapper = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-`;
+const ReportBadgeWrapper = styled.div``;
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useContext(UserContext);
 
@@ -25,7 +18,7 @@ const PostCard = ({ post }: PostCardProps) => {
   const reportCount = post.report ? post.report.length : 0;
 
   return (
-    <PostCardWrapper className="post-card">
+    <div className="post-card">
       <div className="flex-between">
         <div className="flex items-center gap-3">
           <Link to={`/profile/${post.user.userId}`}>
@@ -51,24 +44,21 @@ const PostCard = ({ post }: PostCardProps) => {
               </p>
             </div>
           </div>
-          {reportCount > 0 && (
-            <ReportBadgeWrapper>
-              <ReportBadge reportCount={reportCount} />
-            </ReportBadgeWrapper>
-          )}{" "}
         </div>
-
-        <Link
-          to={`/update-post/${post.postId}`}
-          className={`${user?.id.toString() != post.user.userId && "hidden"}`}
-        >
-          <img
-            src={"/assets/icons/edit.svg"}
-            alt="edit"
-            width={20}
-            height={20}
-          />
-        </Link>
+        <ReportBadgeWrapper className="flex align-center">
+          {reportCount > 0 && <ReportBadge reportCount={reportCount} />}{" "}
+          <Link
+            to={`/update-post/${post.postId}`}
+            className={`${user?.id.toString() != post.user.userId && "hidden"}`}
+          >
+            <img
+              src={"/assets/icons/edit.svg"}
+              alt="edit"
+              width={35}
+              height={35}
+            />
+          </Link>
+        </ReportBadgeWrapper>
       </div>
 
       <Link to={`/posts/${post.postId}`}>
@@ -93,7 +83,7 @@ const PostCard = ({ post }: PostCardProps) => {
       </Link>
 
       {/* <PostStats post={post} userId={user.id} /> */}
-    </PostCardWrapper>
+    </div>
   );
 };
 

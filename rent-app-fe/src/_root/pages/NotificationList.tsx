@@ -46,46 +46,48 @@ const NotificationList: React.FC = () => {
   }, []);
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 min-w-10">
-      {notifications &&
-        notifications.map((notification) => (
-          <div
-            key={notification.id}
-            className={
-              notification.isRead
-                ? "bg-gray-900  p-4 mb-4 rounded-lg shadow-md"
-                : "bg-gray-800  p-4 mb-4 rounded-lg shadow-md"
-            }
-          >
-            <div className="flex items-center mb-2">
-              <Link to={`/profile/${notification.userId}`} className="flex">
-                <img
-                  src={notification.userImage}
-                  alt={`${notification.userName}'s avatar`}
-                  className="w-10 h-10 rounded-full mr-3"
-                />
-                <div>
-                  <p className="text-sm font-medium text-white">
-                    {notification.userName}
+    <div className="flex-col w-full">
+      <div className="max-w-3xl mx-auto mt-8 min-w-10 ">
+        {notifications &&
+          notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className={
+                notification.isRead
+                  ? "bg-gray-900  p-4 mb-4 rounded-lg shadow-md"
+                  : "bg-gray-800  p-4 mb-4 rounded-lg shadow-md"
+              }
+            >
+              <div className="flex items-center mb-2">
+                <Link to={`/profile/${notification.userId}`} className="flex">
+                  <img
+                    src={notification.userImage}
+                    alt={`${notification.userName}'s avatar`}
+                    className="w-10 h-10 rounded-full mr-3"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-white">
+                      {notification.userName}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      {multiFormatDateString(notification.createdDate)}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+              <div className="bg-gray-900 p-3 rounded-lg shadow-sm">
+                <Link to={`/posts/${notification.userId}`}>
+                  <p className="text-base font-bold text-white">
+                    {notification.postTitle}
                   </p>
-                  <p className="text-xs text-gray-400">
-                    {multiFormatDateString(notification.createdDate)}
+                  <p className="text-sm text-gray-300">
+                    {notification.notificationContent}
                   </p>
-                </div>
-              </Link>
+                </Link>
+              </div>
             </div>
-            <div className="bg-gray-900 p-3 rounded-lg shadow-sm">
-              <Link to={`/posts/${notification.userId}`}>
-                <p className="text-base font-bold text-white">
-                  {notification.postTitle}
-                </p>
-                <p className="text-sm text-gray-300">
-                  {notification.notificationContent}
-                </p>
-              </Link>
-            </div>
-          </div>
-        ))}
+          ))}
+      </div>
     </div>
   );
 };

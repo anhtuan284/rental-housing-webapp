@@ -34,4 +34,6 @@ public interface PostRepository {
 
     List<Post> getListreportedPosts(boolean status, boolean actived, Map<String, String> params);
 
+     int countNewPost();
+
 }
